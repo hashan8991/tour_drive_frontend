@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 //import 'package:tour_drive_frontend/size_config.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
+import 'package:tour_drive_frontend/widgets/header.dart';
 import '../../size_config.dart';
 
 
@@ -27,13 +28,7 @@ class LogInScreen extends StatelessWidget {
             scrollDirection: Axis.vertical,
             child: Column(
               children: <Widget>[
-                Row(
-                  children: [
-                    IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_back, )),
-                    SizedBox(width: screenWidth * 0.23,),
-                    Text("Login", style: TextStyle(fontSize: screenHeight*0.03, fontWeight: FontWeight.bold),),
-                  ],
-                ),
+                Header(text: "Login", press: () {} ),
                 SizedBox(height: screenHeight * 0.02),
                 const Text("Hey, Enter your details to get sign in ",),
                 SizedBox(height: screenHeight * 0.04),
@@ -146,4 +141,5 @@ class LogInScreen extends StatelessWidget {
     );
   }
 }
+
 
