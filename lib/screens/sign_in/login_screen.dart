@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 //import 'package:tour_drive_frontend/size_config.dart';
 import 'package:tour_drive_frontend/constants.dart';
+import 'package:tour_drive_frontend/widgets/default_button.dart';
 import '../../size_config.dart';
 
 
@@ -14,7 +15,7 @@ class LogInScreen extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    
      final double screenWidth = MediaQuery.of(context).size.width;
      final double screenHeight = MediaQuery.of(context).size.height;
 
@@ -83,22 +84,9 @@ class LogInScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.02),
-                SizedBox(
-                  height: screenHeight * 0.07,
-                  width: screenWidth,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Add authentication logic here
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: kPrimaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(screenHeight * 0.02),
-                      ),
-                    ),
-                    child: Text('Login', style: TextStyle(fontSize: screenHeight * 0.022, color: Colors.white),),
-                  ),
-                ),
+                DefaultButton( text: "Login", press: () {
+                  
+                },),
                 SizedBox(height: screenHeight * 0.03),
                 Text("Or Sign In With", style: TextStyle(fontSize: screenHeight*0.02, fontWeight: FontWeight.bold),),  
                 SizedBox(height: screenHeight * 0.03),
@@ -158,3 +146,4 @@ class LogInScreen extends StatelessWidget {
     );
   }
 }
+
