@@ -3,16 +3,11 @@ import "package:flutter/material.dart";
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
-import '../../size_config.dart';
-
-
-
 
 class LogInScreen extends StatelessWidget {
 
   static String routeName = "/sign_in";
   const LogInScreen({super.key});
-  
   
   @override
   Widget build(BuildContext context) {
@@ -118,7 +113,6 @@ class LogInScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text("Don't have an account ?"),
-                
                     TextButton(
                       onPressed: () {
                         // Add forgot password logic here
