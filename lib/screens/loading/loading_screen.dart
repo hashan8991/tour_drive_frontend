@@ -1,12 +1,40 @@
 import "package:flutter/material.dart";
+import 'package:tour_drive_frontend/widgets/default_button.dart';
+
 
 class LoadingScreen extends StatelessWidget {
-  const LoadingScreen({super.key});
 
+  static String routeName = "/loading";
+  const LoadingScreen({super.key});
+  
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      
+    
+     final double screenWidth = MediaQuery.of(context).size.width;
+     final double screenHeight = MediaQuery.of(context).size.height;
+
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          margin: EdgeInsets.all(screenWidth * 0.04),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: <Widget>[
+                Image.asset('assets/images/logo.png'),
+                Image.asset('assets/images/cover.png'),
+                SizedBox(height: screenHeight * 0.1),
+                SizedBox(
+                  width: screenWidth *0.5,
+                  child: DefaultButton(text: "Get Started", press: () {})
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
+
+
