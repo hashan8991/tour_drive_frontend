@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:tour_drive_frontend/screens/sign_in/login_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 
 
@@ -21,12 +22,22 @@ class LoadingScreen extends StatelessWidget {
             scrollDirection: Axis.vertical,
             child: Column(
               children: <Widget>[
-                Image.asset('assets/images/logo.png'),
-                Image.asset('assets/images/cover.png'),
+                SizedBox(
+                  width: screenWidth,
+                  height: screenHeight * 0.3,
+                  child: Image.asset('assets/images/logo.png')
+                ),
+                SizedBox(
+                  width: screenWidth,
+                  height: screenHeight * 0.3,
+                  child: Image.asset('assets/images/cover.png')
+                  ),
                 SizedBox(height: screenHeight * 0.1),
                 SizedBox(
                   width: screenWidth *0.5,
-                  child: DefaultButton(text: "Get Started", press: () {})
+                  child: DefaultButton(text: "Get Started", press: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
+                  })
                 ),
               ],
             ),
