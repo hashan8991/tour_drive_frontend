@@ -1,19 +1,29 @@
 import "package:flutter/material.dart";
 //import 'package:tour_drive_frontend/size_config.dart';
 import 'package:tour_drive_frontend/constants.dart';
+import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
+import 'package:tour_drive_frontend/screens/sign_in/login_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
 
   static String routeName = "/sign_up";
+
+  const SignUpScreen({super.key});
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
   String? selectedItem;
+
   List<String> items = [
     'SriLanka',
     'Other',
   ];
-  SignUpScreen({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     
@@ -28,7 +38,9 @@ class SignUpScreen extends StatelessWidget {
             scrollDirection: Axis.vertical,
             child: Column(
               children: <Widget>[
-                Header(text: "Sign Up", press: () {} ),
+                Header(text: "Sign Up", press: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
+                } ),
                 SizedBox(height: screenHeight * 0.01),
                 const Text("Please enter your profile information.",),
                 SizedBox(height: screenHeight * 0.02),
@@ -70,6 +82,7 @@ class SignUpScreen extends StatelessWidget {
                 SizedBox(height: screenHeight * 0.02),
                 TextField(
                   //controller: emailController,
+                  obscureText: true,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: 'Enter Password',
@@ -82,6 +95,7 @@ class SignUpScreen extends StatelessWidget {
                 SizedBox(height: screenHeight * 0.02),
                 TextField(
                   //controller: emailController,
+                  obscureText: true,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: 'Retype Password',
@@ -93,7 +107,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 SizedBox(height: screenHeight * 0.02),
                 Container(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   decoration: BoxDecoration(
                     border: Border.all(
                     color: Colors.grey,
@@ -135,12 +149,14 @@ class SignUpScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: screenHeight * 0.02),
-                DefaultButton(text: "Submit", press: () {}),
+                DefaultButton(text: "Submit", press: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
+                }),
                 SizedBox(height: screenHeight * 0.02),
                 const Text("If you have already account ?",),
                 TextButton(
                   onPressed: () {
-                    // Add forgot password logic here
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
                   },
                   style: TextButton.styleFrom(
                     foregroundColor: kPrimaryColor,

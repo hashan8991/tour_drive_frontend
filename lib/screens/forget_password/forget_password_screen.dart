@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 //import 'package:tour_drive_frontend/size_config.dart';
 import 'package:tour_drive_frontend/constants.dart';
+import 'package:tour_drive_frontend/screens/sign_in/login_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
 
@@ -23,7 +24,9 @@ class ForgetPasswordScreen extends StatelessWidget {
             scrollDirection: Axis.vertical,
             child: Column(
               children: <Widget>[
-                Header(text: "Forget Password", press: () {} ),
+                Header(text: "Forget Password", press: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
+                } ),
                 SizedBox(height: screenHeight * 0.02),
                 const Text("Please enter the email address assosiated with your account.",),
                 SizedBox(height: screenHeight * 0.04),
@@ -47,7 +50,9 @@ class ForgetPasswordScreen extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: screenHeight * 0.04),
-                DefaultButton(text: "Send", press: () {}),
+                DefaultButton(text: "Send", press: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
+                }),
                 SizedBox(height: screenHeight * 0.04),
                 const Text("If you still need help, contact ?",),
                 TextButton(

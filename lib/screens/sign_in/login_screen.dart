@@ -1,6 +1,9 @@
 import "package:flutter/material.dart";
 //import 'package:tour_drive_frontend/size_config.dart';
 import 'package:tour_drive_frontend/constants.dart';
+import 'package:tour_drive_frontend/screens/forget_password/forget_password_screen.dart';
+import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
+import 'package:tour_drive_frontend/screens/sign_up/sign_up_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
 
@@ -23,7 +26,9 @@ class LogInScreen extends StatelessWidget {
             scrollDirection: Axis.vertical,
             child: Column(
               children: <Widget>[
-                Header(text: "Login", press: () {} ),
+                Header(text: "Login", press: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const LoadingScreen()));
+                } ),
                 SizedBox(height: screenHeight * 0.02),
                 const Text("Hey, Enter your details to get sign in ",),
                 SizedBox(height: screenHeight * 0.04),
@@ -60,7 +65,7 @@ class LogInScreen extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    // Add forgot password logic here
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgetPasswordScreen()));
                   },
                   style: TextButton.styleFrom(
                     foregroundColor: kPrimaryColor,
@@ -115,7 +120,7 @@ class LogInScreen extends StatelessWidget {
                     const Text("Don't have an account ?"),
                     TextButton(
                       onPressed: () {
-                        // Add forgot password logic here
+                        Navigator.push(context, MaterialPageRoute(builder: (context) =>  SignUpScreen()));
                       },
                   
                       style: TextButton.styleFrom(
