@@ -1,6 +1,7 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:tour_drive_frontend/routes.dart';
+import 'package:tour_drive_frontend/screens/feedback/feedback_screen.dart';
 import 'package:tour_drive_frontend/screens/forget_password/forget_password_screen.dart';
 import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
 import 'package:tour_drive_frontend/screens/sign_in/login_screen.dart';
@@ -33,12 +34,13 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(color: Colors.white, elevation: 0),
       ),
     
-      //home: const LogInScreen(),
+      home: const LogInScreen(),
       //home: const ForgetPasswordScreen(),
       //home:  SignUpScreen(),
-      home: const LoadingScreen() ,
-      // initialRoute: LoadingScreen.routeName,
-      // routes: routes,
+      //home: const LoadingScreen() ,
+      //home: const FeedbackForm(),
+      //initialRoute: LoadingScreen.routeName,
+     // routes: routes,
     );
   }
 }
