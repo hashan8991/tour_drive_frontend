@@ -55,10 +55,10 @@ class _LogInScreenState extends State<LogInScreen> {
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter your email';
+                            return '* Please enter your email';
                           }
                           if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                            return 'Please enter a valid email';
+                            return '* Please enter a valid email';
                           }
                           return null;
                         },
@@ -87,10 +87,10 @@ class _LogInScreenState extends State<LogInScreen> {
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter your Password';
+                            return '* Please enter your Password';
                           }
                           if ( value.length < 6) {
-                            return 'Please enter more than 6 characters';
+                            return '* Please enter more than 6 characters';
                           }
                           return null;
                         },
@@ -143,11 +143,13 @@ class _LogInScreenState extends State<LogInScreen> {
                 
                 DefaultButton( text: "Login", press:  () {
                   if (formKey.currentState!.validate()) {
-                  
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Login successfully'), backgroundColor: kPrimaryColor,),
-                  );
-                }
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Login successfully'), 
+                        backgroundColor: kPrimaryColor,
+                        ),
+                    );
+                  }
                 },
                 ),
 
