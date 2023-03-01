@@ -34,11 +34,11 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(color: Colors.white, elevation: 0),
       ),
     
-      home: const LogInScreen(),
+      //home: const LogInScreen(),
       //home: const ForgetPasswordScreen(),
       //home:  SignUpScreen(),
       //home: const LoadingScreen() ,
-      //home: const FeedbackForm(),
+      home: const FeedbackForm(),
       //initialRoute: LoadingScreen.routeName,
      // routes: routes,
     );

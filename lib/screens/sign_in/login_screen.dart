@@ -90,7 +90,7 @@ class _LogInScreenState extends State<LogInScreen> {
                             return '* Please enter your Password';
                           }
                           if ( value.length < 6) {
-                            return '* Please enter more than 6 characters';
+                            return '* Please enter valid email';
                           }
                           return null;
                         },

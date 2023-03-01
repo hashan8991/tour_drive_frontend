@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
 import 'package:tour_drive_frontend/constants.dart';
-import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
 import 'package:tour_drive_frontend/screens/sign_in/login_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
 //import 'package:tour_drive_frontend/size_config.dart';
+//import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
 
