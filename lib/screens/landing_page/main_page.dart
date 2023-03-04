@@ -1,0 +1,101 @@
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tour_drive_frontend/screens/landing_page/landing_screen.dart';
+// import 'package:untitled/pages/navPages/drive.dart';
+// import 'package:untitled/pages/navPages/explore.dart';
+// import 'package:untitled/pages/navPages/home_page.dart';
+// import 'package:untitled/pages/navPages/profile.dart';
+
+class MainPage extends StatefulWidget {
+  const MainPage({Key? key}) : super(key: key);
+
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  List pages = [
+    // HomePage(),
+    // ExplorePage(),
+    // DrivePage(),
+    // ProfilePage(),
+    const LandingScreen(),
+  ];
+
+  int currentIndex = 0;
+
+  void onTap(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   centerTitle: false, //title eka center krnne meken
+      //   // backgroundColor: Color(0xFFFFDBCF),// mee app bar eke colour eka
+      //   // backgroundColor: Colors.transparent,
+      //   backgroundColor: Color(0xFF695E2F),
+      //   title: Image.asset(
+      //     'assets/images/logo.png',
+      //     fit: BoxFit.contain,
+      //     height: MediaQuery.of(context).size.height * 0.2,
+      //     width: MediaQuery.of(context).size.height * 0.25,
+      //   ),
+      //   toolbarHeight: MediaQuery.of(context).size.height * 0.1,
+      // ),
+      body: pages[
+          currentIndex], //danata select wechcha ekee index eka meeken pennanne
+      bottomNavigationBar: navBar_Widget(),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: () {
+      //     //action to perform when the button is pressed...
+      //   },
+      //   label: Text('Customize'),
+      //   icon: Image.asset(
+      //     // 'assets/images/customize.png',
+      //     'assets/images/Vector.png',
+      //     width: 24,
+      //     height: 24,
+      //   ),
+      //   backgroundColor: Colors.amber, //floating button colors background
+      //   foregroundColor: Colors.white, //floating button colors foreground
+      // ),
+    );
+  }
+
+  BottomNavigationBar navBar_Widget() {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType
+          .fixed, //methana wenas klaa bottom nav bar ekt paatak daanna oona nisaa
+      backgroundColor:
+          Colors.white54, //methanin bottom nav bar color change krnna puluwan
+      selectedFontSize:
+          0, //icon labels hide krnna oona nisai methana zero klee
+      unselectedFontSize:
+          0, //icon labels hide krnna oona nisai methana zero klee
+      onTap:
+          onTap, //buttons tap klata passe selection change wenna oona nisa mee onTap method eka hadala call klaa
+      currentIndex:
+          currentIndex, // default index value eka meka, methana nm zero wenna oona mn hithanne
+      selectedItemColor: Colors.amber,
+      unselectedItemColor: Colors.grey.withOpacity(0.5),
+      showSelectedLabels: false, //selected icon labels hide kla
+      showUnselectedLabels: false, //unselected icon labels hide kla
+      elevation: 0,
+      items: const [
+        BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home)),
+        BottomNavigationBarItem(label: 'Explore', icon: Icon(Icons.explore)),
+        BottomNavigationBarItem(
+            label: 'Drive', icon: Icon(FontAwesomeIcons.ambulance)),
+        BottomNavigationBarItem(label: 'Drive', icon: Icon(Icons.drive_eta)),
+        BottomNavigationBarItem(
+            label: 'Profile', icon: Icon(Icons.account_circle)),
+      ],
+    );
+  }
+}
