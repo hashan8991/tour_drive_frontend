@@ -17,7 +17,7 @@ class LoadingScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          margin: EdgeInsets.all(screenWidth * 0.04),
+          margin: EdgeInsets.all(screenWidth * 0.01),
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(

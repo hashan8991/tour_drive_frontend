@@ -25,7 +25,7 @@ class DefaultButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: kPrimaryColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(screenHeight * 0.02),
+            borderRadius: BorderRadius.circular(screenHeight * 0.03),
           ),
         ),
         child: Text(text, style: TextStyle(fontSize: screenHeight * 0.022, color: Colors.white),),
