@@ -6,6 +6,7 @@ import 'package:tour_drive_frontend/screens/forget_password/forget_password_scre
 import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
 import 'package:tour_drive_frontend/screens/sign_in/login_screen.dart';
 import 'package:tour_drive_frontend/screens/sign_up/sign_up_screen.dart';
+import 'package:tour_drive_frontend/screens/tour_home_screen/tour_home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,7 +39,8 @@ class MyApp extends StatelessWidget {
       //home: const ForgetPasswordScreen(),
       //home:  SignUpScreen(),
       //home: const LoadingScreen() ,
-      home: const FeedbackForm(),
+      //home: const FeedbackForm(),
+      home: const TourHomeScreen(),
       //initialRoute: LoadingScreen.routeName,
      // routes: routes,
     );
