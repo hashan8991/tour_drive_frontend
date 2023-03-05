@@ -19,7 +19,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
       child: Scaffold(
         body: Container(
           margin: EdgeInsets.all(
-              screenWidth * 0.01), // common code section for all codes
+              screenWidth * 0.05), // common code section for all codes
           child: SingleChildScrollView(
             child: Stack(children: [
               Column(
@@ -44,7 +44,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                                 Container(
                                   //margin: EdgeInsets.all(screenWidth * 0.000000001),
                                   height: screenHeight * 0.3,
-                                  width: screenWidth * 0.42,
+                                  width: screenWidth * 0.38,
                                   decoration: BoxDecoration(
                                     color: Colors.red,
                                     borderRadius: BorderRadius.circular(
@@ -56,7 +56,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                                 ),
                                 Container(
                                   height: screenHeight * 0.3,
-                                  width: screenWidth * 0.48,
+                                  width: screenWidth * 0.44,
                                   decoration: BoxDecoration(
                                     color: Colors.green,
                                     borderRadius: BorderRadius.circular(

@@ -33,7 +33,7 @@ class _LogInScreenState extends State<LogInScreen> {
         body: Container(
           // common code section for all codes
           margin: EdgeInsets.all(
-              screenWidth * 0.01), // common code section for all codes
+              screenWidth * 0.05), // common code section for all codes
           child: SingleChildScrollView(
             // common code section for all codes
             scrollDirection: Axis.vertical, // common code section for all codes
@@ -126,7 +126,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                 vertical: screenHeight * 0.028),
                             hintText: 'Enter your password',
                             suffixIcon: const Icon(
-                              Icons.lock,
+                              Icons.man,
                               color: kPrimaryColor,
                             ),
                             border: OutlineInputBorder(

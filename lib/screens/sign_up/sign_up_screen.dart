@@ -40,7 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          margin: EdgeInsets.all(screenWidth * 0.04),
+          margin: EdgeInsets.all(screenWidth * 0.05),
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
@@ -104,7 +104,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             floatingLabelStyle: const TextStyle(color: kPrimaryColor),
                             contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.028),
                             hintText: 'Enter your first name',
-                            suffixIcon: const Icon(Icons.email, color: kPrimaryColor,),
+                            suffixIcon: const Icon(Icons.man, color: kPrimaryColor,),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(screenHeight * 0.03),
                               borderSide: const BorderSide(color: kPrimaryColor),
@@ -133,7 +133,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             floatingLabelStyle: const TextStyle(color: kPrimaryColor),
                             contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.028),
                             hintText: 'Enter your last name',
-                            suffixIcon: const Icon(Icons.email, color: kPrimaryColor,),
+                            suffixIcon: const Icon(Icons.man, color: kPrimaryColor,),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(screenHeight * 0.03),
                               borderSide: const BorderSide(color: kPrimaryColor),
@@ -154,8 +154,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           if (value!.isEmpty) {
                             return '* Please enter your Password';
                           }
-                          if ( value.length < 6) {
-                            return '* Please enter more than 6 characters';
+                          if ( value.length < 3) {
+                            return '* Please enter more than 3 characters';
                           }
                           return null;
                         },
@@ -187,15 +187,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           if (value!.isEmpty) {
                             return '* Please enter your re-password';
                           }
-                          // if ( password! != confirmPassword) {
-                          //   return '* Password do not match';
-                          // }
+                          if ( password != confirmPassword) {
+                            return '* Password do not match';
+                          }
                           return null;
                         },
                         keyboardType: TextInputType.visiblePassword,
                         obscureText: true,
                         decoration: InputDecoration(
-                          labelText: "Password",
+                          labelText: "Retype Password",
                           floatingLabelStyle: const TextStyle(color: kPrimaryColor),
                           contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.028),
                           hintText: 'Enter your password',
@@ -227,7 +227,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             DropdownButton<String>(
                               enableFeedback: true,
                               borderRadius: BorderRadius.circular(screenHeight * 0.02),
-                              dropdownColor: kPrimaryColor,
+                              dropdownColor: Colors.white,
                               value: country,
                               onChanged: (value) {
                                 setState(() {
