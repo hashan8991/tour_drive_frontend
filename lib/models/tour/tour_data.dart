@@ -49,5 +49,89 @@ final List<Tour> tours = [
     price: 599,
     
   ),
+  Tour(
+    id: 1,
+    name: "Wonder Of Sigiriya " ,
+    tourCover: Image.asset('assets/images/sigiriya.jpeg'),
+    locations: "Central Province, Sri Lanka",
+    ratingsAverage: 2.5,
+    reviews: 2,
+    maxSeats: 18,
+    duration: 4,
+    price: 599,
+    
+  ),
+  Tour(
+    id: 1,
+    name: "Wonder Of Sigiriya " ,
+    tourCover: Image.asset('assets/images/sigiriya.jpeg'),
+    locations: "Central Province, Sri Lanka",
+    ratingsAverage: 2.5,
+    reviews: 2,
+    maxSeats: 18,
+    duration: 4,
+    price: 599,
+    
+  ),
+  Tour(
+    id: 1,
+    name: "Wonder Of Sigiriya " ,
+    tourCover: Image.asset('assets/images/sigiriya.jpeg'),
+    locations: "Central Province, Sri Lanka",
+    ratingsAverage: 2.5,
+    reviews: 2,
+    maxSeats: 18,
+    duration: 4,
+    price: 599,
+    
+  ),
+  Tour(
+    id: 1,
+    name: "Wonder Of Sigiriya " ,
+    tourCover: Image.asset('assets/images/sigiriya.jpeg'),
+    locations: "Central Province, Sri Lanka",
+    ratingsAverage: 2.5,
+    reviews: 2,
+    maxSeats: 18,
+    duration: 4,
+    price: 599,
+    
+  ),
+  Tour(
+    id: 1,
+    name: "Wonder Of Sigiriya " ,
+    tourCover: Image.asset('assets/images/sigiriya.jpeg'),
+    locations: "Central Province, Sri Lanka",
+    ratingsAverage: 2.5,
+    reviews: 2,
+    maxSeats: 18,
+    duration: 4,
+    price: 599,
+    
+  ),
+  Tour(
+    id: 1,
+    name: "Wonder Of Sigiriya " ,
+    tourCover: Image.asset('assets/images/sigiriya.jpeg'),
+    locations: "Central Province, Sri Lanka",
+    ratingsAverage: 2.5,
+    reviews: 2,
+    maxSeats: 18,
+    duration: 4,
+    price: 599,
+    
+  ),
+  Tour(
+    id: 1,
+    name: "Wonder Of Sigiriya " ,
+    tourCover: Image.asset('assets/images/sigiriya.jpeg'),
+    locations: "Central Province, Sri Lanka",
+    ratingsAverage: 2.5,
+    reviews: 2, 
+    maxSeats: 18,
+    duration: 4,
+    price: 599,
+    
+  ),
   
 ];
