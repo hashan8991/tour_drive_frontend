@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tour_drive_frontend/constants.dart';
+import 'package:tour_drive_frontend/models/tour/tour_data.dart';
 
 class TourHomeScreen extends StatefulWidget {
-  const TourHomeScreen({super.key});
+  //final Tour tour;
+  const TourHomeScreen({super.key,  });
 
   @override
   State<TourHomeScreen> createState() => _TourHomeScreenState();
@@ -12,308 +13,119 @@ class TourHomeScreen extends StatefulWidget {
 class _TourHomeScreenState extends State<TourHomeScreen> {
   @override
   Widget build(BuildContext context) {
+    
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
-    return SafeArea(
+    Text buildRatingStars(double rating) {
+
+      String stars = '';
+      for (double i = 0; i < rating; i++) {
+        stars += '⭐ ';
+      }
+      stars.trim();
+      return Text(stars);
+    }
+
+     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {}, 
+            icon: const Icon(Icons.arrow_back, color:Colors.black, )),
+          elevation: 0,
+          // title: Image.asset("assets/images/logoNew.png"),
+          // centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.search, color: Colors.black,),
+              onPressed: () {
+ 
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.filter_list, color: Colors.black, ),
+              onPressed: () {
+
+              },
+            ),
+          ],
+        ),
+        
+
         body: Container(
-          margin: EdgeInsets.all(
-              screenWidth * 0.05), // common code section for all codes
+          margin: EdgeInsets.all(screenWidth * 0.05),
           child: SingleChildScrollView(
-            child: Stack(children: [
-              Column(
-                children: <Widget>[
-                  SizedBox(height: screenHeight * 0.04),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Column(
-                      children: [
-                        Container(
-                          height: screenHeight * 0.22,
-                          width: screenWidth,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius:
-                                BorderRadius.circular(screenWidth * 0.03),
-                          ),
-                          child: Container(
-                            margin: EdgeInsets.all(screenWidth * 0.025),
-                            child: Row(
-                              children: [
-                                Container(
-                                  //margin: EdgeInsets.all(screenWidth * 0.000000001),
-                                  height: screenHeight * 0.3,
-                                  width: screenWidth * 0.38,
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth * 0.03),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: screenWidth * 0.03,
-                                ),
-                                Container(
-                                  height: screenHeight * 0.3,
-                                  width: screenWidth * 0.44,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth * 0.03),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: screenHeight * 0.01,
-                        ),
-                        Container(
-                          height: screenHeight * 0.22,
-                          width: screenWidth,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius:
-                                BorderRadius.circular(screenWidth * 0.03),
-                          ),
-                          child: Container(
-                            margin: EdgeInsets.all(screenWidth * 0.025),
-                            child: Row(
-                              children: [
-                                Container(
-                                  //margin: EdgeInsets.all(screenWidth * 0.000000001),
-                                  height: screenHeight * 0.3,
-                                  width: screenWidth * 0.42,
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth * 0.03),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: screenWidth * 0.03,
-                                ),
-                                Container(
-                                  height: screenHeight * 0.3,
-                                  width: screenWidth * 0.48,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth * 0.03),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.01),
-                        Container(
-                          height: screenHeight * 0.22,
-                          width: screenWidth,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius:
-                                BorderRadius.circular(screenWidth * 0.03),
-                          ),
-                          child: Container(
-                            margin: EdgeInsets.all(screenWidth * 0.025),
-                            child: Row(
-                              children: [
-                                Container(
-                                  //margin: EdgeInsets.all(screenWidth * 0.000000001),
-                                  height: screenHeight * 0.3,
-                                  width: screenWidth * 0.42,
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth * 0.03),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: screenWidth * 0.03,
-                                ),
-                                Container(
-                                  height: screenHeight * 0.3,
-                                  width: screenWidth * 0.48,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth * 0.03),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.01),
-                        Container(
-                          height: screenHeight * 0.22,
-                          width: screenWidth,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius:
-                                BorderRadius.circular(screenWidth * 0.03),
-                          ),
-                          child: Container(
-                            margin: EdgeInsets.all(screenWidth * 0.025),
-                            child: Row(
-                              children: [
-                                Container(
-                                  //margin: EdgeInsets.all(screenWidth * 0.000000001),
-                                  height: screenHeight * 0.3,
-                                  width: screenWidth * 0.42,
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth * 0.03),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: screenWidth * 0.03,
-                                ),
-                                Container(
-                                  height: screenHeight * 0.3,
-                                  width: screenWidth * 0.48,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth * 0.03),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.01),
-                        Container(
-                          height: screenHeight * 0.22,
-                          width: screenWidth,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius:
-                                BorderRadius.circular(screenWidth * 0.03),
-                          ),
-                          child: Container(
-                            margin: EdgeInsets.all(screenWidth * 0.025),
-                            child: Row(
-                              children: [
-                                Container(
-                                  //margin: EdgeInsets.all(screenWidth * 0.000000001),
-                                  height: screenHeight * 0.3,
-                                  width: screenWidth * 0.42,
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth * 0.03),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: screenWidth * 0.03,
-                                ),
-                                Container(
-                                  height: screenHeight * 0.3,
-                                  width: screenWidth * 0.48,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth * 0.03),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: screenHeight * 0.01,
-                        ),
-                        Container(
-                          height: screenHeight * 0.22,
-                          width: screenWidth,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius:
-                                BorderRadius.circular(screenWidth * 0.03),
-                          ),
-                          child: Container(
-                            margin: EdgeInsets.all(screenWidth * 0.025),
-                            child: Row(
-                              children: [
-                                Container(
-                                  //margin: EdgeInsets.all(screenWidth * 0.000000001),
-                                  height: screenHeight * 0.3,
-                                  width: screenWidth * 0.42,
-                                  decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth * 0.03),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: screenWidth * 0.03,
-                                ),
-                                Container(
-                                  height: screenHeight * 0.3,
-                                  width: screenWidth * 0.48,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(
-                                        screenWidth * 0.03),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: screenHeight * 0.22,
+                  width: screenWidth,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.circular(screenWidth * 0.03),
                   ),
-                ],
-              ),
-              Column(children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.arrow_back,
-                        )),
-                    Row(
+                  child: Container(
+                    margin: EdgeInsets.all(screenWidth * 0.025),
+                    child: Row(
                       children: [
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.search,
-                            )),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const FaIcon(
-                            FontAwesomeIcons.filter,
-                            size: 16.0,
+                        ClipRRect( 
+                          borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                          child: Image.asset('assets/images/sigiriya.jpeg', fit: BoxFit.fill, height: screenHeight * 0.3,width: screenWidth * 0.38, )),
+                        SizedBox(width: screenWidth * 0.03),
+                        Container(
+                          height: screenHeight * 0.3,
+                          width: screenWidth * 0.44,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                          ),
+                          child: Column(
+                            //margin: EdgeInsets.all(screenWidth * 0.05),
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text( tours[0].name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.03), maxLines: 2, overflow: TextOverflow.ellipsis,),
+                              Row(
+                                children: [
+                                  const Icon(Icons.location_on_outlined, color: kPrimaryColor,),
+                                  SizedBox(width: screenWidth * 0.37, child: Text(tours[0].locations, style: TextStyle(fontSize: screenHeight * 0.02), maxLines:1, overflow: TextOverflow.ellipsis,)),
+                                ],
+                              ),
+                              SizedBox(height: screenHeight * 0.005,),
+                              buildRatingStars(tours[0].ratingsAverage),
+                              SizedBox(height: screenHeight * 0.01,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.people_outline_sharp, color: kPrimaryColor, size: screenHeight * 0.025,),
+                                      SizedBox(width: screenWidth *0.01,),
+                                      Text("${tours[0].maxSeats}"),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.timer_outlined, color: kPrimaryColor, size: screenHeight * 0.025,),
+                                      SizedBox(width: screenWidth *0.01,),
+                                      Text("${tours[0].duration} days"),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: screenHeight * 0.001,),
+                              Center(child: Text("\$ ${tours[0].price.toStringAsFixed(0)}", style: TextStyle(fontSize: screenHeight * 0.025,fontWeight: FontWeight.bold),))
+                            ],
                           ),
                         ),
                       ],
                     ),
-                  ],
                 ),
-                SizedBox(
-                  height: screenHeight * 0.02,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Top Experinces On TourDrive",
-                      style: TextStyle(
-                          fontSize: screenHeight * 0.03,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ]),
-            ]),
+               ),
+              ],
+            ),
           ),
         ),
       ),

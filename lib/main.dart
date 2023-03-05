@@ -37,11 +37,11 @@ class MyApp extends StatelessWidget {
 
       //home: const LogInScreen(),
       //home: const ForgetPasswordScreen(),
-      // home: SignUpScreen(),
+       //home: SignUpScreen(),
       //home: const LoadingScreen() ,
       //home: const FeedbackForm(),
-      // home: const TourHomeScreen(),
-      home: const MainPage(),
+      home: const TourHomeScreen(),
+      //home: const MainPage(),
       //initialRoute: LoadingScreen.routeName,
       // routes: routes,
     );
