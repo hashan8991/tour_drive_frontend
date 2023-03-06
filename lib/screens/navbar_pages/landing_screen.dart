@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tour_drive_frontend/widgets/default_button.dart';
+import 'package:tour_drive_frontend/screens/tour_home_screen/tour_home_screen.dart';
+
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -44,7 +45,12 @@ class _LandingScreenState extends State<LandingScreen> {
                 SizedBox(height: screenHeight * 0.1),
                 Image.asset('assets/images/drive2.png'),
                 SizedBox(height: screenHeight * 0.02),
-                Image.asset('assets/images/tour2.png'),
+                GestureDetector(
+                  child: Image.asset('assets/images/tour2.png'),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const TourHomeScreen()));
+                  },
+                ),
               ],
             ),
           ),

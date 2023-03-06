@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/models/tour/tour_data.dart';
+import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.dart';
+import 'package:tour_drive_frontend/screens/navbar_pages/landing_screen.dart';
 
 class TourHomeScreen extends StatefulWidget {
   
@@ -32,11 +34,14 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           leading: IconButton(
-            onPressed: () {}, 
+            onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));}, 
             icon: const Icon(Icons.arrow_back, color:Colors.black, )),
           elevation: 0,
-          // title: Image.asset("assets/images/logoNew.png"),
-          // centerTitle: true,
+          title: Padding(
+            padding: const EdgeInsets.symmetric(horizontal:  7),
+            child: Image.asset("assets/images/logoNew.png"),
+          ),
+          centerTitle: true,
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.search, color: Colors.black,),
@@ -57,19 +62,19 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
         body: Container(
           margin: EdgeInsets.all(screenWidth * 0.05),
           child: ListView.builder(
-           
             scrollDirection: Axis.vertical,
             itemCount: tours.length,
             itemBuilder: (BuildContext context, int index) {
             
             return Padding(
-              padding: const EdgeInsets.fromLTRB(0,0,0,8),
+              padding: const EdgeInsets.fromLTRB(0,0,0,16),
               child: Container(
                 
                 height: screenHeight * 0.22,
                 width: screenWidth,
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(115, 155, 239, 254),
+                  // color: const Color.fromARGB(115, 155, 239, 254),
+                  color: Colors.white,
                   borderRadius:
                       BorderRadius.circular(screenWidth * 0.03),
                 ),
@@ -85,11 +90,10 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                         height: screenHeight * 0.3,
                         width: screenWidth * 0.44,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Colors.transparent,
                           borderRadius: BorderRadius.circular(screenWidth * 0.03),
                         ),
                         child: Column(
-                          //margin: EdgeInsets.all(screenWidth * 0.05),
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text( tours[index].name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.03), maxLines: 2, overflow: TextOverflow.ellipsis,),
@@ -133,8 +137,10 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
             );
             }
           ),
+          
         ),
       ),
     );
   }
 }
+
