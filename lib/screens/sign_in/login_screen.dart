@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/forget_password/forget_password_screen.dart';
 import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
+import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.dart';
 import 'package:tour_drive_frontend/screens/sign_up/sign_up_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
@@ -33,7 +34,7 @@ class _LogInScreenState extends State<LogInScreen> {
         body: Container(
           // common code section for all codes
           margin: EdgeInsets.all(
-              screenWidth * 0.01), // common code section for all codes
+              screenWidth * 0.05), // common code section for all codes
           child: SingleChildScrollView(
             // common code section for all codes
             scrollDirection: Axis.vertical, // common code section for all codes
@@ -126,7 +127,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                 vertical: screenHeight * 0.028),
                             hintText: 'Enter your password',
                             suffixIcon: const Icon(
-                              Icons.lock,
+                              Icons.man,
                               color: kPrimaryColor,
                             ),
                             border: OutlineInputBorder(
@@ -184,7 +185,9 @@ class _LogInScreenState extends State<LogInScreen> {
                           content: Text('Login successfully'),
                           backgroundColor: kPrimaryColor,
                         ),
+                        
                       );
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));
                     }
                   },
                 ),
@@ -217,7 +220,9 @@ class _LogInScreenState extends State<LogInScreen> {
                         )),
                     SizedBox(width: screenWidth * 0.08),
                     ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           elevation: 0.7,

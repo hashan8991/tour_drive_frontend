@@ -28,7 +28,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          margin: EdgeInsets.all(screenWidth * 0.01),
+          margin: EdgeInsets.all(screenWidth * 0.05),
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(

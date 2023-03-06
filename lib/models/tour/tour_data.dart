@@ -1,21 +1,22 @@
 import 'package:flutter/cupertino.dart';
 
 class Tour {
-  String? name,locations,maxSeats,duration;
-  double? id,price,ratingsAverage,reviews;
+  final String name,locations;
+  final int maxSeats,duration;
+  final double id,price,ratingsAverage,reviews;
   Image? tourCover;
   String? category,type;
  
   Tour({
-    this.id,
-    this.name,
+    required this.id,
+    required this.name,
     this.tourCover,
-    this.locations,
-    this.ratingsAverage,
-    this.reviews,
-    this.maxSeats,
-    this.duration,
-    this.price,
+    required this.locations,
+    required this.ratingsAverage,
+    required this.reviews,
+    required this.maxSeats,
+    required this.duration,
+    required this.price,
 
     this.category,
     this.type,
@@ -29,10 +30,22 @@ final List<Tour> tours = [
     name: "Wonder Of Sigiriya " ,
     tourCover: Image.asset('assets/images/sigiriya.jpeg'),
     locations: "Central Province, Sri Lanka",
+    ratingsAverage: 2.5,
+    reviews: 2,
+    maxSeats: 18,
+    duration: 4,
+    price: 599,
+    
+  ),
+  Tour(
+    id: 2,
+    name: "Wonder Of Sigiriya " ,
+    tourCover: Image.asset('assets/images/sigiriya.jpeg'),
+    locations: "Central Province, Sri Lanka",
     ratingsAverage: 4.5,
     reviews: 2,
-    maxSeats: "20",
-    duration: "5",
+    maxSeats: 12,
+    duration: 8,
     price: 599,
     
   ),
@@ -41,10 +54,82 @@ final List<Tour> tours = [
     name: "Wonder Of Sigiriya " ,
     tourCover: Image.asset('assets/images/sigiriya.jpeg'),
     locations: "Central Province, Sri Lanka",
-    ratingsAverage: 4.5,
+    ratingsAverage: 2.5,
     reviews: 2,
-    maxSeats: "20",
-    duration: "5",
+    maxSeats: 18,
+    duration: 4,
+    price: 599,
+    
+  ),
+  Tour(
+    id: 1,
+    name: "Wonder Of Sigiriya " ,
+    tourCover: Image.asset('assets/images/sigiriya.jpeg'),
+    locations: "Central Province, Sri Lanka",
+    ratingsAverage: 2.5,
+    reviews: 2,
+    maxSeats: 18,
+    duration: 4,
+    price: 599,
+    
+  ),
+  Tour(
+    id: 1,
+    name: "Wonder Of Sigiriya " ,
+    tourCover: Image.asset('assets/images/sigiriya.jpeg'),
+    locations: "Central Province, Sri Lanka",
+    ratingsAverage: 2.5,
+    reviews: 2,
+    maxSeats: 18,
+    duration: 4,
+    price: 599,
+    
+  ),
+  Tour(
+    id: 1,
+    name: "Wonder Of Sigiriya " ,
+    tourCover: Image.asset('assets/images/sigiriya.jpeg'),
+    locations: "Central Province, Sri Lanka",
+    ratingsAverage: 2.5,
+    reviews: 2,
+    maxSeats: 18,
+    duration: 4,
+    price: 599,
+    
+  ),
+  Tour(
+    id: 1,
+    name: "Wonder Of Sigiriya " ,
+    tourCover: Image.asset('assets/images/sigiriya.jpeg'),
+    locations: "Central Province, Sri Lanka",
+    ratingsAverage: 2.5,
+    reviews: 2,
+    maxSeats: 18,
+    duration: 4,
+    price: 599,
+    
+  ),
+  Tour(
+    id: 1,
+    name: "Wonder Of Sigiriya " ,
+    tourCover: Image.asset('assets/images/sigiriya.jpeg'),
+    locations: "Central Province, Sri Lanka",
+    ratingsAverage: 2.5,
+    reviews: 2,
+    maxSeats: 18,
+    duration: 4,
+    price: 599,
+    
+  ),
+  Tour(
+    id: 1,
+    name: "Wonder Of Sigiriya " ,
+    tourCover: Image.asset('assets/images/sigiriya.jpeg'),
+    locations: "Central Province, Sri Lanka",
+    ratingsAverage: 2.5,
+    reviews: 2, 
+    maxSeats: 18,
+    duration: 4,
     price: 599,
     
   ),

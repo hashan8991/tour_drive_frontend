@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tour_drive_frontend/screens/landing_page/landing_screen.dart';
-// import 'package:untitled/pages/navPages/drive.dart';
-// import 'package:untitled/pages/navPages/explore.dart';
-// import 'package:untitled/pages/navPages/home_page.dart';
-// import 'package:untitled/pages/navPages/profile.dart';
+import 'package:tour_drive_frontend/screens/navbar_pages/drive_option_screen.dart';
+import 'package:tour_drive_frontend/screens/navbar_pages/emergency_screen.dart';
+import 'package:tour_drive_frontend/screens/navbar_pages/landing_screen.dart';
+import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_sreen.dart';
+import 'package:tour_drive_frontend/screens/navbar_pages/tour_option_screen.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+class NavbarMainPage extends StatefulWidget {
+  const NavbarMainPage({Key? key}) : super(key: key);
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<NavbarMainPage> createState() => _NavbarMainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _NavbarMainPageState extends State<NavbarMainPage> {
   List pages = [
-    // HomePage(),
-    // ExplorePage(),
-    // DrivePage(),
-    // ProfilePage(),
-    const LandingScreen(),
+    LandingScreen(),
+    TourOptionScreen(),
+    EmergencyScreen(),
+    DriveOptionScreen(),
+    ProfileScreen(),
+    
   ];
 
   int currentIndex = 0;
