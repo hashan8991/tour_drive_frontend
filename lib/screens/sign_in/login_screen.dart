@@ -111,7 +111,7 @@ class _LogInScreenState extends State<LogInScreen> {
                           if (value!.isEmpty) {
                             return '* Please enter your Password';
                           }
-                          if (value.length < 6) {
+                          if (value.length < 3) {
                             return '* Please enter valid email';
                           }
                           return null;
@@ -127,7 +127,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                 vertical: screenHeight * 0.028),
                             hintText: 'Enter your password',
                             suffixIcon: const Icon(
-                              Icons.man,
+                              Icons.lock,
                               color: kPrimaryColor,
                             ),
                             border: OutlineInputBorder(
