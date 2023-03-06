@@ -23,44 +23,26 @@ class _LandingScreenState extends State<LandingScreen> {
 
     return SafeArea(
       child: Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,    //title eka center krnne meken
-        backgroundColor: Colors.transparent, 
-        title: Image.asset(
-          'assets/images/logoPic.png',
-          fit: BoxFit.fill,
-          height: screenHeight * 0.04,
-          width: screenWidth * 0.6,
+        appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,    //title eka center krnne meken
+          backgroundColor: Colors.transparent, 
+          title: Image.asset(
+            'assets/images/logoPic.png',
+            fit: BoxFit.fill,
+            height: screenHeight * 0.04,
+            width: screenWidth * 0.6,
+          ),
         ),
-      ),
-      body: Container(
-        margin: EdgeInsets.all(screenWidth * 0.09),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(height: screenHeight * 0.05),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(screenWidth * 0.04),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: screenWidth * 0.02,
-                      blurRadius: screenWidth * 0.04,
-                      offset: const Offset(10, 13),
-                    ),
-                  ],
-                ),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(screenWidth * 0.04),
-                    child: Image.asset('assets/images/drivePic3.png')),
-              ),
-              SizedBox(height: screenHeight * 0.05),
-              GestureDetector(
-                child: Container(
+        body: Container(
+          margin: EdgeInsets.all(screenWidth * 0.09),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: screenHeight * 0.05),
+                Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(screenWidth * 0.04),
                     boxShadow: [
@@ -73,22 +55,41 @@ class _LandingScreenState extends State<LandingScreen> {
                     ],
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(screenWidth * 0.04),
-                    child: Image.asset('assets/images/tourPic2.png'),
-                  ),
+                      borderRadius: BorderRadius.circular(screenWidth * 0.04),
+                      child: Image.asset('assets/images/drivePic3.png')),
                 ),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const TourHomeScreen()));
-                },
-              ),
-            ],
+                SizedBox(height: screenHeight * 0.05),
+                GestureDetector(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(screenWidth * 0.04),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: screenWidth * 0.02,
+                          blurRadius: screenWidth * 0.04,
+                          offset: const Offset(10, 13),
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(screenWidth * 0.04),
+                      child: Image.asset('assets/images/tourPic2.png'),
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TourHomeScreen()));
+                  },
+                ),
+              ],
+            ),
           ),
         ),
+        // bottomNavigationBar: BottomNavigationBar(items: items),
       ),
-      // bottomNavigationBar: BottomNavigationBar(items: items),
     );
   }
 }
