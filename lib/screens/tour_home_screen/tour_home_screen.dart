@@ -37,17 +37,18 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
             onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));}, 
             icon: const Icon(Icons.arrow_back, color:Colors.black, )),
           elevation: 0,
-          title: Padding(
-            padding: const EdgeInsets.symmetric(horizontal:  7),
-            child: Image.asset("assets/images/logoNew.png"),
-          ),
+          title: Image.asset("assets/images/logoPic.png"),
           centerTitle: true,
           actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.search, color: Colors.black,),
-              onPressed: () {
+            Container(
+              margin: EdgeInsets.all(3),
+              child: IconButton(
+                alignment: Alignment.centerRight,
+                icon: const Icon(Icons.search, color: Colors.black,),
+                onPressed: () {
  
-              },
+                },
+              ),
             ),
             IconButton(
               icon: const Icon(Icons.filter_list, color: Colors.black, ),
