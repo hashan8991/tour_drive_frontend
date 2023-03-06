@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tour_drive_frontend/screens/tour_home_screen/tour_home_screen.dart';
 
-
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
 
@@ -26,10 +25,10 @@ class _LandingScreenState extends State<LandingScreen> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          centerTitle: false,
+          centerTitle: true,
           backgroundColor: Colors.transparent, //title eka center krnne meken
           title: Image.asset(
-            'assets/images/logoNew.png',
+            'assets/images/logoPic.png',
             fit: BoxFit.fill,
             height: screenHeight * 0.04,
             width: screenWidth * 0.6,
@@ -43,12 +42,46 @@ class _LandingScreenState extends State<LandingScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(height: screenHeight * 0.1),
-                Image.asset('assets/images/drive2.png'),
-                SizedBox(height: screenHeight * 0.02),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(screenWidth * 0.04),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: screenWidth * 0.02,
+                        blurRadius: screenWidth * 0.04,
+                        offset: const Offset(10, 13),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(screenWidth * 0.04),
+                      child: Image.asset('assets/images/drivePic3.png')),
+                ),
+                SizedBox(height: screenHeight * 0.05),
                 GestureDetector(
-                  child: Image.asset('assets/images/tour2.png'),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(screenWidth * 0.04),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: screenWidth * 0.02,
+                          blurRadius: screenWidth * 0.04,
+                          offset: const Offset(10, 13),
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(screenWidth * 0.04),
+                      child: Image.asset('assets/images/tourPic2.png'),
+                    ),
+                  ),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const TourHomeScreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TourHomeScreen()));
                   },
                 ),
               ],
