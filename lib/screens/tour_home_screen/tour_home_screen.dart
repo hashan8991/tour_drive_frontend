@@ -26,7 +26,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
         stars += '⭐ ';
       }
       stars.trim();
-      return Text(stars);
+      return Text(stars, style: TextStyle(fontSize: screenHeight * 0.015),);
     }
 
      return SafeArea(
@@ -71,7 +71,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
               padding: const EdgeInsets.fromLTRB(0,0,0,16),
               child: Container(
                 
-                height: screenHeight * 0.22,
+                height: screenHeight * 0.16,
                 width: screenWidth,
                 decoration: BoxDecoration(
                   // color: const Color.fromARGB(115, 155, 239, 254),
@@ -85,49 +85,53 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                     children: [
                       ClipRRect( 
                         borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                        child: Image.asset('assets/images/sigiriya.jpeg', fit: BoxFit.fill, height: screenHeight * 0.3,width: screenWidth * 0.38, )),
+                        child: Image.asset('assets/images/sigiriya.jpeg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
                       SizedBox(width: screenWidth * 0.03),
                       Container(
-                        height: screenHeight * 0.3,
-                        width: screenWidth * 0.44,
+                        height: screenHeight * 0.14,
+                        width: screenWidth * 0.52,
                         decoration: BoxDecoration(
-                          color: Colors.transparent,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(screenWidth * 0.03),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text( tours[index].name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.03), maxLines: 2, overflow: TextOverflow.ellipsis,),
+                            Text( tours[index].name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.02), maxLines: 2, overflow: TextOverflow.ellipsis,),
+                            SizedBox(height: screenHeight * 0.008,),
                             Row(
                               children: [
-                                const Icon(Icons.location_on_outlined, color: kPrimaryColor,),
-                                SizedBox(width: screenWidth * 0.37, child: Text(tours[0].locations, style: TextStyle(fontSize: screenHeight * 0.02), maxLines:1, overflow: TextOverflow.ellipsis,)),
+                                const Icon(Icons.location_on_outlined, color: kPrimaryColor, size: 12.0,),
+                                SizedBox(width: screenWidth * 0.40, child: Text(tours[0].locations, style: TextStyle(fontSize: screenHeight * 0.018), maxLines:1, overflow: TextOverflow.ellipsis,)),
                               ],
                             ),
-                            SizedBox(height: screenHeight * 0.005,),
-                            buildRatingStars(tours[index].ratingsAverage),
-                            SizedBox(height: screenHeight * 0.01,),
+                            SizedBox(height: screenHeight * 0.008,),
+                            Row(children: [buildRatingStars(tours[index].ratingsAverage), SizedBox(width: screenWidth * 0.02,),Text("${tours[index].reviews.toStringAsFixed(0)} reviews", style: TextStyle(fontSize: screenHeight *0.015),)]),
+                            SizedBox(height: screenHeight * 0.007,),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Row(
                                   children: [
-                                    Icon(Icons.people_outline_sharp, color: kPrimaryColor, size: screenHeight * 0.025,),
-                                    SizedBox(width: screenWidth *0.01,),
+                                    Icon(Icons.people_outline_sharp, color: kPrimaryColor, size: screenHeight * 0.02,),
+                                    SizedBox(width: screenWidth *0.005,),
                                     Text("${tours[index].maxSeats}"),
                                   ],
                                 ),
+                                SizedBox(width: screenHeight * 0.01,),
                                 Row(
                                   children: [
-                                    Icon(Icons.timer_outlined, color: kPrimaryColor, size: screenHeight * 0.025,),
-                                    SizedBox(width: screenWidth *0.01,),
+                                    Icon(Icons.timer_outlined, color: kPrimaryColor, size: screenHeight * 0.02,),
+                                    SizedBox(width: screenWidth *0.005,),
                                     Text("${tours[index].duration} days"),
                                   ],
                                 ),
+                                SizedBox(width: screenWidth * 0.09,),
+                                Text("\$ ${tours[index].price.toStringAsFixed(0)}", style: TextStyle(fontSize: screenHeight * 0.022,fontWeight: FontWeight.bold),)
                               ],
                             ),
                             SizedBox(height: screenHeight * 0.001,),
-                            Center(child: Text("\$ ${tours[index].price.toStringAsFixed(0)}", style: TextStyle(fontSize: screenHeight * 0.025,fontWeight: FontWeight.bold),))
+                            
                           ],
                         ),
                       ),

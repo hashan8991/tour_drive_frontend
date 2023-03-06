@@ -31,7 +31,7 @@ final List<Tour> tours = [
     tourCover: Image.asset('assets/images/sigiriya.jpeg'),
     locations: "Central Province, Sri Lanka",
     ratingsAverage: 2.5,
-    reviews: 2,
+    reviews: 3,
     maxSeats: 18,
     duration: 4,
     price: 599,
@@ -75,7 +75,7 @@ final List<Tour> tours = [
   ),
   Tour(
     id: 1,
-    name: "Wonder Of Sigiriya " ,
+    name: "Wonder Of Sigiriya xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx " ,
     tourCover: Image.asset('assets/images/sigiriya.jpeg'),
     locations: "Central Province, Sri Lanka",
     ratingsAverage: 2.5,
