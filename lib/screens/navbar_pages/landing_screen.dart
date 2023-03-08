@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tour_drive_frontend/screens/tour_home_screen/tour_home_screen.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/tour_home_screen.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});

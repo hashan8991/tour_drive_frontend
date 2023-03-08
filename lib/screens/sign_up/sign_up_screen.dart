@@ -40,7 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          margin: EdgeInsets.all(screenWidth * 0.05),
+          margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(

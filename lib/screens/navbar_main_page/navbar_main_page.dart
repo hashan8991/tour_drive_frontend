@@ -48,8 +48,7 @@ class _NavbarMainPageState extends State<NavbarMainPage> {
       //   ),
       //   toolbarHeight: MediaQuery.of(context).size.height * 0.1,
       // ),
-      body: pages[
-          currentIndex], //danata select wechcha ekee index eka meeken pennanne
+      body: pages[currentIndex], //danata select wechcha ekee index eka meeken pennanne
       bottomNavigationBar: navBar_Widget(),
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       // floatingActionButton: FloatingActionButton.extended(
@@ -71,31 +70,23 @@ class _NavbarMainPageState extends State<NavbarMainPage> {
 
   BottomNavigationBar navBar_Widget() {
     return BottomNavigationBar(
-      type: BottomNavigationBarType
-          .fixed, //methana wenas klaa bottom nav bar ekt paatak daanna oona nisaa
-      backgroundColor:
-          Colors.white54, //methanin bottom nav bar color change krnna puluwan
-      selectedFontSize:
-          0, //icon labels hide krnna oona nisai methana zero klee
-      unselectedFontSize:
-          0, //icon labels hide krnna oona nisai methana zero klee
-      onTap:
-          onTap, //buttons tap klata passe selection change wenna oona nisa mee onTap method eka hadala call klaa
-      currentIndex:
-          currentIndex, // default index value eka meka, methana nm zero wenna oona mn hithanne
+      type: BottomNavigationBarType.fixed, //methana wenas klaa bottom nav bar ekt paatak daanna oona nisaa
+      backgroundColor: Colors.white54, //methanin bottom nav bar color change krnna puluwan
+      selectedFontSize: 0, //icon labels hide krnna oona nisai methana zero klee
+      unselectedFontSize: 0, //icon labels hide krnna oona nisai methana zero klee
+      onTap: onTap, //buttons tap klata passe selection change wenna oona nisa mee onTap method eka hadala call klaa
+      currentIndex: currentIndex, // default index value eka meka, methana nm zero wenna oona mn hithanne
       selectedItemColor: Colors.amber,
       unselectedItemColor: Colors.grey.withOpacity(0.5),
       showSelectedLabels: false, //selected icon labels hide kla
       showUnselectedLabels: false, //unselected icon labels hide kla
       elevation: 0,
       items: const [
-        BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home)),
-        BottomNavigationBarItem(label: 'Explore', icon: Icon(Icons.explore)),
-        BottomNavigationBarItem(
-            label: 'Drive', icon: Icon(FontAwesomeIcons.ambulance)),
-        BottomNavigationBarItem(label: 'Drive', icon: Icon(Icons.drive_eta)),
-        BottomNavigationBarItem(
-            label: 'Profile', icon: Icon(Icons.account_circle)),
+        BottomNavigationBarItem( label: 'Home', icon: Icon(Icons.home) ),
+        BottomNavigationBarItem( label: 'Explore', icon: Icon(Icons.explore) ),
+        BottomNavigationBarItem( label: 'Drive', icon: Icon(FontAwesomeIcons.truckMedical) ),
+        BottomNavigationBarItem( label: 'Drive', icon: Icon(Icons.drive_eta) ),
+        BottomNavigationBarItem( label: 'Profile', icon: Icon(Icons.account_circle) ),
       ],
     );
   }

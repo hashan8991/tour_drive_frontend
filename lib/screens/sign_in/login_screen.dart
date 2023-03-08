@@ -33,8 +33,8 @@ class _LogInScreenState extends State<LogInScreen> {
         // common code section for all codes
         body: Container(
           // common code section for all codes
-          margin: EdgeInsets.all(
-              screenWidth * 0.05), // common code section for all codes
+          margin: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.05), // common code section for all codes
           child: SingleChildScrollView(
             // common code section for all codes
             scrollDirection: Axis.vertical, // common code section for all codes
