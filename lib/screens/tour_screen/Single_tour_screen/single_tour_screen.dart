@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:readmore/readmore.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/Single_tour_screen/sub_pages/included_excluded.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/Single_tour_screen/sub_pages/overview.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/Single_tour_screen/sub_pages/tour_highlights.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/Single_tour_screen/sub_pages/tour_map.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/Single_tour_screen/sub_pages/tour_plan.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/tour_home_screen.dart';
 import 'package:tour_drive_frontend/screens/feedback/feedback_screen.dart';
 import 'package:tour_drive_frontend/widgets/divider_container.dart';
@@ -64,7 +72,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                       color: Colors.grey.withOpacity(0.15), // shadow color
                       spreadRadius: 1.0, // how wide the shadow is
                       blurRadius: 5.0, // how soft the shadow is
-                      offset: Offset(0, 3), // offset of the shadow
+                      offset: const Offset(0, 3), // offset of the shadow
                     ),
                   ],
                 ),
@@ -74,15 +82,9 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    ClipRRect( 
-                      borderRadius: BorderRadius.circular(screenWidth * 0.02),
-                      child: Image.asset('assets/images/sigiriya.jpeg', fit: BoxFit.fill, height: screenHeight * 0.3, )
-                    ),
+                    Image.asset('assets/images/sigiriya.jpeg', fit: BoxFit.fill, height: screenHeight * 0.3, ),
                     SizedBox(width: screenWidth * 0.04),
-                    ClipRRect( 
-                      borderRadius: BorderRadius.circular(screenWidth * 0.02),
-                      child: Image.asset('assets/images/sigiriya.jpeg', fit: BoxFit.fill, height: screenHeight * 0.3, )
-                    ),
+                    Image.asset('assets/images/sigiriya.jpeg', fit: BoxFit.fill, height: screenHeight * 0.3, ),
                   ]
                   ),
                 ),
@@ -120,9 +122,9 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                 SizedBox(height: screenHeight * 0.025),
           //######################## Tour sub details duration, max people, min age, pick up #######################################################################################################               
                 Row(
-                  //mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Column(
                           children: const[
@@ -133,14 +135,15 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:  [
-                           Text("Duration",style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.015),),
-                           Text("12 days", style: TextStyle( fontSize: screenHeight * 0.015),),
+                           Text("Duration",style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.017),),
+                           Text("12 days", style: TextStyle( fontSize: screenHeight * 0.017),),
                           ],
                         ),
                       ],
                     ),
-                    SizedBox(width: screenWidth * 0.1,),
+                    SizedBox(width: screenWidth * 0.25,),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Column(
                           children: const [
@@ -151,19 +154,21 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:  [
-                           Text("Max People",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.015),),
-                           Text("5", style: TextStyle( fontSize: screenHeight * 0.015) ),
+                           Text("Max People",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.017),),
+                           Text("15", style: TextStyle( fontSize: screenHeight * 0.017) ),
                           ],
                         ),
                       ],
                     ),
                   ],
                 ),
+
                 SizedBox(height: screenHeight * 0.025),
+
                 Row(
-                  //mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start ,
@@ -175,14 +180,15 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:  [
-                           Text("Min Age",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.015),),
-                           Text("17+",style: TextStyle( fontSize: screenHeight * 0.015)),
+                           Text("Min Age",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.017),),
+                           Text("17+",style: TextStyle( fontSize: screenHeight * 0.017)),
                           ],
                         ),
                       ],
                     ),
-                    SizedBox(width: screenWidth * 0.1,),
+                    SizedBox(width: screenWidth * 0.25,),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Column(
                           children: const [
@@ -193,8 +199,8 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:  [
-                           Text("Pick up",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.015),),
-                          SizedBox(height: 16.0,   child: Text("Air port",maxLines: 2,style: TextStyle( fontSize: screenHeight * 0.015)),), 
+                           Text("Pick up",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.017),),
+                          SizedBox(width: screenWidth * 0.3,   child: Text("Air port ",maxLines: 4,style: TextStyle( fontSize: screenHeight * 0.017)),), 
                           ],
                         ),
                       ],
@@ -202,38 +208,143 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                   ],
                 ),
                SizedBox(height: screenHeight * 0.021),
-                
-               
           //######################## submit review  #######################################################################################################               
-                TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const FeedbackForm()));
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: kPrimaryColor,
-                      textStyle: const TextStyle(
-                      decoration: TextDecoration.underline, // add underline style
+              TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const FeedbackForm()));
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: kPrimaryColor,
+                    textStyle: const TextStyle(
+                    decoration: TextDecoration.underline, // add underline style
+                  ),
+                  ),
+                  child: Text(
+                    'Submit Review',
+                    style: TextStyle(
+                      fontSize: screenHeight * 0.022,
+                      color: kPrimaryColor,
                     ),
-                    ),
-                    child: Text(
-                      'Submit Review',
-                      style: TextStyle(
-                        fontSize: screenHeight * 0.02,
-                        color: kPrimaryColor,
+                  ),
+                ),
+ //######################## Touroverview ...  #######################################################################################################               
+                DividerContainer(text: "Overview", press: () {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const OverviewScreen()));
+                }
+                ),
+                DividerContainer(text: "Tour Highlights", press: () {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourhighlightScreen()));
+                }),
+                DividerContainer(text: "Included / Excluded", press: () {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const IncludeExcludeScreen()));
+                }),
+                DividerContainer(text: "Tour Plan", press: () {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourPlanScreen()));
+                }),
+                const Divider(thickness: 1.0),
+  //#####################################      Tour Map   ##################################################################################        
+                SizedBox(height: screenHeight * 0.012),
+                Text( "Tour Map", style: TextStyle(fontSize: screenHeight * 0.025,fontWeight: FontWeight.bold)),
+                SizedBox(height: screenHeight * 0.023),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourMapScreen()));
+                  },
+                  child: Image.asset('assets/images/map.jpg', fit: BoxFit.fill, height: screenHeight * 0.15, width: screenWidth,)
+                ),
+                SizedBox(height: screenHeight * 0.023),
+                const Divider(thickness: 1.0),
+                SizedBox(height: screenHeight * 0.016),
+                Text( "Reviews", style: TextStyle(fontSize: screenHeight * 0.025,fontWeight: FontWeight.bold)),
+                SizedBox(height: screenHeight * 0.02),
+      //#####################################      Tour Review   ##################################################################################                    
+                Row(
+                  children: [
+                    RatingBarIndicator(
+                      rating: 2.75,
+                      itemBuilder: (context, index) => Icon(
+                          Icons.star,
+                          color: kPrimaryColor,
                       ),
+                      itemCount: 5,
+                      itemSize: screenHeight * 0.03,
+                      direction: Axis.horizontal,
                     ),
+                    SizedBox(width: screenWidth * 0.05),
+                    Text("2 reviews", style: TextStyle(fontSize: screenHeight * 0.022)),
+                  ],
+                ),
+                 SizedBox(height: screenHeight * 0.02),
+                Row(
+                  children: [
+                    Text("Location ", style: TextStyle(fontSize: screenHeight * 0.022)),
+                    SizedBox(width: screenWidth * 0.02,),
+                    LinearPercentIndicator(
+                      width: screenWidth * 0.5,
+                      barRadius: Radius.circular(screenHeight * 0.02),
+                      animation: true,
+                      lineHeight: screenHeight * 0.022,
+                      animationDuration: 2500,
+                      percent: 0.8,
+                      center: Text("80.0%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
+                      progressColor: kPrimaryColor,
+                    ),
+                  ],
+                ),
+  //#####################################      Person revieew   ##################################################################################                    
+
+                SizedBox(height: screenHeight * 0.02,),
+                const Divider(thickness: 1.0),
+                Container(
+                  width: screenWidth,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundImage:NetworkImage('https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper.png'),
+                          ),
+                          SizedBox(width: screenWidth * 0.05,),
+                          Text("Name here", style: TextStyle(fontSize: screenHeight * 0.02,fontWeight: FontWeight.bold),),
+                        ],
+                      ),
+                      SizedBox(height: screenHeight * 0.01,),
+                      RatingBarIndicator(
+                        rating: 2.75,
+                        itemBuilder: (context, index) => Icon(
+                            Icons.star,
+                            color: kPrimaryColor,
+                        ),
+                        itemCount: 5,
+                        itemSize: screenHeight * 0.03,
+                        direction: Axis.horizontal,
+                      ),
+                      SizedBox(height: screenHeight * 0.01,),
+                      ReadMoreText(
+                        'Flutter is Google’s mobile UI open source framework to build high-quality native (super fast) interfaces for iOS and Android apps with the unified codebase.',
+                        trimLines: 2,
+                        colorClickableText: kPrimaryColor,
+                        trimMode: TrimMode.Line,
+                        trimCollapsedText: 'Read more',
+                        trimExpandedText: "",
+                        moreStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        //lessStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: screenHeight * 0.01,),
+                      Row(
+                        children: [
+                          Icon(Icons.calendar_month_outlined, color: kPrimaryColor,),
+                          SizedBox(width: screenWidth * 0.02),
+                          Text("March 10, 2020"),
+                      ],)
+                    ],
                   ),
-                  DividerContainer(text: "Overeview", press: ()
-                    {Navigator.push(context,MaterialPageRoute(builder: (context) =>const FeedbackForm()));}
-                  ),
-                  DividerContainer(text: "Tour Highlights", press: () {}),
-                  DividerContainer(text: "Included/Excluded", press: () {}),
-                  DividerContainer(text: "Tour Plan", press: () {}),
-                  const Divider(thickness: 1.0),
+                ),
 
               ]
             ),

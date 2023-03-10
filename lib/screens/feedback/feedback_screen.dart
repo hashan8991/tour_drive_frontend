@@ -139,22 +139,22 @@ class _FeedbackFormState extends State<FeedbackForm> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         RatingBar.builder(
-                      initialRating: serviceRating,
-                      minRating: 0,
-                      maxRating: 5,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      ),
-                      onRatingUpdate: (rating) {
-                        setState(() {
-                          serviceRating = rating;
-                        });
-                      },
-                    ),
+                          initialRating: serviceRating,
+                          minRating: 0,
+                          maxRating: 5,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          itemBuilder: (context, _) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          onRatingUpdate: (rating) {
+                            setState(() {
+                              serviceRating = rating;
+                            });
+                          },
+                        ),
                       ],
                     ),
                     ]

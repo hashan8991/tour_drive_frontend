@@ -23,6 +23,7 @@ class DividerContainer extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text( text, style: TextStyle(fontSize: screenHeight * 0.02,fontWeight: FontWeight.bold)),
+              SizedBox(width: screenHeight * 0.02,),
               Icon(Icons.arrow_forward_ios, size: screenHeight * 0.021,),
             ],
           ),
