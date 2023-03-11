@@ -1,8 +1,9 @@
 import "package:flutter/material.dart";
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:tour_drive_frontend/constants.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/Single_tour_screen/single_tour_screen.dart';
 import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
-import 'package:tour_drive_frontend/screens/sign_in/login_screen.dart';
+import 'package:tour_drive_frontend/screens/authentication/sign_in/login_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
 
@@ -28,14 +29,14 @@ class _FeedbackFormState extends State<FeedbackForm> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          margin: EdgeInsets.all(screenWidth * 0.05),
+          margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
               Header(text: "Create Review", press: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const LoadingScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
               }),
               SizedBox(height: screenHeight *0.02,),
               const Center(child: Text("Hey, Leave feedback about this",)),
@@ -138,22 +139,22 @@ class _FeedbackFormState extends State<FeedbackForm> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         RatingBar.builder(
-                      initialRating: serviceRating,
-                      minRating: 0,
-                      maxRating: 5,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      ),
-                      onRatingUpdate: (rating) {
-                        setState(() {
-                          serviceRating = rating;
-                        });
-                      },
-                    ),
+                          initialRating: serviceRating,
+                          minRating: 0,
+                          maxRating: 5,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          itemBuilder: (context, _) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          onRatingUpdate: (rating) {
+                            setState(() {
+                              serviceRating = rating;
+                            });
+                          },
+                        ),
                       ],
                     ),
                     ]

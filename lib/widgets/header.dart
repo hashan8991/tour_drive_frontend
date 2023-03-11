@@ -17,6 +17,8 @@ class Header extends StatelessWidget {
     //final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      //crossAxisAlignment: CrossAxisAlignment.,
       children: [
         IconButton(onPressed: press, icon: const Icon(Icons.arrow_back, )),
         Text(text, style: TextStyle(fontSize: screenHeight*0.03, fontWeight: FontWeight.bold),),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tour_drive_frontend/screens/tour_home_screen/tour_home_screen.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/tour_home_screen.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -25,8 +25,8 @@ class _LandingScreenState extends State<LandingScreen> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          centerTitle: true,
-          backgroundColor: Colors.transparent, //title eka center krnne meken
+          centerTitle: true,    //title eka center krnne meken
+          backgroundColor: Colors.transparent, 
           title: Image.asset(
             'assets/images/logoPic.png',
             fit: BoxFit.fill,
@@ -35,13 +35,13 @@ class _LandingScreenState extends State<LandingScreen> {
           ),
         ),
         body: Container(
-          margin: EdgeInsets.all(screenWidth * 0.04),
+          margin: EdgeInsets.all(screenWidth * 0.09),
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SizedBox(height: screenHeight * 0.1),
+                SizedBox(height: screenHeight * 0.05),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(screenWidth * 0.04),

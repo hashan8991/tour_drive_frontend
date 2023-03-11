@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
 import 'package:tour_drive_frontend/constants.dart';
-import 'package:tour_drive_frontend/screens/forget_password/forget_password_screen.dart';
+import 'package:tour_drive_frontend/screens/authentication/forget_password/forget_password_screen.dart';
 import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.dart';
-import 'package:tour_drive_frontend/screens/sign_up/sign_up_screen.dart';
+import 'package:tour_drive_frontend/screens/authentication/sign_up/sign_up_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
 //import 'package:tour_drive_frontend/size_config.dart';
@@ -33,8 +33,8 @@ class _LogInScreenState extends State<LogInScreen> {
         // common code section for all codes
         body: Container(
           // common code section for all codes
-          margin: EdgeInsets.all(
-              screenWidth * 0.05), // common code section for all codes
+          margin: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.05), // common code section for all codes
           child: SingleChildScrollView(
             // common code section for all codes
             scrollDirection: Axis.vertical, // common code section for all codes
@@ -111,7 +111,7 @@ class _LogInScreenState extends State<LogInScreen> {
                           if (value!.isEmpty) {
                             return '* Please enter your Password';
                           }
-                          if (value.length < 6) {
+                          if (value.length < 3) {
                             return '* Please enter valid email';
                           }
                           return null;
@@ -127,7 +127,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                 vertical: screenHeight * 0.028),
                             hintText: 'Enter your password',
                             suffixIcon: const Icon(
-                              Icons.man,
+                              Icons.lock,
                               color: kPrimaryColor,
                             ),
                             border: OutlineInputBorder(
