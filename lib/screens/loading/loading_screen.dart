@@ -17,15 +17,15 @@ class LoadingScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          margin: EdgeInsets.all(screenWidth * 0.05),
+          margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
               children: <Widget>[
                 SizedBox(
-                  width: screenWidth,
+                  width: screenWidth * 0.7,
                   height: screenHeight * 0.3,
-                  child: Image.asset('assets/images/logo.png')
+                  child: Image.asset('assets/images/logoPic.png')
                 ),
                 SizedBox(
                   width: screenWidth,
