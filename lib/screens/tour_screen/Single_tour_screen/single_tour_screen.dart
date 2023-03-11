@@ -41,6 +41,14 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
 
     return SafeArea(
       child: Scaffold(
+       floatingActionButton: FloatingActionButton.extended(
+          backgroundColor: kPrimaryColor,
+          foregroundColor: Colors.white,
+          onPressed: () {
+            // Respond to button press
+          },
+          label: Text('Check availability'),
+        ),
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.transparent,
@@ -254,7 +262,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                   onTap: () {
                     Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourMapScreen()));
                   },
-                  child: Image.asset('assets/images/map.jpg', fit: BoxFit.fill, height: screenHeight * 0.15, width: screenWidth,)
+                  child: Image.asset('assets/images/map.jpeg', fit: BoxFit.fill, height: screenHeight * 0.15, width: screenWidth,)
                 ),
                 SizedBox(height: screenHeight * 0.023),
                 const Divider(thickness: 1.0),
