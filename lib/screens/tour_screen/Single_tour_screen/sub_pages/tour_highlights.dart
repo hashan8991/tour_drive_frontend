@@ -18,22 +18,31 @@ class _TourhighlightScreenState extends State<TourhighlightScreen> {
 
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Header(text: "Tour Highlights", press: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
-                } ),
-                SizedBox(height: screenHeight * 0.02,),
-                Text("🔰  Be enveloped in the beauty of towering trees, remote beaches, and mountains of the Canadian wilderness"),
-                SizedBox(height: screenHeight * 0.02,),
-                Text("🔰  Be enveloped in the beauty of towering trees, remote beaches, and mountains of the Canadian wilderness"),
-              ],
-            ),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Header(text: "Tour Highlights", press: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
+              } ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      
+                      SizedBox(height: screenHeight * 0.02,),
+                      Text("🔰  Be enveloped in the beauty of towering trees, remote beaches, and mountains of the Canadian wilderness"),
+                      SizedBox(height: screenHeight * 0.02,),
+                      Text("🔰  Be enveloped in the beauty of towering trees, remote beaches, and mountains of the Canadian wilderness"),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

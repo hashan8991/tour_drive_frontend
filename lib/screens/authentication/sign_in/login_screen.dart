@@ -31,239 +31,247 @@ class _LogInScreenState extends State<LogInScreen> {
       // common code section for all codes
       child: Scaffold(
         // common code section for all codes
-        body: Container(
-          // common code section for all codes
-          margin: EdgeInsets.symmetric(
-              horizontal: screenWidth * 0.05), // common code section for all codes
-          child: SingleChildScrollView(
-            // common code section for all codes
-            scrollDirection: Axis.vertical, // common code section for all codes
-            child: Column(
-              // common code section for all codes
-              children: <Widget>[
-                Header(
-                    text: "Sign In",
-                    press: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoadingScreen()));
-                    }),
-
-                SizedBox(height: screenHeight * 0.02),
-                const Text(
-                  "Hey, Enter your details to get sign in ",
-                ),
-                SizedBox(height: screenHeight * 0.04),
-
-                Form(
-                  key: formKey,
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              Header(
+                text: "Sign In",
+                press: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoadingScreen()));
+                }
+              ),
+              Container(
+                // common code section for all codes
+                margin: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.05), // common code section for all codes
+                child: SingleChildScrollView(
+                  // common code section for all codes
+                  scrollDirection: Axis.vertical, // common code section for all codes
                   child: Column(
-                    children: [
-                      TextFormField(
-                        controller: emailController,
-                        onSaved: (name) {
-                          email = name!;
-                        },
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return '* Please enter your email';
-                          }
-                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                              .hasMatch(value)) {
-                            return '* Please enter a valid email';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                            labelText: "Email",
-                            floatingLabelStyle:
-                                const TextStyle(color: kPrimaryColor),
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: screenWidth * 0.05,
-                                vertical: screenHeight * 0.028),
-                            hintText: 'Enter your email',
-                            suffixIcon: const Icon(
-                              Icons.email,
-                              color: kPrimaryColor,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(screenHeight * 0.03),
-                              borderSide:
-                                  const BorderSide(color: kPrimaryColor),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(screenHeight * 0.03),
-                              borderSide:
-                                  const BorderSide(color: kPrimaryColor),
-                            )),
-                      ),
+                    // common code section for all codes
+                    children: <Widget>[
+                      
                       SizedBox(height: screenHeight * 0.02),
-                      TextFormField(
-                        controller: passwordController,
-                        onSaved: (value) {
-                          password = value!;
-                        },
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return '* Please enter your Password';
-                          }
-                          if (value.length < 3) {
-                            return '* Please enter valid email';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            labelText: "Password",
-                            floatingLabelStyle:
-                                const TextStyle(color: kPrimaryColor),
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: screenWidth * 0.05,
-                                vertical: screenHeight * 0.028),
-                            hintText: 'Enter your password',
-                            suffixIcon: const Icon(
-                              Icons.lock,
-                              color: kPrimaryColor,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(screenHeight * 0.03),
-                              borderSide:
-                                  const BorderSide(color: kPrimaryColor),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(screenHeight * 0.03),
-                              borderSide:
-                                  const BorderSide(color: kPrimaryColor),
-                            )),
+                      const Text(
+                        "Hey, Enter your details to get sign in ",
                       ),
-                    ],
-                  ),
-                ),
-
-                SizedBox(height: screenHeight * 0.02),
-                // Row(
-                //   children: [
-                //     const Icon(Icons.warning, color: kPrimaryColor,),
-                //     SizedBox(width: screenWidth * 0.02,),
-                //     const Text("Email Or Password Is Incorrect", ),
-                //   ],
-                // ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const ForgetPasswordScreen()));
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: kPrimaryColor,
-                  ),
-                  child: Text(
-                    'Forgot password?',
-                    style: TextStyle(
-                      fontSize: screenHeight * 0.02,
-                      color: kPrimaryColor,
-                    ),
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.02),
-
-                DefaultButton(
-                  text: "Login",
-                  press: () {
-                    if (formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Login successfully'),
-                          backgroundColor: kPrimaryColor,
+                      SizedBox(height: screenHeight * 0.04),
+        
+                      Form(
+                        key: formKey,
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: emailController,
+                              onSaved: (name) {
+                                email = name!;
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return '* Please enter your email';
+                                }
+                                if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                                    .hasMatch(value)) {
+                                  return '* Please enter a valid email';
+                                }
+                                return null;
+                              },
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(
+                                  labelText: "Email",
+                                  floatingLabelStyle:
+                                      const TextStyle(color: kPrimaryColor),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: screenWidth * 0.05,
+                                      vertical: screenHeight * 0.028),
+                                  hintText: 'Enter your email',
+                                  suffixIcon: const Icon(
+                                    Icons.email,
+                                    color: kPrimaryColor,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(screenHeight * 0.03),
+                                    borderSide:
+                                        const BorderSide(color: kPrimaryColor),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(screenHeight * 0.03),
+                                    borderSide:
+                                        const BorderSide(color: kPrimaryColor),
+                                  )),
+                            ),
+                            SizedBox(height: screenHeight * 0.02),
+                            TextFormField(
+                              controller: passwordController,
+                              onSaved: (value) {
+                                password = value!;
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return '* Please enter your Password';
+                                }
+                                if (value.length < 3) {
+                                  return '* Please enter valid email';
+                                }
+                                return null;
+                              },
+                              keyboardType: TextInputType.visiblePassword,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                  labelText: "Password",
+                                  floatingLabelStyle:
+                                      const TextStyle(color: kPrimaryColor),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: screenWidth * 0.05,
+                                      vertical: screenHeight * 0.028),
+                                  hintText: 'Enter your password',
+                                  suffixIcon: const Icon(
+                                    Icons.lock,
+                                    color: kPrimaryColor,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(screenHeight * 0.03),
+                                    borderSide:
+                                        const BorderSide(color: kPrimaryColor),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(screenHeight * 0.03),
+                                    borderSide:
+                                        const BorderSide(color: kPrimaryColor),
+                                  )),
+                            ),
+                          ],
                         ),
-                        
-                      );
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));
-                    }
-                  },
-                ),
-
-                SizedBox(height: screenHeight * 0.03),
-                Text(
-                  "Or Sign In With",
-                  style: TextStyle(
-                      fontSize: screenHeight * 0.02,
-                      fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: screenHeight * 0.03),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          elevation: 0.7,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(screenWidth *
-                                0.9), // Set the border radius of the button
-                          ),
-                        ),
-                        child: Image.asset(
-                          'assets/images/google.png',
-                          height: screenHeight * 0.07,
-                          width: screenWidth * 0.07,
-                        )),
-                    SizedBox(width: screenWidth * 0.08),
-                    ElevatedButton(
-                        onPressed: () {
-                          
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          elevation: 0.7,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(screenWidth *
-                                0.9), // Set the border radius of the button
-                          ),
-                        ),
-                        child: Image.asset(
-                          'assets/images/facebook.png',
-                          height: screenHeight * 0.07,
-                          width: screenWidth * 0.07,
-                        )),
-                  ],
-                ),
-                SizedBox(height: screenHeight * 0.04),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Don't have an account ?"),
+                      ),
+        
+                      SizedBox(height: screenHeight * 0.02),
+                      // Row(
+                      //   children: [
+                      //     const Icon(Icons.warning, color: kPrimaryColor,),
+                      //     SizedBox(width: screenWidth * 0.02,),
+                      //     const Text("Email Or Password Is Incorrect", ),
+                      //   ],
+                      // ),
                       TextButton(
                         onPressed: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const SignUpScreen()));
+                                  builder: (context) =>
+                                      const ForgetPasswordScreen()));
                         },
                         style: TextButton.styleFrom(
                           foregroundColor: kPrimaryColor,
                         ),
                         child: Text(
-                          'Register Now',
+                          'Forgot password?',
                           style: TextStyle(
                             fontSize: screenHeight * 0.02,
                             color: kPrimaryColor,
                           ),
                         ),
                       ),
-                    ]),
-              ],
-            ),
+                      SizedBox(height: screenHeight * 0.02),
+        
+                      DefaultButton(
+                        text: "Login",
+                        press: () {
+                          if (formKey.currentState!.validate()) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Login successfully'),
+                                backgroundColor: kPrimaryColor,
+                              ),
+                              
+                            );
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));
+                          }
+                        },
+                      ),
+        
+                      SizedBox(height: screenHeight * 0.03),
+                      Text(
+                        "Or Sign In With",
+                        style: TextStyle(
+                            fontSize: screenHeight * 0.02,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: screenHeight * 0.03),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                elevation: 0.7,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(screenWidth *
+                                      0.9), // Set the border radius of the button
+                                ),
+                              ),
+                              child: Image.asset(
+                                'assets/images/google.png',
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.07,
+                              )),
+                          SizedBox(width: screenWidth * 0.08),
+                          ElevatedButton(
+                              onPressed: () {
+                                
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                elevation: 0.7,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(screenWidth *
+                                      0.9), // Set the border radius of the button
+                                ),
+                              ),
+                              child: Image.asset(
+                                'assets/images/facebook.png',
+                                height: screenHeight * 0.07,
+                                width: screenWidth * 0.07,
+                              )),
+                        ],
+                      ),
+                      SizedBox(height: screenHeight * 0.04),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text("Don't have an account ?"),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const SignUpScreen()));
+                              },
+                              style: TextButton.styleFrom(
+                                foregroundColor: kPrimaryColor,
+                              ),
+                              child: Text(
+                                'Register Now',
+                                style: TextStyle(
+                                  fontSize: screenHeight * 0.02,
+                                  color: kPrimaryColor,
+                                ),
+                              ),
+                            ),
+                          ]),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

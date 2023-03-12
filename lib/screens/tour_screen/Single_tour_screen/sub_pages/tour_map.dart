@@ -17,18 +17,23 @@ class _TourMapScreenState extends State<TourMapScreen> {
 
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: <Widget>[
-                Header(text: "Tour Map", press: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
-                } ),
-               
-              ],
-            ),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              Header(text: "Tour Map", press: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
+              } ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
