@@ -1,15 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:readmore/readmore.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/Single_tour_screen/sub_pages/included_excluded.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/Single_tour_screen/sub_pages/overview.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/Single_tour_screen/sub_pages/tour_highlights.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/Single_tour_screen/sub_pages/tour_map.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/Single_tour_screen/sub_pages/tour_plan.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/tour_check_avilability.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/included_excluded.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/overview.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/tour_highlights.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/tour_map.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/tour_plan.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/tour_home_screen.dart';
-import 'package:tour_drive_frontend/screens/feedback/feedback_screen.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/tour_feedback_screen.dart';
 import 'package:tour_drive_frontend/widgets/divider_container.dart';
 import 'package:tour_drive_frontend/widgets/favorite_icon.dart';
 import 'package:tour_drive_frontend/constants.dart';
@@ -41,14 +43,22 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
 
     return SafeArea(
       child: Scaffold(
-       floatingActionButton: FloatingActionButton.extended(
-          backgroundColor: kPrimaryColor,
-          foregroundColor: Colors.white,
-          onPressed: () {
-            // Respond to button press
-          },
-          label: Text('Check availability'),
-        ),
+
+       floatingActionButton: SizedBox(
+        width: screenWidth * 0.4,
+        height: screenHeight * 0.1,
+         child: FittedBox(
+           child: FloatingActionButton.extended(
+              backgroundColor: kPrimaryColor,
+              foregroundColor: Colors.white,
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourCheckAvailabilityScreen())); 
+              },
+              label: Text('Check availability'),
+            ),
+         ),
+       ),
+       
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.transparent,
@@ -115,7 +125,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                 Row(children: [
                   buildRatingStars(5),
                   SizedBox(width: screenWidth * 0.05,),
-                  Text("2 reviews")
+                  Text("2 Reviews")
                 ]
                 ), 
                 SizedBox(height: screenHeight * 0.025),
@@ -223,7 +233,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                const FeedbackForm()));
+                                const TourFeedbackForm()));
                   },
                   style: TextButton.styleFrom(
                     foregroundColor: kPrimaryColor,
