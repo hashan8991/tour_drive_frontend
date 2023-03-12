@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/tour_home_screen.dart';
+import 'package:tour_drive_frontend/screens/vehicle_screen/vehicle_home_screen.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -42,21 +43,29 @@ class _LandingScreenState extends State<LandingScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(height: screenHeight * 0.05),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(screenWidth * 0.04),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: screenWidth * 0.02,
-                        blurRadius: screenWidth * 0.04,
-                        offset: const Offset(10, 13),
-                      ),
-                    ],
-                  ),
-                  child: ClipRRect(
+                GestureDetector(
+                  child: Container(
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(screenWidth * 0.04),
-                      child: Image.asset('assets/images/drivePic3.png')),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: screenWidth * 0.02,
+                          blurRadius: screenWidth * 0.04,
+                          offset: const Offset(10, 13),
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(screenWidth * 0.04),
+                        child: Image.asset('assets/images/drivePic3.png')),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const VehicleHomeScreen()));
+                  },
                 ),
                 SizedBox(height: screenHeight * 0.05),
                 GestureDetector(
