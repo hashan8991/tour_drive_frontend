@@ -124,7 +124,7 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(Icons.people_outline_sharp, color: kPrimaryColor, size: screenHeight * 0.02,),
+                                          Icon(Icons.airline_seat_recline_normal_sharp, color: kPrimaryColor, size: screenHeight * 0.02,),
                                           SizedBox(width: screenWidth *0.005,),
                                           Text("4 seats"),
                                         ],
