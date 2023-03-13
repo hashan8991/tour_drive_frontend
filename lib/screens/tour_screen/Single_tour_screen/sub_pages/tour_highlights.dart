@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/Single_tour_screen/single_tour_screen.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
 
 class TourhighlightScreen extends StatefulWidget {

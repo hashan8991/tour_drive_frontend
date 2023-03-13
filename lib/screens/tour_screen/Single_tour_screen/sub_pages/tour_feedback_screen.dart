@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:tour_drive_frontend/constants.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/Single_tour_screen/single_tour_screen.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
 import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
 import 'package:tour_drive_frontend/screens/authentication/sign_in/login_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
@@ -178,7 +178,7 @@ class _TourFeedbackFormState extends State<TourFeedbackForm> {
                                     backgroundColor: kPrimaryColor,
                                     ),
                                 );
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
+                                //Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
                         }
                       }),
                     ),
