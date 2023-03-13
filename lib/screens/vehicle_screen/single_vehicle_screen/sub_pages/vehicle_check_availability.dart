@@ -27,6 +27,18 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
         initialDate: DateTime.now(),
         firstDate: DateTime(1900),
         lastDate: DateTime(2100),
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: const ColorScheme.light(
+                primary: kPrimaryColor, // header background color
+                onPrimary: Colors.black, // header text color
+                onSurface: Colors.black, // body text color
+              )
+            ),
+            child: child!,
+          );
+        },
     );
 
     if (picked != null) {
@@ -172,7 +184,7 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
                             ),
                           ),
                           SizedBox(height: screenHeight * 0.06,),
-                          DefaultButton(text: "Book Now", press: () {
+                          DefaultButton(text: "Rent Now", press: () {
                             //Navigator.push(context, MaterialPageRoute(builder: (context) => const ()));
                           })
                         ],
