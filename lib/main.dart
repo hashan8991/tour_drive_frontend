@@ -7,7 +7,7 @@ import 'package:tour_drive_frontend/screens/authentication/forget_password/forge
 import 'package:tour_drive_frontend/screens/navbar_pages/landing_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.dart';
 import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
-import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_sreen.dart';
+import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_page_sreen.dart';
 import 'package:tour_drive_frontend/screens/authentication/sign_in/login_screen.dart';
 import 'package:tour_drive_frontend/screens/authentication/sign_up/sign_up_screen.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/tour_home_screen.dart';
@@ -40,15 +40,15 @@ class MyApp extends StatelessWidget {
       //home: const LogInScreen(),
       //home: const ForgetPasswordScreen(),
       //home: SignUpScreen(),
-      //home: const LoadingScreen(), // first page of the app
+      home: const LoadingScreen(), // first page of the app
       //home: const FeedbackForm(),
       //home: const TourHomeScreen(),
       //home: const MainPage(),
       //initialRoute: LoadingScreen.routeName,
       // routes: routes,
-       //home: const LandingScreen(),
+      //home: const LandingScreen(),
       // home: const ProfileScreen(),
-      home: SingleTourScreen(),
+      // home: SingleTourScreen(),
     );
   }
 }
