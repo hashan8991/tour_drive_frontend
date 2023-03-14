@@ -100,9 +100,12 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    Image.asset('assets/images/sigiriya.jpeg', fit: BoxFit.fill, height: screenHeight * 0.3, ),
+                    Image.asset('assets/images/sigiriya.jpeg', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7, ),
                     SizedBox(width: screenWidth * 0.04),
-                    Image.asset('assets/images/sigiriya.jpeg', fit: BoxFit.fill, height: screenHeight * 0.3, ),
+                    Image.network('https://media-cdn.tripadvisor.com/media/photo-s/1b/39/e3/9e/sigiriya-ancient-rock.jpg', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
+                    SizedBox(width: screenWidth * 0.04),
+                    Image.network('https://images.unsplash.com/photo-1612862862126-865765df2ded?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2lnaXJpeWElMjByb2NrfGVufDB8fDB8fA%3D%3D&w=1000&q=80', fit: BoxFit.fill, height: screenHeight * 0.3,width: screenWidth * 0.7, ),
+                    
                   ]
                   ),
                 ),
