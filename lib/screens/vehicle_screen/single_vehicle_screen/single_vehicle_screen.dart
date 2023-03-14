@@ -1,31 +1,24 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:readmore/readmore.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/tour_check_availability.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/included_excluded.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/overview.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/tour_highlights.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/tour_map.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/tour_plan.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/tour_home_screen.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/tour_feedback_screen.dart';
+import 'package:tour_drive_frontend/constants.dart';
+import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen/sub_pages/description.dart';
+import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen/sub_pages/features.dart';
+import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen/sub_pages/vehicle_check_availability.dart';
+import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen/sub_pages/vehicle_feedback_screen.dart';
+import 'package:tour_drive_frontend/screens/vehicle_screen/vehicle_home_screen.dart';
 import 'package:tour_drive_frontend/widgets/divider_container.dart';
 import 'package:tour_drive_frontend/widgets/favorite_icon.dart';
-import 'package:tour_drive_frontend/constants.dart';
-import 'package:tour_drive_frontend/models/tour/tour_data.dart';
 
-class SingleTourScreen extends StatefulWidget {
-  const SingleTourScreen({super.key});
+class SingleVehicleScreen extends StatefulWidget {
+  const SingleVehicleScreen({super.key});
 
   @override
-  State<SingleTourScreen> createState() => _SingleTourScreenState();
+  State<SingleVehicleScreen> createState() => _SingleVehicleScreenState();
 }
 
-class _SingleTourScreenState extends State<SingleTourScreen> {
-
+class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
   @override
   Widget build(BuildContext context) {
 
@@ -41,6 +34,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
       return Text(stars, style: TextStyle(fontSize: screenHeight * 0.015),);
     }
 
+    
     return SafeArea(
       child: Scaffold(
 
@@ -52,7 +46,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
               backgroundColor: kPrimaryColor,
               foregroundColor: Colors.white,
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourCheckAvailabilityScreen())); 
+                Navigator.push(context,MaterialPageRoute(builder: (context) =>const VehicleCheckAvailability())); 
               },
               label: Text('Check availability'),
             ),
@@ -63,7 +57,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
           elevation: 0,
           backgroundColor: Colors.transparent,
           leading: IconButton(
-            onPressed: () { Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourHomeScreen())); }, 
+            onPressed: () { Navigator.push(context,MaterialPageRoute(builder: (context) =>const VehicleHomeScreen())); }, 
             icon: const Icon(Icons.arrow_back, color:Colors.black, )
             ),
           actions: <Widget>[
@@ -100,31 +94,23 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    Image.asset('assets/images/sigiriya.jpeg', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7, ),
-                    SizedBox(width: screenWidth * 0.04),
-                    Image.network('https://media-cdn.tripadvisor.com/media/photo-s/1b/39/e3/9e/sigiriya-ancient-rock.jpg', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
-                    SizedBox(width: screenWidth * 0.04),
-                    Image.network('https://images.unsplash.com/photo-1612862862126-865765df2ded?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2lnaXJpeWElMjByb2NrfGVufDB8fDB8fA%3D%3D&w=1000&q=80', fit: BoxFit.fill, height: screenHeight * 0.3,width: screenWidth * 0.7, ),
-                    
+                    Image.network('https://images.unsplash.com/photo-1638618164682-12b986ec2a75?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
+                    SizedBox(width: screenWidth * 0.03),
+                    Image.network('https://images.unsplash.com/photo-1638618164682-12b986ec2a75?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7),
+                    SizedBox(width: screenWidth * 0.03),
+                    Image.network('https://images.unsplash.com/photo-1638618164682-12b986ec2a75?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7),
+                    SizedBox(width: screenWidth * 0.03),
+                    Image.network('https://images.unsplash.com/photo-1638618164682-12b986ec2a75?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7),
                   ]
                   ),
                 ),
+                SizedBox(height: screenHeight * 0.02),
+          //######################## vehicle name #######################################################################################################               
+                Text("Mercedes Grand Sedan", style: TextStyle(fontSize: screenHeight *0.03, fontWeight: FontWeight.bold)),
+                SizedBox(height: screenHeight * 0.02),
           
-                SizedBox(height: screenHeight * 0.02),
-          //######################## Tour name #######################################################################################################               
-                Text("Wonder of Sigiriya", style: TextStyle(fontSize: screenHeight *0.03, fontWeight: FontWeight.bold)),
-                SizedBox(height: screenHeight * 0.02),
-          
-                Row(
-                  children: [
-                    const Icon(Icons.location_on_outlined, color: kPrimaryColor, size: 15.0,),
-                    SizedBox(width: screenWidth * 0.005),
-          //######################## Tour location #######################################################################################################               
-                    SizedBox(width: screenWidth * 0.85, child: Text("Central Province, Sri Lanka", style: TextStyle(fontSize: screenHeight * 0.017 ),maxLines: 2, overflow: TextOverflow.ellipsis),), 
-                  ],
-                ),
-          //######################## Tour Reviews #######################################################################################################               
-                SizedBox(height: screenHeight * 0.02),
+                
+          //######################## vehicle Reviews #######################################################################################################              
                 Row(children: [
                   buildRatingStars(5),
                   SizedBox(width: screenWidth * 0.05,),
@@ -136,12 +122,12 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                   children: [
                     const Icon(Icons.sell_outlined, color: kPrimaryColor, size: 20.0,),
                     SizedBox(width: screenWidth * 0.02),
-          //######################## Tour Price #######################################################################################################               
+          //######################## vehicle Price #######################################################################################################               
                      Text("\$200", style: TextStyle(fontSize: screenHeight * 0.03, fontWeight: FontWeight.bold)),
                   ],
                 ),
                 SizedBox(height: screenHeight * 0.025),
-          //######################## Tour sub details duration, max people, min age, pick up #######################################################################################################               
+          //######################## vehicle sub details milage, transmisson, seats, Fuel #######################################################################################################               
                 Row(
                   children: [
                     Row(
@@ -149,15 +135,15 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                       children: [
                         Column(
                           children: const[
-                            Icon(Icons.date_range, color: kPrimaryColor,),
+                            Icon(Icons.speed_outlined, color: kPrimaryColor,),
                           ],
                         ),
                         SizedBox(width: screenWidth * 0.015,),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:  [
-                           Text("Duration",style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.017),),
-                           Text("12 days", style: TextStyle( fontSize: screenHeight * 0.017),),
+                           Text("Milage",style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.017),),
+                           Text("40000 km", style: TextStyle( fontSize: screenHeight * 0.017),),
                           ],
                         ),
                       ],
@@ -168,15 +154,15 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                       children: [
                         Column(
                           children: const [
-                             Icon(Icons.group_outlined, color: kPrimaryColor,),
+                             Icon(Icons.local_taxi_outlined, color: kPrimaryColor,),
                           ],
                         ),
                         SizedBox(width: screenWidth * 0.015,),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:  [
-                           Text("Max People",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.017),),
-                           Text("15", style: TextStyle( fontSize: screenHeight * 0.017) ),
+                           Text("Transmission",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.017),),
+                           Text("Auto", style: TextStyle( fontSize: screenHeight * 0.017) ),
                           ],
                         ),
                       ],
@@ -194,34 +180,34 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start ,
                           children: const[
-                            Icon(Icons.man_sharp, color: kPrimaryColor,),
+                            Icon(Icons.airline_seat_recline_normal_outlined, color: kPrimaryColor,),
                           ],
                         ),
                         SizedBox(width: screenWidth * 0.015,),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:  [
-                           Text("Min Age",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.017),),
-                           Text("17+",style: TextStyle( fontSize: screenHeight * 0.017)),
+                           Text("Seats",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.017),),
+                           Text("5 adults",style: TextStyle( fontSize: screenHeight * 0.017)),
                           ],
                         ),
                       ],
                     ),
-                    SizedBox(width: screenWidth * 0.25,),
+                    SizedBox(width: screenWidth * 0.285,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Column(
                           children: const [
-                             Icon(Icons.location_on, color: kPrimaryColor,),
+                             Icon(Icons.local_gas_station_outlined, color: kPrimaryColor,),
                           ],
                         ),
                         SizedBox(width: screenWidth * 0.015,),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:  [
-                           Text("Pick up",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.017),),
-                          SizedBox(width: screenWidth * 0.3,   child: Text("Air port ",maxLines: 4,style: TextStyle( fontSize: screenHeight * 0.017)),), 
+                           Text("Fuel",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.017),),
+                          SizedBox(width: screenWidth * 0.3,   child: Text("Petrol ",maxLines: 4,style: TextStyle( fontSize: screenHeight * 0.017)),), 
                           ],
                         ),
                       ],
@@ -236,7 +222,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                const TourFeedbackForm()));
+                                const VehicleFeedbackScreen()));
                   },
                   style: TextButton.styleFrom(
                     foregroundColor: kPrimaryColor,
@@ -252,32 +238,15 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                     ),
                   ),
                 ),
- //######################## Touroverview ...  #######################################################################################################               
-                DividerContainer(text: "Overview", press: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const OverviewScreen()));
+ //######################## vehicle descroption ...  #######################################################################################################               
+                DividerContainer(text: "Description", press: () {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const DescriptionScreen()));
                 }
                 ),
-                DividerContainer(text: "Tour Highlights", press: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourhighlightScreen()));
+                DividerContainer(text: "Features", press: () {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const FeaturesScreen()));
                 }),
-                DividerContainer(text: "Included / Excluded", press: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const IncludeExcludeScreen()));
-                }),
-                DividerContainer(text: "Tour Plan", press: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourPlanScreen()));
-                }),
-                const Divider(thickness: 1.0),
-  //#####################################      Tour Map   ##################################################################################        
-                SizedBox(height: screenHeight * 0.012),
-                Text( "Tour Map", style: TextStyle(fontSize: screenHeight * 0.025,fontWeight: FontWeight.bold)),
-                SizedBox(height: screenHeight * 0.023),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourMapScreen()));
-                  },
-                  child: Image.asset('assets/images/map.jpeg', fit: BoxFit.fill, height: screenHeight * 0.15, width: screenWidth,)
-                ),
-                SizedBox(height: screenHeight * 0.023),
+                SizedBox(height: screenHeight * 0.011),
                 const Divider(thickness: 1.0),
                 SizedBox(height: screenHeight * 0.016),
                 Text( "Reviews", style: TextStyle(fontSize: screenHeight * 0.025,fontWeight: FontWeight.bold)),
@@ -299,10 +268,27 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                     Text("2 reviews", style: TextStyle(fontSize: screenHeight * 0.022)),
                   ],
                 ),
-                 SizedBox(height: screenHeight * 0.02),
+                SizedBox(height: screenHeight * 0.02),
                 Row(
                   children: [
-                    Text("Location ", style: TextStyle(fontSize: screenHeight * 0.022)),
+                    Text("Driver ", style: TextStyle(fontSize: screenHeight * 0.022)),
+                    SizedBox(width: screenWidth * 0.04,),
+                    LinearPercentIndicator(
+                      width: screenWidth * 0.5,
+                      barRadius: Radius.circular(screenHeight * 0.02),
+                      animation: true,
+                      lineHeight: screenHeight * 0.022,
+                      animationDuration: 2500,
+                      percent: 0.8,
+                      center: Text("80.0%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
+                      progressColor: kPrimaryColor,
+                    ),
+                  ],
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                Row(
+                  children: [
+                    Text("Vehicle ", style: TextStyle(fontSize: screenHeight * 0.022)),
                     SizedBox(width: screenWidth * 0.02,),
                     LinearPercentIndicator(
                       width: screenWidth * 0.5,
@@ -375,5 +361,3 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
     );
   }
 }
-
-

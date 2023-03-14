@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
+import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen/single_vehicle_screen.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
 
-class TourhighlightScreen extends StatefulWidget {
-  const TourhighlightScreen({super.key});
+class FeaturesScreen extends StatefulWidget {
+  const FeaturesScreen({super.key});
 
   @override
-  State<TourhighlightScreen> createState() => _TourhighlightScreenState();
+  State<FeaturesScreen> createState() => _FeaturesScreenState();
 }
 
-class _TourhighlightScreenState extends State<TourhighlightScreen> {
+class _FeaturesScreenState extends State<FeaturesScreen> {
   @override
   Widget build(BuildContext context) {
 
@@ -23,8 +23,8 @@ class _TourhighlightScreenState extends State<TourhighlightScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Header(text: "Tour Highlights", press: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
+              Header(text: "Features", press: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleVehicleScreen()));
               } ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
@@ -35,9 +35,9 @@ class _TourhighlightScreenState extends State<TourhighlightScreen> {
                     children: <Widget>[
                       
                       SizedBox(height: screenHeight * 0.02,),
-                      Text("🔰  Be enveloped in the beauty of towering trees, remote beaches, and mountains of the Canadian wilderness"),
+                      Text("🔰  Powerful engine that delivers exceptional performance and speed"),
                       SizedBox(height: screenHeight * 0.02,),
-                      Text("🔰  Be enveloped in the beauty of towering trees, remote beaches, and mountains of the Canadian wilderness"),
+                      Text("🔰  Advanced safety features, including adaptive cruise control, automatic emergency braking, lane departure warning, and blind-spot monitoring"),
                     ],
                   ),
                 ),

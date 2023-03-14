@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:readmore/readmore.dart';
-import 'package:tour_drive_frontend/constants.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
+import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen/single_vehicle_screen.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
 
-class OverviewScreen extends StatefulWidget {
-  const OverviewScreen({super.key});
+class DescriptionScreen extends StatefulWidget {
+  const DescriptionScreen({super.key});
 
   @override
-  State<OverviewScreen> createState() => _OverviewScreenState();
+  State<DescriptionScreen> createState() => _DescriptionScreenState();
 }
 
-class _OverviewScreenState extends State<OverviewScreen> {
+class _DescriptionScreenState extends State<DescriptionScreen> {
   @override
   Widget build(BuildContext context) {
 
@@ -26,8 +23,8 @@ class _OverviewScreenState extends State<OverviewScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Header(text: "Overview", press: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
+              Header(text: "Description", press: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleVehicleScreen()));
               } ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),

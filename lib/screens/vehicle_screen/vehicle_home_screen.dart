@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tour_drive_frontend/constants.dart';
-import 'package:tour_drive_frontend/models/tour/tour_data.dart';
 import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.dart';
-import 'package:tour_drive_frontend/screens/navbar_pages/landing_screen.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
+import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen/single_vehicle_screen.dart';
 
-class TourHomeScreen extends StatefulWidget {
-  
-  const TourHomeScreen({super.key,  });
+class VehicleHomeScreen extends StatefulWidget {
+  const VehicleHomeScreen({super.key});
 
   @override
-  State<TourHomeScreen> createState() => _TourHomeScreenState();
+  State<VehicleHomeScreen> createState() => _VehicleHomeScreenState();
 }
 
-class _TourHomeScreenState extends State<TourHomeScreen> {
+class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
   @override
   Widget build(BuildContext context) {
     
@@ -42,7 +39,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
           centerTitle: true,
           actions: <Widget>[
             Container(
-              margin: EdgeInsets.all(3),
+              margin: const EdgeInsets.all(3),
               child: IconButton(
                 alignment: Alignment.centerRight,
                 icon: const Icon(Icons.search, color: Colors.black,),
@@ -66,17 +63,17 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Explore Sri Lanka, One tour at a time", style: TextStyle(fontSize: screenHeight * 0.032, fontWeight: FontWeight.bold),),
+              Text("Choose Your best vehicle here", style: TextStyle(fontSize: screenHeight * 0.032, fontWeight: FontWeight.bold),),
               SizedBox(height: screenHeight * 0.02,),
               Expanded(
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
-                  itemCount: tours.length,
+                  itemCount: 5,
                   itemBuilder: (BuildContext context, int index) {
                   
                   return GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleVehicleScreen()));
                     },
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0,0,0,16),
@@ -92,7 +89,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                               color: Colors.grey.withOpacity(0.15), // shadow color
                               spreadRadius: 1.0, // how wide the shadow is
                               blurRadius: 5.0, // how soft the shadow is
-                              offset: Offset(0, 3), // offset of the shadow
+                              offset: const Offset(0, 3), // offset of the shadow
                             ),
                           ],
                           borderRadius:
@@ -104,7 +101,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                             children: [
                               ClipRRect( 
                                 borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                                child: Image.asset('assets/images/sigiriya.jpeg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
+                                child: Image.network('https://images.unsplash.com/photo-1638618164682-12b986ec2a75?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
                               SizedBox(width: screenWidth * 0.03),
                               Container(
                                 height: screenHeight * 0.14,
@@ -116,41 +113,30 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text( tours[index].name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.02), maxLines: 2, overflow: TextOverflow.ellipsis,),
+                                    Text("Toyota Prius", style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.02), maxLines: 2, overflow: TextOverflow.ellipsis,),
                                     SizedBox(height: screenHeight * 0.008,),
                                     Row(
                                       children: [
-                                        const Icon(Icons.location_on_outlined, color: kPrimaryColor, size: 12.0,),
-                                        SizedBox(width: screenWidth * 0.40, child: Text(tours[0].locations, style: TextStyle(fontSize: screenHeight * 0.018), maxLines:1, overflow: TextOverflow.ellipsis,)),
+                                        const Icon(Icons.construction_outlined, color: kPrimaryColor, size: 12.0,),
+                                        SizedBox(width: screenWidth * 0.4, child: Text(" Brandnew condition", style: TextStyle(fontSize: screenHeight * 0.018), maxLines:1, overflow: TextOverflow.ellipsis,)),
                                       ],
                                     ),
                                     SizedBox(height: screenHeight * 0.008,),
-                                    Row(children: [buildRatingStars(tours[index].ratingsAverage), SizedBox(width: screenWidth * 0.02,),Text("${tours[index].reviews.toStringAsFixed(0)} reviews", style: TextStyle(fontSize: screenHeight *0.015),)]),
+                                    Row(children: [buildRatingStars(3), SizedBox(width: screenWidth * 0.02,),Text("2 reviews", style: TextStyle(fontSize: screenHeight *0.015),)]),
                                     SizedBox(height: screenHeight * 0.007,),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Row(
                                           children: [
-                                            Icon(Icons.people_outline_sharp, color: kPrimaryColor, size: screenHeight * 0.02,),
+                                            Icon(Icons.airline_seat_recline_normal_sharp, color: kPrimaryColor, size: screenHeight * 0.02,),
                                             SizedBox(width: screenWidth *0.005,),
-                                            Text("${tours[index].maxSeats}"),
+                                            Text("4 seats"),
                                           ],
                                         ),
-                                        SizedBox(width: screenHeight * 0.01,),
-                                        Row(
-                                          children: [
-                                            Icon(Icons.timer_outlined, color: kPrimaryColor, size: screenHeight * 0.02,),
-                                            SizedBox(width: screenWidth *0.005,),
-                                            Text("${tours[index].duration} days"),
-                                          ],
-                                        ),
-                                        SizedBox(width: screenWidth * 0.09,),
-                                        Text("\$ ${tours[index].price.toStringAsFixed(0)}", style: TextStyle(fontSize: screenHeight * 0.022,fontWeight: FontWeight.bold),)
+                                        Text("\$ 200", style: TextStyle(fontSize: screenHeight * 0.022,fontWeight: FontWeight.bold),)
                                       ],
                                     ),
-                                    SizedBox(height: screenHeight * 0.001,),
-                                    
                                   ],
                                 ),
                               ),

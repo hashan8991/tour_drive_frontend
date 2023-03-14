@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/Single_tour_screen/single_tour_screen.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
 
 class TourMapScreen extends StatefulWidget {
@@ -17,18 +17,23 @@ class _TourMapScreenState extends State<TourMapScreen> {
 
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: <Widget>[
-                Header(text: "Tour Map", press: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
-                } ),
-               
-              ],
-            ),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              Header(text: "Tour Map", press: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
+              } ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
