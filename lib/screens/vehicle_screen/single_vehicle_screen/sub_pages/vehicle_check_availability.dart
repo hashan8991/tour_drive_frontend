@@ -68,7 +68,7 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
                   scrollDirection: Axis.vertical,
                   child: Container(
                     width: screenWidth * 0.9 ,
-                    height: screenHeight * 0.7,
+                    height: screenHeight * 0.8,
                     decoration: BoxDecoration(
                       // color: const Color.fromARGB(115, 155, 239, 254),
                       color: Colors.white,
