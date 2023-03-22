@@ -268,38 +268,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
              //  display error message             
                       Visibility(
                         visible: isError,
-                        child: Text("🛑 ${errorMessage} " , style: TextStyle(fontSize: screenHeight * 0.02, color: Colors.red),),
+                        child: Text("🛑 $errorMessage " , style: TextStyle(fontSize: screenHeight * 0.02, color: Colors.red),),
                       ),
                       SizedBox(height: screenHeight * 0.02),
-                      
-                      DefaultButton(text: "Submit", press: () async {
-                        // get response from the server
-                        var response = await registerUser(emailController, passwordController, confirmPasswordController);
 
-                        if( formKey.currentState!.validate() && response.statusCode == 201 ) {   
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Profile creation successfully'), 
-                              backgroundColor: kPrimaryColor,
-                              ),
-                          );
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));
+                      DefaultButton(
+                        text: "Submit", 
+                        press: () async {
+                          // get response from the server
+                          var response = await registerUser(emailController, passwordController, confirmPasswordController);
 
-                          // register successful, extract the  user ID from the response body
-                          final Map<String, dynamic> responseData = json.decode(response.body);
-                          final String userId = responseData['data']["user"]["_id"];
+                          if( formKey.currentState!.validate() && response.statusCode == 201 ) {   
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Profile creation successfully'), 
+                                backgroundColor: kPrimaryColor,
+                                ),
+                            );
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));
 
-                          // Store the  user ID in shared preferences
-                          final prefs = await SharedPreferences.getInstance();
-                          await prefs.setString('userId', userId);
-                        }else{
-                          final Map<String, dynamic> responseData = json.decode(response.body);
-                          errorMessage = responseData["message"];
-                          setState(() {
-                            isError = true;
-                          });
+                            // register successful, extract the  user ID from the response body
+                            final Map<String, dynamic> responseData = json.decode(response.body);
+                            final String userId = responseData['data']["user"]["_id"];
+
+                            // Store the  user ID in shared preferences
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.setString('userId', userId);
+                          }else{
+                            final Map<String, dynamic> responseData = json.decode(response.body);
+                            errorMessage = responseData["message"];
+                            setState(() {
+                              isError = true;
+                            });
+                          }
                         }
-                      }),
+                      ),
 
                       SizedBox(height: screenHeight * 0.02),
                       const Text("If you have already account ?",),

@@ -1,4 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import "package:flutter/material.dart";
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/authentication/forget_password/forget_password_screen.dart';
 import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
@@ -6,7 +9,25 @@ import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.da
 import 'package:tour_drive_frontend/screens/authentication/sign_up/sign_up_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
-//import 'package:tour_drive_frontend/size_config.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
+
+// Sending data to server
+Future loginUser(TextEditingController emailController,TextEditingController passwordController) async {
+  final response = await http.post(                             // send data to server using post method
+    Uri.parse('http://localhost:8000/api/v1/auth/login'),             // end point url
+    //Uri.parse('http://192.168.8.152:8000/api/v1/auth/login'),     
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{                          // what we need to send to the server
+      "email": emailController.text,
+      "password": passwordController.text,
+    }),
+  );
+  return response;
+}
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -20,7 +41,8 @@ class _LogInScreenState extends State<LogInScreen> {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  bool isLoading = false;
+  bool isError = false;
+  String errorMessage = "";
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +50,7 @@ class _LogInScreenState extends State<LogInScreen> {
     final double screenHeight = MediaQuery.of(context).size.height;
 
     return SafeArea(
-      // common code section for all codes
       child: Scaffold(
-        // common code section for all codes
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
@@ -45,22 +65,17 @@ class _LogInScreenState extends State<LogInScreen> {
                 }
               ),
               Container(
-                // common code section for all codes
                 margin: EdgeInsets.symmetric(
-                    horizontal: screenWidth * 0.05), // common code section for all codes
+                    horizontal: screenWidth * 0.05), 
                 child: SingleChildScrollView(
-                  // common code section for all codes
-                  scrollDirection: Axis.vertical, // common code section for all codes
+                  scrollDirection: Axis.vertical, 
                   child: Column(
-                    // common code section for all codes
                     children: <Widget>[
-                      
                       SizedBox(height: screenHeight * 0.02),
                       const Text(
                         "Hey, Enter your details to get sign in ",
                       ),
                       SizedBox(height: screenHeight * 0.04),
-        
                       Form(
                         key: formKey,
                         child: Column(
@@ -151,15 +166,12 @@ class _LogInScreenState extends State<LogInScreen> {
                           ],
                         ),
                       ),
-        
                       SizedBox(height: screenHeight * 0.02),
-                      // Row(
-                      //   children: [
-                      //     const Icon(Icons.warning, color: kPrimaryColor,),
-                      //     SizedBox(width: screenWidth * 0.02,),
-                      //     const Text("Email Or Password Is Incorrect", ),
-                      //   ],
-                      // ),
+             //  display error message             
+                      Visibility(
+                        visible: isError,
+                        child: Text("🛑 $errorMessage " , style: TextStyle(fontSize: screenHeight * 0.02, color: Colors.red),),
+                      ),
                       TextButton(
                         onPressed: () {
                           Navigator.push(
@@ -183,18 +195,34 @@ class _LogInScreenState extends State<LogInScreen> {
         
                       DefaultButton(
                         text: "Login",
-                        press: () {
-                          if (formKey.currentState!.validate()) {
+                        press: () async {
+                          // get response from the server
+                          var response = await loginUser(emailController, passwordController);
+
+                          if( formKey.currentState!.validate() && response.statusCode == 200 ) {   
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Login successfully'),
+                                content: Text('Profile creation successfully'), 
                                 backgroundColor: kPrimaryColor,
-                              ),
-                              
+                                ),
                             );
                             Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));
+
+                            // register successful, extract the  user ID from the response body
+                            final Map<String, dynamic> responseData = json.decode(response.body);
+                            final String userId = responseData['data']["user"]["_id"];
+
+                            // Store the  user ID in shared preferences
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.setString('userId', userId);
+                          }else{
+                            final Map<String, dynamic> responseData = json.decode(response.body);
+                            errorMessage = responseData["message"];
+                            setState(() {
+                              isError = true;
+                            });
                           }
-                        },
+                        }
                       ),
         
                       SizedBox(height: screenHeight * 0.03),
