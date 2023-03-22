@@ -1,20 +1,40 @@
+// ignore_for_file: use_build_context_synchronously
+
 import "package:flutter/material.dart";
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/authentication/sign_in/login_screen.dart';
+import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
-//import 'package:tour_drive_frontend/size_config.dart';
-//import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
 
+// Sending data to server
+Future registerUser(TextEditingController emailController,TextEditingController passwordController,TextEditingController confirmPasswordController) async {
+  final response = await http.post(                             // send data to server using post method
+    Uri.parse('http://localhost:8000/api/v1/auth/signup'),             // end point url
+    //Uri.parse('http://192.168.8.152:8000/api/v1/auth/signup'),     
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{                          // what we need to send to the server
+      "email": emailController.text,
+      "password": passwordController.text,
+      "passwordConfirm": confirmPasswordController.text,
+    }),
+  );
+  return response;
+}
 class SignUpScreen extends StatefulWidget {
-
   const SignUpScreen({super.key});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
-
 class _SignUpScreenState extends State<SignUpScreen> {
+
   String? country,password;
   late final String email,fName,lName,confirmPassword;
   final formKey = GlobalKey<FormState>();
@@ -24,12 +44,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final lastNameController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  bool isLoading = false;
-
-  List<String> items = [
-    'SriLanka',
-    'Other',
-  ];
+  List<String> items = [ 'SriLanka' , 'Other' ,];
+  bool isError = false;
+  String errorMessage = "";
 
   @override
   Widget build(BuildContext context) {
@@ -159,8 +176,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 if (value!.isEmpty) {
                                   return '* Please enter your Password';
                                 }
-                                if ( value.length < 3) {
-                                  return '* Please enter more than 3 characters';
+                                if ( value.length < 8) {
+                                  return '* Please enter more than 8 characters';
                                 }
                                 return null;
                               },
@@ -185,15 +202,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             SizedBox(height: screenHeight * 0.02),
                             TextFormField(
                               controller: confirmPasswordController,
-                              onSaved: (value)  {
-                                confirmPassword = value!;
-                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return '* Please enter your re-password';
-                                }
-                                if ( password != confirmPassword) {
-                                  return '* Password do not match';
                                 }
                                 return null;
                               },
@@ -254,30 +265,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.02),
-                      // Row(
-                      //   children: [
-                      //     const Icon(Icons.warning, color: kPrimaryColor,),
-                      //     SizedBox(width: screenWidth * 0.02,),
-                      //     const Text("Enter the valid email or correct password", ),
-                      //   ],
-                      // ),
+             //  display error message             
+                      Visibility(
+                        visible: isError,
+                        child: Text("🛑 ${errorMessage} " , style: TextStyle(fontSize: screenHeight * 0.02, color: Colors.red),),
+                      ),
                       SizedBox(height: screenHeight * 0.02),
-                      DefaultButton(text: "Submit", press: () {
-                        if (formKey.currentState!.validate()) {
+                      
+                      DefaultButton(text: "Submit", press: () async {
+                        // get response from the server
+                        var response = await registerUser(emailController, passwordController, confirmPasswordController);
+
+                        if( formKey.currentState!.validate() && response.statusCode == 201 ) {   
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Profile creation successfully'), 
                               backgroundColor: kPrimaryColor,
                               ),
                           );
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));
+
+                          // register successful, extract the  user ID from the response body
+                          final Map<String, dynamic> responseData = json.decode(response.body);
+                          final String userId = responseData['data']["user"]["_id"];
+
+                          // Store the  user ID in shared preferences
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setString('userId', userId);
+                        }else{
+                          final Map<String, dynamic> responseData = json.decode(response.body);
+                          errorMessage = responseData["message"];
+                          setState(() {
+                            isError = true;
+                          });
                         }
                       }),
+
                       SizedBox(height: screenHeight * 0.02),
                       const Text("If you have already account ?",),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));
                         },
                         style: TextButton.styleFrom(
                           foregroundColor: kPrimaryColor,
