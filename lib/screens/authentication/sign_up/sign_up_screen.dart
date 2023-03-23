@@ -15,7 +15,7 @@ import 'dart:async';
 Future registerUser(TextEditingController emailController,TextEditingController passwordController,TextEditingController confirmPasswordController) async {
   final response = await http.post(                             // send data to server using post method
     Uri.parse('http://localhost:8000/api/v1/auth/signup'),             // end point url
-    //Uri.parse('http://192.168.8.152:8000/api/v1/auth/signup'),     
+    //Uri.parse('http://192.168.8.152:8000/api/v1/auth/signup'),    // hashan router ip 
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -308,7 +308,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const Text("If you have already account ?",),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
                         },
                         style: TextButton.styleFrom(
                           foregroundColor: kPrimaryColor,

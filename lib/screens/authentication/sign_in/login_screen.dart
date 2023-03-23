@@ -17,7 +17,7 @@ import 'dart:async';
 Future loginUser(TextEditingController emailController,TextEditingController passwordController) async {
   final response = await http.post(                             // send data to server using post method
     Uri.parse('http://localhost:8000/api/v1/auth/login'),             // end point url
-    //Uri.parse('http://192.168.8.152:8000/api/v1/auth/login'),     
+    //Uri.parse('http://192.168.8.152:8000/api/v1/auth/login'), // hashan router ip    
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
