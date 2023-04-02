@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
-import 'package:tour_drive_frontend/models/tour/tour_data.dart';
 import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.dart';
-import 'package:tour_drive_frontend/screens/navbar_pages/landing_screen.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class TourHomeScreen extends StatefulWidget {
   
@@ -14,6 +16,35 @@ class TourHomeScreen extends StatefulWidget {
 }
 
 class _TourHomeScreenState extends State<TourHomeScreen> {
+
+  // ####################################################################################################################
+        // Backend Integration
+  List<dynamic> tours = [];
+
+  Future<void> fetchTours() async {
+    final response = await http
+        .get(Uri.parse('https://tour-drive.onrender.com/api/v1/tours'));
+
+    if (response.statusCode == 200) {
+      setState(() {
+        final Map<String, dynamic> responseData =  jsonDecode(response.body);
+        tours =  responseData["data"];
+         
+      });
+    } else {
+      throw Exception('Failed to load Tour');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTours();
+  }
+
+// ####################################################################################################################
+
+
   @override
   Widget build(BuildContext context) {
     
@@ -42,7 +73,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
           centerTitle: true,
           actions: <Widget>[
             Container(
-              margin: EdgeInsets.all(3),
+              margin: const EdgeInsets.all(3),
               child: IconButton(
                 alignment: Alignment.centerRight,
                 icon: const Icon(Icons.search, color: Colors.black,),
@@ -68,14 +99,30 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
             children: [
               Text("Explore Sri Lanka, One tour at a time", style: TextStyle(fontSize: screenHeight * 0.032, fontWeight: FontWeight.bold),),
               SizedBox(height: screenHeight * 0.02,),
+
+              tours.isEmpty 
+              ? Center(
+                  child:CircularProgressIndicator(
+                    backgroundColor: Colors.grey[200], // Set the background color of the widget
+                    valueColor: const AlwaysStoppedAnimation<Color>(kPrimaryColor), // Set the color of the progress indicator
+                    strokeWidth: 3, // Set the width of the progress indicator
+                  )
+                )
+              :
               Expanded(
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   itemCount: tours.length,
                   itemBuilder: (BuildContext context, int index) {
-                  
+                  final tour = tours[index];
+
                   return GestureDetector(
-                    onTap: () {
+                    onTap: () async{
+                      // Store the  tour ID in shared preferences
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setString('tourId', tour["_id"]);
+                      
+                      // ignore: use_build_context_synchronously
                       Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
                     },
                     child: Padding(
@@ -92,7 +139,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                               color: Colors.grey.withOpacity(0.15), // shadow color
                               spreadRadius: 1.0, // how wide the shadow is
                               blurRadius: 5.0, // how soft the shadow is
-                              offset: Offset(0, 3), // offset of the shadow
+                              offset: const Offset(0, 3), // offset of the shadow
                             ),
                           ],
                           borderRadius:
@@ -104,7 +151,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                             children: [
                               ClipRRect( 
                                 borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                                child: Image.asset('assets/images/sigiriya.jpeg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
+                                child: Image.network('https://tour-drive.onrender.com/tour-uploads/${tour["tour_cover"]}', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
                               SizedBox(width: screenWidth * 0.03),
                               Container(
                                 height: screenHeight * 0.14,
@@ -116,16 +163,16 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text( tours[index].name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.02), maxLines: 2, overflow: TextOverflow.ellipsis,),
+                                    Text( tour["name"], style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.02), maxLines: 2, overflow: TextOverflow.ellipsis,),
                                     SizedBox(height: screenHeight * 0.008,),
                                     Row(
                                       children: [
                                         const Icon(Icons.location_on_outlined, color: kPrimaryColor, size: 12.0,),
-                                        SizedBox(width: screenWidth * 0.40, child: Text(tours[0].locations, style: TextStyle(fontSize: screenHeight * 0.018), maxLines:1, overflow: TextOverflow.ellipsis,)),
+                                        SizedBox(width: screenWidth * 0.40, child: Text("${tour["cities"]}", style: TextStyle(fontSize: screenHeight * 0.018), maxLines:1, overflow: TextOverflow.ellipsis,)),
                                       ],
                                     ),
                                     SizedBox(height: screenHeight * 0.008,),
-                                    Row(children: [buildRatingStars(tours[index].ratingsAverage), SizedBox(width: screenWidth * 0.02,),Text("${tours[index].reviews.toStringAsFixed(0)} reviews", style: TextStyle(fontSize: screenHeight *0.015),)]),
+                                    Row(children: [buildRatingStars(5), SizedBox(width: screenWidth * 0.02,),Text("* reviews", style: TextStyle(fontSize: screenHeight *0.015),)]),
                                     SizedBox(height: screenHeight * 0.007,),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.start,
@@ -134,7 +181,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                                           children: [
                                             Icon(Icons.people_outline_sharp, color: kPrimaryColor, size: screenHeight * 0.02,),
                                             SizedBox(width: screenWidth *0.005,),
-                                            Text("${tours[index].maxSeats}"),
+                                            Text("${tour["capacity"]}"),
                                           ],
                                         ),
                                         SizedBox(width: screenHeight * 0.01,),
@@ -142,11 +189,11 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                                           children: [
                                             Icon(Icons.timer_outlined, color: kPrimaryColor, size: screenHeight * 0.02,),
                                             SizedBox(width: screenWidth *0.005,),
-                                            Text("${tours[index].duration} days"),
+                                            Text("${tour["duration"]} days"),
                                           ],
                                         ),
                                         SizedBox(width: screenWidth * 0.09,),
-                                        Text("\$ ${tours[index].price.toStringAsFixed(0)}", style: TextStyle(fontSize: screenHeight * 0.022,fontWeight: FontWeight.bold),)
+                                        Text("\$ ${tour["price"].toStringAsFixed(0)}", style: TextStyle(fontSize: screenHeight * 0.022,fontWeight: FontWeight.bold),)
                                       ],
                                     ),
                                     SizedBox(height: screenHeight * 0.001,),
