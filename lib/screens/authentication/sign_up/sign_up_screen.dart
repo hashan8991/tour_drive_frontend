@@ -14,8 +14,7 @@ import 'dart:async';
 // Sending data to server
 Future registerUser(TextEditingController emailController,TextEditingController passwordController,TextEditingController confirmPasswordController) async {
   final response = await http.post(                             // send data to server using post method
-    Uri.parse('http://localhost:8000/api/v1/auth/signup'),             // end point url
-    //Uri.parse('http://192.168.8.152:8000/api/v1/auth/signup'),    // hashan router ip 
+    Uri.parse('https://tour-drive.onrender.com/api/v1/auth/signup'),             // end point url
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -38,13 +37,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String? country,password;
   late final String email,fName,lName,confirmPassword;
   final formKey = GlobalKey<FormState>();
-  final countryController = TextEditingController();
   final emailController = TextEditingController();
-  final firstNameController = TextEditingController();
-  final lastNameController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  List<String> items = [ 'SriLanka' , 'Other' ,];
   bool isError = false;
   String errorMessage = "";
 
@@ -98,64 +93,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.028),
                                   hintText: 'Enter your email',
                                   suffixIcon: const Icon(Icons.email, color: kPrimaryColor,),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(screenHeight * 0.03),
-                                    borderSide: const BorderSide(color: kPrimaryColor),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(screenHeight * 0.03),
-                                    borderSide: const BorderSide(color: kPrimaryColor),
-                                  )
-                                ),
-                              ),
-                            SizedBox(height: screenHeight * 0.02),
-                            TextFormField(
-                                controller: firstNameController,
-                                onSaved: (value)  {
-                                  fName = value!;
-                                },
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return '* Please enter your first name';
-                                  }
-                                  return null;
-                                },
-                                keyboardType: TextInputType.name,
-                                decoration: InputDecoration(
-                                  labelText: "First Name",
-                                  floatingLabelStyle: const TextStyle(color: kPrimaryColor),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.028),
-                                  hintText: 'Enter your first name',
-                                  suffixIcon: const Icon(Icons.man, color: kPrimaryColor,),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(screenHeight * 0.03),
-                                    borderSide: const BorderSide(color: kPrimaryColor),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(screenHeight * 0.03),
-                                    borderSide: const BorderSide(color: kPrimaryColor),
-                                  )
-                                ),
-                              ),
-                            SizedBox(height: screenHeight * 0.02),
-                            TextFormField(
-                                controller: lastNameController,
-                                onSaved: (value)  {
-                                  fName = value!;
-                                },
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return '* Please enter your last name';
-                                  }
-                                  return null;
-                                },
-                                keyboardType: TextInputType.name,
-                                decoration: InputDecoration(
-                                  labelText: "Last Name",
-                                  floatingLabelStyle: const TextStyle(color: kPrimaryColor),
-                                  contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.028),
-                                  hintText: 'Enter your last name',
-                                  suffixIcon: const Icon(Icons.man, color: kPrimaryColor,),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(screenHeight * 0.03),
                                     borderSide: const BorderSide(color: kPrimaryColor),
@@ -227,40 +164,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                             SizedBox(height: screenHeight * 0.02),
-                            Container(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                color: Colors.grey,
-                                width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(16.0),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Select Country", style: TextStyle(fontSize: screenHeight * 0.021, color: const Color.fromARGB(255, 114, 111, 111)) ),
-                                  DropdownButton<String>(
-                                    enableFeedback: true,
-                                    borderRadius: BorderRadius.circular(screenHeight * 0.02),
-                                    dropdownColor: Colors.white,
-                                    value: country,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        country = value!;
-                                      });
-                                    },
-                                    items: items.map((item) {
-                                      return DropdownMenuItem<String>(
-                                        value: item,
-                                        child: Text(item),
-                                      );
-                                    }).toList(),
-                                    hint: const Text("Country"),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            
                           ],
                         ),
                       ),

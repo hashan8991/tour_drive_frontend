@@ -16,8 +16,7 @@ import 'dart:async';
 // Sending data to server
 Future loginUser(TextEditingController emailController,TextEditingController passwordController) async {
   final response = await http.post(                             // send data to server using post method
-    Uri.parse('http://localhost:8000/api/v1/auth/login'),             // end point url
-    //Uri.parse('http://192.168.8.152:8000/api/v1/auth/login'), // hashan router ip    
+    Uri.parse('https://tour-drive.onrender.com/api/v1/auth/login'),            // end point url   
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -202,7 +201,7 @@ class _LogInScreenState extends State<LogInScreen> {
                           if( formKey.currentState!.validate() && response.statusCode == 200 ) {   
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Profile creation successfully'), 
+                                content: Text('Login successfully'), 
                                 backgroundColor: kPrimaryColor,
                                 ),
                             );
