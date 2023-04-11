@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/about_us/about_us_screen.dart';
+import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/contact_us/contact_us.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_details_screen.dart';
+import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/support/support.dart';
 
 import '../../../constants.dart';
 import '../../../widgets/default_button.dart';
@@ -23,7 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
-          iconTheme: const IconThemeData(color: kTextColor),
+          iconTheme: const IconThemeData(color: kPrimaryColor),
           backgroundColor: const Color.fromARGB(0, 255, 255, 255),
           // shadowColor: const Color.fromARGB(0, 37, 97, 107),
           leading: IconButton(
@@ -36,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           title: const Text(
             'Profile',
             textAlign: TextAlign.center,
-            style: TextStyle(color: kTextColor),
+            style: TextStyle(color: kPrimaryColor),
           ),
         ),
         backgroundColor: Colors.white,
@@ -62,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           CircleAvatar(
                             radius: screenWidth * 0.1,
-                            backgroundColor: Colors.blueGrey,
+                            backgroundColor: kTextColor,
                             backgroundImage:
                                 const AssetImage('assets/images/avatar2.png'),
                           ),
@@ -71,8 +74,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     const Text(
                       'Udaya Anushanka',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: kTextColor),
                     )
                   ],
                 ),
@@ -85,29 +90,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         iconTail: Icons.navigate_next,
                         press: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ProfileDetails()));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ProfileDetails(),
+                            ),
+                          );
                         }),
                     const Divider(),
                     MyListTile(
                         iconLeading: Icons.support_agent_rounded,
                         title: 'Support',
                         iconTail: Icons.navigate_next,
-                        press: () {}),
+                        press: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Support(),
+                            ),
+                          );
+                        }),
                     const Divider(),
                     MyListTile(
-                        iconLeading: Icons.call,
+                        iconLeading: Icons.phone_in_talk_outlined,
                         title: 'Contact Us',
                         iconTail: Icons.navigate_next,
-                        press: () {}),
+                        press: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ContactUs(),
+                            ),
+                          );
+                        }),
                     const Divider(),
                     MyListTile(
                         iconLeading: Icons.info_outline_rounded,
                         title: 'About Us',
                         iconTail: Icons.navigate_next,
-                        press: () {}),
+                        press: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AboutUs(),
+                            ),
+                          );
+                        }),
                     const Divider(),
                   ],
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_page_edit.dart';
 // import 'package:proftest1/components/list_tile2.dart';
 
 import '../../../constants.dart';
@@ -22,7 +23,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
-          iconTheme: const IconThemeData(color: kTextColor),
+          iconTheme: const IconThemeData(color: kPrimaryColor),
           backgroundColor: const Color.fromARGB(0, 255, 255, 255),
           // shadowColor: const Color.fromARGB(0, 37, 97, 107),
           leading: IconButton(
@@ -35,9 +36,20 @@ class _ProfileDetailsState extends State<ProfileDetails> {
           title: const Text(
             'My Account',
             textAlign: TextAlign.center,
-            style: TextStyle(color: kTextColor),
+            style: TextStyle(color: kPrimaryColor),
           ),
-          actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.edit))],
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EditProfile(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.edit))
+          ],
         ),
         body: Container(
           margin: EdgeInsets.all(screenWidth * 0.05),
@@ -62,7 +74,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                         children: [
                           CircleAvatar(
                             radius: screenWidth * 0.1,
-                            backgroundColor: Colors.blueGrey,
+                            backgroundColor: kTextColor,
                             backgroundImage:
                                 const AssetImage('assets/images/avatar2.png'),
                           ),
@@ -81,6 +93,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                     MyListTile2(
                         iconLeading: Icons.email,
                         title: 'beligahamullage@gmail.com'),
+                    Divider(),
                     MyListTile2(iconLeading: Icons.call, title: '0775632256'),
                     Divider(),
                     MyListTile2(

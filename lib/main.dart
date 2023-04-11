@@ -45,8 +45,8 @@ class MyApp extends StatelessWidget {
 
       //home: const LogInScreen(),
       //home: const ForgetPasswordScreen(),
-      //home: SignUpScreen(),
-      home: const LoadingScreen(), // first page of the app
+      // home: const SignUpScreen(),
+      // home: const LoadingScreen(), // first page of the app
 
       //home: const FeedbackForm(),
 
@@ -57,18 +57,15 @@ class MyApp extends StatelessWidget {
       //initialRoute: LoadingScreen.routeName,
       // routes: routes,
       //home: const LandingScreen(),
-      // home: const ProfileScreen(),
-
+      home: const ProfileScreen(),
 
       // home: SingleTourScreen(),
-
 
       //home: SingleTourScreen(),
       //home: VehicleHomeScreen(),
       //home: SingleVehicleScreen(),
       //home: VehicleCheckAvailability(),
       //home: const EmergencyScreen(),
-
     );
   }
 }
