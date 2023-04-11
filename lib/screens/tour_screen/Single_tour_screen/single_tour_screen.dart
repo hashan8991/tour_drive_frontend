@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:readmore/readmore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/tour_check_availability.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/included_excluded.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/overview.dart';
@@ -15,7 +14,10 @@ import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_p
 import 'package:tour_drive_frontend/widgets/divider_container.dart';
 import 'package:tour_drive_frontend/widgets/favorite_icon.dart';
 import 'package:tour_drive_frontend/constants.dart';
-import 'package:tour_drive_frontend/models/tour/tour_data.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 
 class SingleTourScreen extends StatefulWidget {
   const SingleTourScreen({super.key});
@@ -25,6 +27,49 @@ class SingleTourScreen extends StatefulWidget {
 }
 
 class _SingleTourScreenState extends State<SingleTourScreen> {
+
+  // ####################################################################################################################
+    // Backend Integration
+  late List<dynamic> tours ;
+  
+  bool isloading = false;
+
+  getTourId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return tourId
+    String? tourId = prefs.getString('tourId');
+    return tourId;
+  }
+
+  // Future<void> fetchTour(String tourId) async {
+  //   print("sdo");
+  //   print('https://tour-drive.onrender.com/api/v1/tours/$tourId');
+    
+  //   // final response = await http.get(Uri.parse('https://tour-drive.onrender.com/api/v1/tours/$tourId'));
+  //   // print(response.statusCode);
+  //   // if (response.statusCode == 200) {
+  //   //   setState(() {
+  //   //     final Map<String, dynamic> responseData =  jsonDecode(response.body);
+  //   //     print(responseData);
+  //   //     // tours =  responseData["data"];
+  //   //     // print(tours);
+  //   //     isloading = false;
+  //   //   });
+  //   // } else {
+  //   //   throw Exception('Failed to load Tour');
+  //   // }
+  // }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   final String tourId = getTourId();
+  //   fetchTour(tourId);
+  
+  // }
+
+// ####################################################################################################################
+
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +99,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
               onPressed: () {
                 Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourCheckAvailabilityScreen())); 
               },
-              label: Text('Check availability'),
+              label: const Text('Check availability'),
             ),
          ),
        ),
@@ -75,7 +120,17 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
           ],
         ),
 
-        body: Container(
+        body: 
+        isloading ? 
+        Center(
+            child:CircularProgressIndicator(
+              backgroundColor: Colors.grey[200], // Set the background color of the widget
+              valueColor: const AlwaysStoppedAnimation<Color>(kPrimaryColor), // Set the color of the progress indicator
+              strokeWidth: 3, // Set the width of the progress indicator
+            )
+          )
+        :
+        Container(
           margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
@@ -100,11 +155,11 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    Image.asset('assets/images/sigiriya.jpeg', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7, ),
-                    SizedBox(width: screenWidth * 0.04),
-                    Image.network('https://media-cdn.tripadvisor.com/media/photo-s/1b/39/e3/9e/sigiriya-ancient-rock.jpg', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
-                    SizedBox(width: screenWidth * 0.04),
-                    Image.network('https://images.unsplash.com/photo-1612862862126-865765df2ded?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2lnaXJpeWElMjByb2NrfGVufDB8fDB8fA%3D%3D&w=1000&q=80', fit: BoxFit.fill, height: screenHeight * 0.3,width: screenWidth * 0.7, ),
+                    // Image.network('https://tour-drive.onrender.com/tour-uploads/${tour["tour_gallery"][0]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7, ),
+                    // SizedBox(width: screenWidth * 0.04),
+                    // Image.network('https://tour-drive.onrender.com/tour-uploads/${tour["tour_cover"][1]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
+                    // SizedBox(width: screenWidth * 0.04),
+                    // Image.network('https://tour-drive.onrender.com/tour-uploads/${tour["tour_cover"][2]}', fit: BoxFit.fill, height: screenHeight * 0.3,width: screenWidth * 0.7, ),
                     
                   ]
                   ),
