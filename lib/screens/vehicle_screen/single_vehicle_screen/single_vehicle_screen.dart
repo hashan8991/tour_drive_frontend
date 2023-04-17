@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:readmore/readmore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen/sub_pages/description.dart';
 import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen/sub_pages/features.dart';
@@ -10,6 +11,9 @@ import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen
 import 'package:tour_drive_frontend/screens/vehicle_screen/vehicle_home_screen.dart';
 import 'package:tour_drive_frontend/widgets/divider_container.dart';
 import 'package:tour_drive_frontend/widgets/favorite_icon.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class SingleVehicleScreen extends StatefulWidget {
   const SingleVehicleScreen({super.key});
@@ -19,15 +23,47 @@ class SingleVehicleScreen extends StatefulWidget {
 }
 
 class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
+
+   // ####################################################################################################################
+    // Backend Integration
+  var vehicleDetails;
+  bool isloading = true;
+
+  Future<void> fetchVehicle() async {
+    
+    SharedPreferences prefs =  await SharedPreferences.getInstance();
+    String? vehicleId = prefs.getString('vehicleId');
+    
+    final response = await http.get(Uri.parse('https://tour-drive.onrender.com/api/v1/vehicles/$vehicleId'));
+    
+    if (response.statusCode == 200) {
+      setState(() {
+        final Map<String, dynamic> responseData =  jsonDecode(response.body);
+        vehicleDetails =  responseData["data"];
+        isloading = false;
+      });
+    } else {
+      throw Exception('Failed to load Tour');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchVehicle();
+  }
+
+// ####################################################################################################################
+
   @override
   Widget build(BuildContext context) {
 
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
-    Text buildRatingStars(double rating) {
+    Text buildRatingStars(int rating) {
       String stars = '';
-      for (double i = 0; i < rating; i++) {
+      for (int i = 0; i < rating; i++) {
         stars += '⭐ ';
       }
       stars.trim();
@@ -69,7 +105,17 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
           ],
         ),
 
-        body: Container(
+        body: 
+        isloading ? 
+        Center(
+            child:CircularProgressIndicator(
+              backgroundColor: Colors.grey[200], // Set the background color of the widget
+              valueColor: const AlwaysStoppedAnimation<Color>(kPrimaryColor), // Set the color of the progress indicator
+              strokeWidth: 3, // Set the width of the progress indicator
+            )
+          )
+        :
+        Container(
           margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
@@ -89,32 +135,28 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                   ],
                 ),
                 height: screenHeight * 0.3,
-                //color: Colors.white,
-                //margin: EdgeInsets.all(screenWidth * 0.05),
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    Image.network('https://images.unsplash.com/photo-1638618164682-12b986ec2a75?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
+                    Image.network('https://tour-drive.onrender.com/vehicle-uploads/${vehicleDetails["images_URL"][0]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
                     SizedBox(width: screenWidth * 0.03),
-                    Image.network('https://images.unsplash.com/photo-1638618164682-12b986ec2a75?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7),
+                    Image.network('https://tour-drive.onrender.com/vehicle-uploads/${vehicleDetails["images_URL"][1]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
                     SizedBox(width: screenWidth * 0.03),
-                    Image.network('https://images.unsplash.com/photo-1638618164682-12b986ec2a75?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7),
-                    SizedBox(width: screenWidth * 0.03),
-                    Image.network('https://images.unsplash.com/photo-1638618164682-12b986ec2a75?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7),
+                    Image.network('https://tour-drive.onrender.com/vehicle-uploads/${vehicleDetails["images_URL"][2]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
                   ]
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.02),
           //######################## vehicle name #######################################################################################################               
-                Text("Mercedes Grand Sedan", style: TextStyle(fontSize: screenHeight *0.03, fontWeight: FontWeight.bold)),
+                Text("${vehicleDetails['brand']} ${vehicleDetails['model']}", style: TextStyle(fontSize: screenHeight *0.03, fontWeight: FontWeight.bold)),
                 SizedBox(height: screenHeight * 0.02),
           
                 
           //######################## vehicle Reviews #######################################################################################################              
                 Row(children: [
-                  buildRatingStars(5),
+                  buildRatingStars(vehicleDetails['vehicleRatingsAverage']),
                   SizedBox(width: screenWidth * 0.05,),
-                  Text("2 Reviews")
+                  Text("${vehicleDetails['ratingsQuantity']} Reviews")
                 ]
                 ), 
                 SizedBox(height: screenHeight * 0.025),
@@ -123,7 +165,7 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                     const Icon(Icons.sell_outlined, color: kPrimaryColor, size: 20.0,),
                     SizedBox(width: screenWidth * 0.02),
           //######################## vehicle Price #######################################################################################################               
-                     Text("\$200", style: TextStyle(fontSize: screenHeight * 0.03, fontWeight: FontWeight.bold)),
+                     Text("\$ ${vehicleDetails["price_per_day_without_dr"]}", style: TextStyle(fontSize: screenHeight * 0.03, fontWeight: FontWeight.bold)),
                   ],
                 ),
                 SizedBox(height: screenHeight * 0.025),
@@ -143,7 +185,7 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:  [
                            Text("Milage",style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.017),),
-                           Text("40000 km", style: TextStyle( fontSize: screenHeight * 0.017),),
+                           Text("${vehicleDetails["milage"]} km", style: TextStyle( fontSize: screenHeight * 0.017),),
                           ],
                         ),
                       ],
@@ -162,7 +204,7 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:  [
                            Text("Transmission",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.017),),
-                           Text("Auto", style: TextStyle( fontSize: screenHeight * 0.017) ),
+                           Text("${vehicleDetails["transmission"]}", style: TextStyle( fontSize: screenHeight * 0.017) ),
                           ],
                         ),
                       ],
@@ -188,7 +230,7 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:  [
                            Text("Seats",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.017),),
-                           Text("5 adults",style: TextStyle( fontSize: screenHeight * 0.017)),
+                           Text("${vehicleDetails["seats"]} adults",style: TextStyle( fontSize: screenHeight * 0.017)),
                           ],
                         ),
                       ],
@@ -207,7 +249,7 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:  [
                            Text("Fuel",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.017),),
-                          SizedBox(width: screenWidth * 0.3,   child: Text("Petrol ",maxLines: 4,style: TextStyle( fontSize: screenHeight * 0.017)),), 
+                          SizedBox(width: screenWidth * 0.3,   child: Text("${vehicleDetails["fuel"]}",maxLines: 4,style: TextStyle( fontSize: screenHeight * 0.017)),), 
                           ],
                         ),
                       ],
@@ -238,13 +280,15 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                     ),
                   ),
                 ),
- //######################## vehicle descroption ...  #######################################################################################################               
+ //######################## vehicle description ...  #######################################################################################################               
                 DividerContainer(text: "Description", press: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const DescriptionScreen()));
+                  String vehicleDescription = vehicleDetails["description"];
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => DescriptionScreen(vehicleDescription: vehicleDescription)));
                 }
                 ),
                 DividerContainer(text: "Features", press: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const FeaturesScreen()));
+                  String vehicleFeatures = vehicleDetails["features"];
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => FeaturesScreen(vehicleFeatures: vehicleFeatures)));
                 }),
                 SizedBox(height: screenHeight * 0.011),
                 const Divider(thickness: 1.0),
