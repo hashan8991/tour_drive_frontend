@@ -6,7 +6,8 @@ import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/singl
 import 'package:tour_drive_frontend/widgets/header.dart';
 
 class OverviewScreen extends StatefulWidget {
-  const OverviewScreen({super.key});
+  final String tourDescription;
+  const OverviewScreen({super.key, required this.tourDescription});
 
   @override
   State<OverviewScreen> createState() => _OverviewScreenState();
@@ -37,7 +38,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
                     children: <Widget>[
                       
                       SizedBox(height: screenHeight * 0.02,),
-                      Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sagittis, arcu vitae fringilla sollicitudin, orci ex euismod ligula, pellentesque porttitor dui purus quis lectus. Vivamus magna mi, suscipit ut urna ut, maximus dignissim nisl. Praesent eget justo a nisl accumsan lobortis. Nulla auctor mattis finibus. Vivamus erat nibh, accumsan ut malesuada non, egestas quis nisi. Quisque tristique diam vel eleifend tristique. Vestibulum pharetra semper nunc elementum maximus. Pellentesque pellentesque justo at purus faucibus, a sodales felis posuere. Praesent in tempus ex. Duis lectus ex, suscipit at ligula quis, fermentum lacinia odio. Cras fermentum vulputate diam, eu tempus urna hendrerit malesuada. Aliquam eleifend elit at elit ultrices blandit at at metus. In consequat purus in ex congue ultricies. Vestibulum non iaculis erat, sit amet blandit lacus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget ex non dolor mattis pharetra.", style: TextStyle(fontSize: screenHeight * 0.017,)),
+                      Text(widget.tourDescription, style: TextStyle(fontSize: screenHeight * 0.02,)),
                     ],
                   ),
                 ),
