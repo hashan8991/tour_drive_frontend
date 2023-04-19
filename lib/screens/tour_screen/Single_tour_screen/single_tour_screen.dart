@@ -30,43 +30,33 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
 
   // ####################################################################################################################
     // Backend Integration
-  late List<dynamic> tours ;
-  
-  bool isloading = false;
+  var tourDetails ;
+  bool isloading = true;
 
-  getTourId() async {
+  Future<void> fetchTour() async {
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    //Return tourId
     String? tourId = prefs.getString('tourId');
-    return tourId;
+    
+    final response = await http.get(Uri.parse('https://tour-drive.onrender.com/api/v1/tours/$tourId'));
+    
+    if (response.statusCode == 200) {
+      setState(() {
+        final Map<String, dynamic> responseData =  jsonDecode(response.body);
+        tourDetails =  responseData["data"];
+        isloading = false;
+      });
+    } else {
+      throw Exception('Failed to load Tour');
+    }
   }
 
-  // Future<void> fetchTour(String tourId) async {
-  //   print("sdo");
-  //   print('https://tour-drive.onrender.com/api/v1/tours/$tourId');
-    
-  //   // final response = await http.get(Uri.parse('https://tour-drive.onrender.com/api/v1/tours/$tourId'));
-  //   // print(response.statusCode);
-  //   // if (response.statusCode == 200) {
-  //   //   setState(() {
-  //   //     final Map<String, dynamic> responseData =  jsonDecode(response.body);
-  //   //     print(responseData);
-  //   //     // tours =  responseData["data"];
-  //   //     // print(tours);
-  //   //     isloading = false;
-  //   //   });
-  //   // } else {
-  //   //   throw Exception('Failed to load Tour');
-  //   // }
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   final String tourId = getTourId();
-  //   fetchTour(tourId);
+  @override
+  void initState() {
+    super.initState();
+    fetchTour();
   
-  // }
+  }
 
 // ####################################################################################################################
 
@@ -150,24 +140,21 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                   ],
                 ),
                 height: screenHeight * 0.3,
-                //color: Colors.white,
-                //margin: EdgeInsets.all(screenWidth * 0.05),
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    // Image.network('https://tour-drive.onrender.com/tour-uploads/${tour["tour_gallery"][0]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7, ),
-                    // SizedBox(width: screenWidth * 0.04),
-                    // Image.network('https://tour-drive.onrender.com/tour-uploads/${tour["tour_cover"][1]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
-                    // SizedBox(width: screenWidth * 0.04),
-                    // Image.network('https://tour-drive.onrender.com/tour-uploads/${tour["tour_cover"][2]}', fit: BoxFit.fill, height: screenHeight * 0.3,width: screenWidth * 0.7, ),
-                    
+                    Image.network('https://tour-drive.onrender.com/tour-uploads/${tourDetails["tour_gallery"][0]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
+                    SizedBox(width: screenWidth * 0.03),
+                    Image.network('https://tour-drive.onrender.com/tour-uploads/${tourDetails["tour_gallery"][1]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
+                    SizedBox(width: screenWidth * 0.03),
+                    Image.network('https://tour-drive.onrender.com/tour-uploads/${tourDetails["tour_gallery"][2]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
                   ]
                   ),
                 ),
           
                 SizedBox(height: screenHeight * 0.02),
           //######################## Tour name #######################################################################################################               
-                Text("Wonder of Sigiriya", style: TextStyle(fontSize: screenHeight *0.03, fontWeight: FontWeight.bold)),
+                Text(tourDetails['name'], style: TextStyle(fontSize: screenHeight *0.03, fontWeight: FontWeight.bold)),
                 SizedBox(height: screenHeight * 0.02),
           
                 Row(
@@ -175,7 +162,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                     const Icon(Icons.location_on_outlined, color: kPrimaryColor, size: 15.0,),
                     SizedBox(width: screenWidth * 0.005),
           //######################## Tour location #######################################################################################################               
-                    SizedBox(width: screenWidth * 0.85, child: Text("Central Province, Sri Lanka", style: TextStyle(fontSize: screenHeight * 0.017 ),maxLines: 2, overflow: TextOverflow.ellipsis),), 
+                    SizedBox(width: screenWidth * 0.85, child: Text(tourDetails['cities'], style: TextStyle(fontSize: screenHeight * 0.017 ),maxLines: 2, overflow: TextOverflow.ellipsis),), 
                   ],
                 ),
           //######################## Tour Reviews #######################################################################################################               
@@ -183,7 +170,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                 Row(children: [
                   buildRatingStars(5),
                   SizedBox(width: screenWidth * 0.05,),
-                  Text("2 Reviews")
+                  Text("${tourDetails['ratingsQuantity']} Reviews")
                 ]
                 ), 
                 SizedBox(height: screenHeight * 0.025),
@@ -192,7 +179,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                     const Icon(Icons.sell_outlined, color: kPrimaryColor, size: 20.0,),
                     SizedBox(width: screenWidth * 0.02),
           //######################## Tour Price #######################################################################################################               
-                     Text("\$200", style: TextStyle(fontSize: screenHeight * 0.03, fontWeight: FontWeight.bold)),
+                     Text("\$ ${tourDetails['price']}", style: TextStyle(fontSize: screenHeight * 0.03, fontWeight: FontWeight.bold)),
                   ],
                 ),
                 SizedBox(height: screenHeight * 0.025),
@@ -212,7 +199,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:  [
                            Text("Duration",style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.017),),
-                           Text("12 days", style: TextStyle( fontSize: screenHeight * 0.017),),
+                           Text("${tourDetails['duration']} days", style: TextStyle( fontSize: screenHeight * 0.017),),
                           ],
                         ),
                       ],
@@ -231,7 +218,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:  [
                            Text("Max People",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.017),),
-                           Text("15", style: TextStyle( fontSize: screenHeight * 0.017) ),
+                           Text("${tourDetails['capacity']}", style: TextStyle( fontSize: screenHeight * 0.017) ),
                           ],
                         ),
                       ],
@@ -257,7 +244,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:  [
                            Text("Min Age",style: TextStyle(fontWeight: FontWeight.bold,fontSize: screenHeight * 0.017),),
-                           Text("17+",style: TextStyle( fontSize: screenHeight * 0.017)),
+                           Text("${tourDetails['age_limit']}+",style: TextStyle( fontSize: screenHeight * 0.017)),
                           ],
                         ),
                       ],
@@ -309,17 +296,22 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                 ),
  //######################## Touroverview ...  #######################################################################################################               
                 DividerContainer(text: "Overview", press: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const OverviewScreen()));
+                  String tourDescription = tourDetails["description"];
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => OverviewScreen(tourDescription: tourDescription)));
                 }
                 ),
                 DividerContainer(text: "Tour Highlights", press: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourhighlightScreen()));
+                  String tourHighlights = tourDetails["highlights"];
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => TourhighlightScreen(tourHighlights: tourHighlights)));
                 }),
                 DividerContainer(text: "Included / Excluded", press: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const IncludeExcludeScreen()));
+                  String tourIncludes = tourDetails["includes"];
+                  String tourExcludes = tourDetails["excludes"];
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => IncludeExcludeScreen(tourIncludes: tourIncludes, tourExcludes: tourExcludes)));
                 }),
                 DividerContainer(text: "Tour Plan", press: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourPlanScreen()));
+                  List<String> tourPlan = tourDetails['tourPlan'].cast<String>();
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => TourPlanScreen(tourPlan: tourPlan)));
                 }),
                 const Divider(thickness: 1.0),
   //#####################################      Tour Map   ##################################################################################        
