@@ -69,6 +69,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       SizedBox(height: screenHeight * 0.01),
                       const Text("Please enter your profile information.",),
                       SizedBox(height: screenHeight * 0.02),
+                      //  display error message             
+                      Visibility(
+                        visible: isError,
+                        child: Text("🛑 $errorMessage " , style: TextStyle(fontSize: screenHeight * 0.02, color: Colors.red,fontWeight: FontWeight.bold),),
+                      ),
+                      SizedBox(height: screenHeight * 0.04),
                       Form(
                         key: formKey,
                         child: Column(
@@ -170,11 +176,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.02),
-             //  display error message             
-                      Visibility(
-                        visible: isError,
-                        child: Text("🛑 $errorMessage " , style: TextStyle(fontSize: screenHeight * 0.02, color: Colors.red),),
-                      ),
+             
                       SizedBox(height: screenHeight * 0.02),
 
                       DefaultButton(

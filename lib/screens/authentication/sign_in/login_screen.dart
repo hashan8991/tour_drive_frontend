@@ -76,6 +76,12 @@ class _LogInScreenState extends State<LogInScreen> {
                       const Text(
                         "Hey, Enter your details to get sign in ",
                       ),
+                      //  display error message      
+                      SizedBox(height: screenHeight * 0.02),       
+                      Visibility(
+                        visible: isError,
+                        child: Text("🛑 $errorMessage " , style: TextStyle(fontSize: screenHeight * 0.02, color: Colors.red,fontWeight: FontWeight.bold),),
+                      ),
                       SizedBox(height: screenHeight * 0.04),
                       Form(
                         key: formKey,
@@ -168,11 +174,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.02),
-             //  display error message             
-                      Visibility(
-                        visible: isError,
-                        child: Text("🛑 $errorMessage " , style: TextStyle(fontSize: screenHeight * 0.02, color: Colors.red),),
-                      ),
+             
                       TextButton(
                         onPressed: () {
                           Navigator.push(

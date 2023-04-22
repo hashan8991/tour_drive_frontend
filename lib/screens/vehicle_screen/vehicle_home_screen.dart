@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.dart';
@@ -22,7 +23,7 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
 
   Future<void> fetchVehicles() async {
     final response = await http
-        .get(Uri.parse('https://tour-drive.onrender.com/api/v1/vehicles'));
+        .get(Uri.parse('$URL/api/v1/vehicles'));
 
     if (response.statusCode == 200) {
       setState(() {
@@ -49,15 +50,7 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
-    Text buildRatingStars(int rating) {
-
-      String stars = '';
-      for (int i = 0; i < rating; i++) {
-        stars += '⭐ ';
-      }
-      stars.trim();
-      return Text(stars, style: TextStyle(fontSize: screenHeight * 0.015),);
-    }
+    
 
      return SafeArea(
       child: Scaffold(
@@ -151,7 +144,7 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
                             children: [
                               ClipRRect( 
                                 borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                                child: Image.network('https://tour-drive.onrender.com/vehicle-uploads/${vehicle["cover_URL"]}', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
+                                child: Image.network('$URL/vehicle-uploads/${vehicle["cover_URL"]}', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
                               SizedBox(width: screenWidth * 0.03),
                               Container(
                                 height: screenHeight * 0.14,
@@ -168,11 +161,24 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
                                     Row(
                                       children: [
                                         const Icon(Icons.construction_outlined, color: kPrimaryColor, size: 12.0,),
-                                        SizedBox(width: screenWidth * 0.4, child: Text(" Brandnew condition", style: TextStyle(fontSize: screenHeight * 0.018), maxLines:1, overflow: TextOverflow.ellipsis,)),
+                                        SizedBox(width: screenWidth * 0.4, child: Text(" ${vehicle['transmission']}", style: TextStyle(fontSize: screenHeight * 0.018), maxLines:1, overflow: TextOverflow.ellipsis,)),
                                       ],
                                     ),
                                     SizedBox(height: screenHeight * 0.008,),
-                                    Row(children: [buildRatingStars(vehicle["vehicleRatingsAverage"]), SizedBox(width: screenWidth * 0.02,),Text("${vehicle["ratingsQuantity"]} reviews", style: TextStyle(fontSize: screenHeight *0.015),)]),
+                                    Row(
+                                      children: [
+                                        RatingBarIndicator(
+                                        rating: vehicle["vehicleRatingsAverage"].toDouble(),
+                                        itemBuilder: (context, index) => const Icon(
+                                            Icons.star,
+                                            color: kPrimaryColor,
+                                        ),
+                                        itemCount: 5,
+                                        itemSize: screenHeight * 0.021,
+                                        direction: Axis.horizontal,
+                                      ),
+                                        SizedBox(width: screenWidth * 0.02,),
+                                        Text("${vehicle["ratingsQuantity"]} reviews", style: TextStyle(fontSize: screenHeight *0.015),)]),
                                     SizedBox(height: screenHeight * 0.007,),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
