@@ -13,10 +13,11 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
+
 // Sending data to server
 Future loginUser(TextEditingController emailController,TextEditingController passwordController) async {
   final response = await http.post(                             // send data to server using post method
-    Uri.parse('https://tour-drive.onrender.com/api/v1/auth/login'),            // end point url   
+    Uri.parse('$URL/api/v1/auth/login'),            // end point url   
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
        'cookie': 'jwt=cookie_value',
@@ -198,7 +199,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         press: () async {
                           // get response from the server
                           var response = await loginUser(emailController, passwordController);
-
+                          print("pakaya");
                           if( formKey.currentState!.validate() && response.statusCode == 200 ) {   
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(

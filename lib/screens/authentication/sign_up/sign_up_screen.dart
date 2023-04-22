@@ -14,9 +14,10 @@ import 'dart:async';
 // Sending data to server
 Future registerUser(TextEditingController emailController,TextEditingController passwordController,TextEditingController confirmPasswordController) async {
   final response = await http.post(                             // send data to server using post method
-    Uri.parse('https://tour-drive.onrender.com/api/v1/auth/signup'),             // end point url
+    Uri.parse('$URL/api/v1/auth/signup'),             // end point url
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
+      'cookie': 'jwt=cookie_value',
     },
     body: jsonEncode(<String, String>{                          // what we need to send to the server
       "email": emailController.text,
