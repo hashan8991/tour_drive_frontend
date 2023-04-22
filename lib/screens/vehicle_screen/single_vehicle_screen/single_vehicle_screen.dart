@@ -34,7 +34,7 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
     SharedPreferences prefs =  await SharedPreferences.getInstance();
     String? vehicleId = prefs.getString('vehicleId');
     
-    final response = await http.get(Uri.parse('https://tour-drive.onrender.com/api/v1/vehicles/$vehicleId'));
+    final response = await http.get(Uri.parse('$URL/api/v1/vehicles/$vehicleId'));
     
     if (response.statusCode == 200) {
       setState(() {
@@ -61,14 +61,7 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
-    Text buildRatingStars(int rating) {
-      String stars = '';
-      for (int i = 0; i < rating; i++) {
-        stars += '⭐ ';
-      }
-      stars.trim();
-      return Text(stars, style: TextStyle(fontSize: screenHeight * 0.015),);
-    }
+   
 
     
     return SafeArea(
@@ -138,11 +131,11 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    Image.network('https://tour-drive.onrender.com/vehicle-uploads/${vehicleDetails["images_URL"][0]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
+                    Image.network('$URL/vehicle-uploads/${vehicleDetails["images_URL"][0]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
                     SizedBox(width: screenWidth * 0.03),
-                    Image.network('https://tour-drive.onrender.com/vehicle-uploads/${vehicleDetails["images_URL"][1]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
+                    Image.network('$URL/vehicle-uploads/${vehicleDetails["images_URL"][1]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
                     SizedBox(width: screenWidth * 0.03),
-                    Image.network('https://tour-drive.onrender.com/vehicle-uploads/${vehicleDetails["images_URL"][2]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
+                    Image.network('$URL/vehicle-uploads/${vehicleDetails["images_URL"][2]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
                   ]
                   ),
                 ),
@@ -154,7 +147,16 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                 
           //######################## vehicle Reviews #######################################################################################################              
                 Row(children: [
-                  buildRatingStars(vehicleDetails['vehicleRatingsAverage']),
+                  RatingBarIndicator(
+                    rating: vehicleDetails["vehicleRatingsAverage"].toDouble(),
+                    itemBuilder: (context, index) => const Icon(
+                        Icons.star,
+                        color: kPrimaryColor,
+                    ),
+                    itemCount: 5,
+                    itemSize: screenHeight * 0.024,
+                    direction: Axis.horizontal,
+                  ),
                   SizedBox(width: screenWidth * 0.05,),
                   Text("${vehicleDetails['ratingsQuantity']} Reviews")
                 ]
@@ -269,13 +271,14 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                   style: TextButton.styleFrom(
                     foregroundColor: kPrimaryColor,
                     textStyle: const TextStyle(
-                    decoration: TextDecoration.underline, // add underline style
+                    decoration: TextDecoration.underline,
+                    fontWeight: FontWeight.bold  // add underline style
                   ),
                   ),
                   child: Text(
                     'Submit Review',
                     style: TextStyle(
-                      fontSize: screenHeight * 0.022,
+                      fontSize: screenHeight * 0.025,
                       color: kPrimaryColor,
                     ),
                   ),
