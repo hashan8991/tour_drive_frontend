@@ -38,7 +38,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? tourId = prefs.getString('tourId');
     
-    final response = await http.get(Uri.parse('https://tour-drive.onrender.com/api/v1/tours/$tourId'));
+    final response = await http.get(Uri.parse('$URL/api/v1/tours/$tourId'));
     
     if (response.statusCode == 200) {
       setState(() {
@@ -66,15 +66,6 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
 
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-
-    Text buildRatingStars(double rating) {
-      String stars = '';
-      for (double i = 0; i < rating; i++) {
-        stars += '⭐ ';
-      }
-      stars.trim();
-      return Text(stars, style: TextStyle(fontSize: screenHeight * 0.015),);
-    }
 
     return SafeArea(
       child: Scaffold(
@@ -143,11 +134,11 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    Image.network('https://tour-drive.onrender.com/tour-uploads/${tourDetails["tour_gallery"][0]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
+                    Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][0]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
                     SizedBox(width: screenWidth * 0.03),
-                    Image.network('https://tour-drive.onrender.com/tour-uploads/${tourDetails["tour_gallery"][1]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
+                    Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][1]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
                     SizedBox(width: screenWidth * 0.03),
-                    Image.network('https://tour-drive.onrender.com/tour-uploads/${tourDetails["tour_gallery"][2]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
+                    Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][2]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
                   ]
                   ),
                 ),
@@ -168,7 +159,16 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
           //######################## Tour Reviews #######################################################################################################               
                 SizedBox(height: screenHeight * 0.02),
                 Row(children: [
-                  buildRatingStars(5),
+                  RatingBarIndicator(
+                    rating: tourDetails["ratingsAverage"].toDouble(),
+                    itemBuilder: (context, index) => const Icon(
+                        Icons.star,
+                        color: kPrimaryColor,
+                    ),
+                    itemCount: 5,
+                    itemSize: screenHeight * 0.024,
+                    direction: Axis.horizontal,
+                  ),
                   SizedBox(width: screenWidth * 0.05,),
                   Text("${tourDetails['ratingsQuantity']} Reviews")
                 ]
@@ -333,8 +333,8 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                 Row(
                   children: [
                     RatingBarIndicator(
-                      rating: 2.75,
-                      itemBuilder: (context, index) => Icon(
+                      rating: 1.5,
+                      itemBuilder: (context, index) => const Icon(
                           Icons.star,
                           color: kPrimaryColor,
                       ),

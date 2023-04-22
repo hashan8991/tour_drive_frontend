@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.dart';
@@ -23,7 +24,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
 
   Future<void> fetchTours() async {
     final response = await http
-        .get(Uri.parse('https://tour-drive.onrender.com/api/v1/tours'));
+        .get(Uri.parse('$URL/api/v1/tours'));
 
     if (response.statusCode == 200) {
       setState(() {
@@ -50,16 +51,6 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
     
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-
-    Text buildRatingStars(double rating) {
-
-      String stars = '';
-      for (double i = 0; i < rating; i++) {
-        stars += '⭐ ';
-      }
-      stars.trim();
-      return Text(stars, style: TextStyle(fontSize: screenHeight * 0.015),);
-    }
 
      return SafeArea(
       child: Scaffold(
@@ -151,7 +142,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                             children: [
                               ClipRRect( 
                                 borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                                child: Image.network('https://tour-drive.onrender.com/tour-uploads/${tour["tour_cover"]}', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
+                                child: Image.network('$URL/tour-uploads/${tour["tour_cover"]}', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
                               SizedBox(width: screenWidth * 0.03),
                               Container(
                                 height: screenHeight * 0.14,
@@ -163,7 +154,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text( tour["name"], style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.02), maxLines: 2, overflow: TextOverflow.ellipsis,),
+                                    Text( tour["name"], style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.019), maxLines: 2, overflow: TextOverflow.ellipsis,),
                                     SizedBox(height: screenHeight * 0.008,),
                                     Row(
                                       children: [
@@ -172,7 +163,22 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                                       ],
                                     ),
                                     SizedBox(height: screenHeight * 0.008,),
-                                    Row(children: [buildRatingStars(5), SizedBox(width: screenWidth * 0.02,),Text("* reviews", style: TextStyle(fontSize: screenHeight *0.015),)]),
+                                    Row(
+                                      children: [
+                                       RatingBarIndicator(
+                                        rating: tour["ratingsAverage"].toDouble(),
+                                        itemBuilder: (context, index) => const Icon(
+                                            Icons.star,
+                                            color: kPrimaryColor,
+                                        ),
+                                        itemCount: 5,
+                                        itemSize: screenHeight * 0.021,
+                                        direction: Axis.horizontal,
+                                        ),
+                                        SizedBox(width: screenWidth * 0.02,),
+                                        Text("${tour["ratingsQuantity"]} reviews", style: TextStyle(fontSize: screenHeight *0.016),)
+                                      ]
+                                    ),
                                     SizedBox(height: screenHeight * 0.007,),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.start,
