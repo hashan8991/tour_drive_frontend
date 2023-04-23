@@ -32,7 +32,9 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
     // Backend Integration
   var tourDetails ;
   List<dynamic> tourReviews  = [];
+  var numOfReview;
   bool isloading1 = true;
+  bool isloading2 = true;
 
   Future<void> fetchTour() async {
 
@@ -63,7 +65,8 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
       setState(() {
         final Map<String, dynamic> responseData =  jsonDecode(response.body);
         tourReviews =  responseData["data"]["reviews"];
-       
+        numOfReview = responseData["results"];
+        isloading2 = false;
       });
     } else {
       throw Exception('Failed to load Tour');
@@ -363,7 +366,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                       direction: Axis.horizontal,
                     ),
                     SizedBox(width: screenWidth * 0.05),
-                    Text("Based on * ratings", style: TextStyle(fontSize: screenHeight * 0.022)),
+                    Text("Based on $numOfReview ratings", style: TextStyle(fontSize: screenHeight * 0.022)),
                   ],
                 ),
                 SizedBox(height: screenHeight * 0.01),
@@ -409,13 +412,14 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                 SizedBox(
                   height: screenHeight * 0.5,
                   child: 
-                  tourReviews.isEmpty ? 
+                  isloading2  ? 
                     Center(child: CircularProgressIndicator(
                       backgroundColor: Colors.grey[200], // Set the background color of the widget
                       valueColor: const AlwaysStoppedAnimation<Color>(kPrimaryColor), // Set the color of the progress indicator
                       strokeWidth: 3, 
                     )) 
                   :
+                  (numOfReview < 1) ? Text("No reviews for this tour yet",style: TextStyle(fontSize: screenHeight * 0.02,fontWeight: FontWeight.bold),):
                   ListView.builder(
                     //shrinkWrap: true,
                     scrollDirection: Axis.vertical,
