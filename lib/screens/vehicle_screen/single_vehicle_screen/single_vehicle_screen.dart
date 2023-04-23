@@ -27,7 +27,10 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
    // ####################################################################################################################
     // Backend Integration
   var vehicleDetails;
-  bool isloading = true;
+  List<dynamic> vehicleReviews  = [];
+  var numOfReview;
+  bool isloading1 = true;
+  bool isloading2 = true;
 
   Future<void> fetchVehicle() async {
     
@@ -40,17 +43,40 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
       setState(() {
         final Map<String, dynamic> responseData =  jsonDecode(response.body);
         vehicleDetails =  responseData["data"];
-        isloading = false;
+        isloading1 = false;
+        print(vehicleDetails["driverRatingsAverage"]);
+        //print(((vehicleDetails["driverRatingAverage"]*100)/5.toDouble())/100);
       });
     } else {
-      throw Exception('Failed to load Tour');
+      throw Exception('Failed to vehicle Tour');
     }
   }
 
+  Future<void> fetchVehicleReview() async {
+
+    SharedPreferences prefs =  await SharedPreferences.getInstance();
+    String? vehicleId = prefs.getString('vehicleId');
+
+    final response = await http.get(Uri.parse('$URL/api/v1/reviews?vehicle=$vehicleId'));
+   
+    if (response.statusCode == 200) {
+      setState(() {
+        final Map<String, dynamic> responseData =  jsonDecode(response.body);
+        vehicleReviews =  responseData["data"]["reviews"];
+        numOfReview = responseData["results"];
+        isloading2 = false;
+      });
+    } else {
+      throw Exception('Failed to vehicle Tour');
+    }
+  }
+  
   @override
   void initState() {
     super.initState();
     fetchVehicle();
+    fetchVehicleReview();
+   // print("(${((vehicleDetails["driverRatingsAverage"]+vehicleDetails["vehicleRatingsAverage"])/2).toDouble()}/5)");
   }
 
 // ####################################################################################################################
@@ -99,7 +125,7 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
         ),
 
         body: 
-        isloading ? 
+        isloading1 ? 
         Center(
             child:CircularProgressIndicator(
               backgroundColor: Colors.grey[200], // Set the background color of the widget
@@ -298,12 +324,12 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                 SizedBox(height: screenHeight * 0.016),
                 Text( "Reviews", style: TextStyle(fontSize: screenHeight * 0.025,fontWeight: FontWeight.bold)),
                 SizedBox(height: screenHeight * 0.02),
-      //#####################################      Tour Review   ##################################################################################                    
+      //#####################################      vehicle Review   ##################################################################################                    
                 Row(
                   children: [
                     RatingBarIndicator(
-                      rating: 2.75,
-                      itemBuilder: (context, index) => Icon(
+                      rating: ((vehicleDetails["driverRatingsAverage"]+vehicleDetails["vehicleRatingsAverage"])/2).toDouble(),
+                      itemBuilder: (context, index) => const Icon(
                           Icons.star,
                           color: kPrimaryColor,
                       ),
@@ -312,22 +338,24 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                       direction: Axis.horizontal,
                     ),
                     SizedBox(width: screenWidth * 0.05),
-                    Text("2 reviews", style: TextStyle(fontSize: screenHeight * 0.022)),
+                    Text("Based on $numOfReview ratings", style: TextStyle(fontSize: screenHeight * 0.022)),
                   ],
                 ),
+                SizedBox(height: screenHeight * 0.01),
+                Text("       (${((vehicleDetails["driverRatingsAverage"]+vehicleDetails["vehicleRatingsAverage"])/2).toDouble()}/5)", style: TextStyle(fontSize: screenHeight * 0.022)),
                 SizedBox(height: screenHeight * 0.02),
                 Row(
                   children: [
                     Text("Driver ", style: TextStyle(fontSize: screenHeight * 0.022)),
-                    SizedBox(width: screenWidth * 0.04,),
+                    SizedBox(width: screenWidth * 0.07,),
                     LinearPercentIndicator(
                       width: screenWidth * 0.5,
                       barRadius: Radius.circular(screenHeight * 0.02),
                       animation: true,
                       lineHeight: screenHeight * 0.022,
                       animationDuration: 2500,
-                      percent: 0.8,
-                      center: Text("80.0%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
+                      percent: ((vehicleDetails["driverRatingsAverage"]*100)/5.toDouble())/100,
+                      center: Text("${((vehicleDetails["driverRatingsAverage"]*100)/5)}%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
                       progressColor: kPrimaryColor,
                     ),
                   ],
@@ -336,70 +364,120 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                 Row(
                   children: [
                     Text("Vehicle ", style: TextStyle(fontSize: screenHeight * 0.022)),
-                    SizedBox(width: screenWidth * 0.02,),
+                    SizedBox(width: screenWidth * 0.05,),
                     LinearPercentIndicator(
                       width: screenWidth * 0.5,
                       barRadius: Radius.circular(screenHeight * 0.02),
                       animation: true,
                       lineHeight: screenHeight * 0.022,
                       animationDuration: 2500,
-                      percent: 0.8,
-                      center: Text("80.0%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
+                      percent: ((vehicleDetails["vehicleRatingsAverage"]*100)/5.toDouble())/100,
+                      center: Text("${((vehicleDetails["vehicleRatingsAverage"]*100)/5)}%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
                       progressColor: kPrimaryColor,
                     ),
                   ],
                 ),
-  //#####################################      Person revieew   ##################################################################################                    
-
+            //#####################################      Person revieew   ##################################################################################                    
+          
                 SizedBox(height: screenHeight * 0.02,),
                 const Divider(thickness: 1.0),
-                Container(
-                  width: screenWidth,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage:NetworkImage('https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper.png'),
-                          ),
-                          SizedBox(width: screenWidth * 0.05,),
-                          Text("Name here", style: TextStyle(fontSize: screenHeight * 0.02,fontWeight: FontWeight.bold),),
-                        ],
-                      ),
-                      SizedBox(height: screenHeight * 0.01,),
-                      RatingBarIndicator(
-                        rating: 2.75,
-                        itemBuilder: (context, index) => Icon(
-                            Icons.star,
-                            color: kPrimaryColor,
+                SizedBox(
+                  height: screenHeight * 0.5,
+                  child: 
+                  isloading2  ? 
+                    Center(child: CircularProgressIndicator(
+                      backgroundColor: Colors.grey[200], // Set the background color of the widget
+                      valueColor: const AlwaysStoppedAnimation<Color>(kPrimaryColor), // Set the color of the progress indicator
+                      strokeWidth: 3, 
+                    )) 
+                  :
+                  (numOfReview < 1) ? Text("No reviews for this tour yet",style: TextStyle(fontSize: screenHeight * 0.02,fontWeight: FontWeight.bold),):
+                  ListView.builder(
+                    //shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemCount: vehicleReviews.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return 
+                      SizedBox(
+                        width: screenWidth,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const CircleAvatar(
+                                  backgroundImage:NetworkImage('https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper.png'),
+                                ),
+                                SizedBox(width: screenWidth * 0.05,),
+                                Text(vehicleReviews[index]['name'], style: TextStyle(fontSize: screenHeight * 0.02,fontWeight: FontWeight.bold),),
+                              ],
+                            ),
+                            //SizedBox(height: screenHeight * 0.01,),
+                            Row(
+                              //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Column(
+                                  children: [
+                                    const Text("vehicle"),
+                                    RatingBarIndicator(
+                                      rating: vehicleReviews[index]['vehicleRating'].toDouble(),
+                                      itemBuilder: (context, index) => const Icon(
+                                          Icons.star,
+                                          color: kPrimaryColor,
+                                      ),
+                                      itemCount: 5,
+                                      itemSize: screenHeight * 0.03,
+                                      direction: Axis.horizontal,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(width: screenWidth * 0.05,),
+                                Column(
+                                  children: [
+                                    const Text("Driver"),
+                                    RatingBarIndicator(
+                                      rating: vehicleReviews[index]['driverRating'].toDouble(),
+                                      itemBuilder: (context, index) => const Icon(
+                                          Icons.star,
+                                          color: kPrimaryColor,
+                                      ),
+                                      itemCount: 5,
+                                      itemSize: screenHeight * 0.03,
+                                      direction: Axis.horizontal,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: screenHeight * 0.01,),
+                            ReadMoreText(
+                              vehicleReviews[index]['review'],
+                              trimLines: 2,
+                              colorClickableText: kPrimaryColor,
+                              trimMode: TrimMode.Line,
+                              trimCollapsedText: 'Read more',
+                              trimExpandedText: "",
+                              moreStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                              //lessStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: screenHeight * 0.01,),
+                            Row(
+                              children: [
+                                const Icon(Icons.calendar_month_outlined, color: kPrimaryColor,),
+                                SizedBox(width: screenWidth * 0.02),
+                                Text(vehicleReviews[index]['updatedAt'].split('T')[0]),
+                              ],
+                            ),
+                            const Divider(thickness: 1.0),
+                            
+                          ],
                         ),
-                        itemCount: 5,
-                        itemSize: screenHeight * 0.03,
-                        direction: Axis.horizontal,
-                      ),
-                      SizedBox(height: screenHeight * 0.01,),
-                      ReadMoreText(
-                        'Flutter is Google’s mobile UI open source framework to build high-quality native (super fast) interfaces for iOS and Android apps with the unified codebase.',
-                        trimLines: 2,
-                        colorClickableText: kPrimaryColor,
-                        trimMode: TrimMode.Line,
-                        trimCollapsedText: 'Read more',
-                        trimExpandedText: "",
-                        moreStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                        //lessStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: screenHeight * 0.01,),
-                      Row(
-                        children: [
-                          Icon(Icons.calendar_month_outlined, color: kPrimaryColor,),
-                          SizedBox(width: screenWidth * 0.02),
-                          Text("March 10, 2020"),
-                      ],)
-                    ],
+                      );
+                    }
                   ),
                 ),
-
+                
               ]
             ),
           ),
