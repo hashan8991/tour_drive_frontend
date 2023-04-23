@@ -31,7 +31,8 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
   // ####################################################################################################################
     // Backend Integration
   var tourDetails ;
-  bool isloading = true;
+  List<dynamic> tourReviews  = [];
+  bool isloading1 = true;
 
   Future<void> fetchTour() async {
 
@@ -44,7 +45,25 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
       setState(() {
         final Map<String, dynamic> responseData =  jsonDecode(response.body);
         tourDetails =  responseData["data"];
-        isloading = false;
+        isloading1 = false;
+      });
+    } else {
+      throw Exception('Failed to load Tour');
+    }
+  }
+
+  Future<void> fetchTourReview() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? tourId = prefs.getString('tourId');
+
+    final response = await http.get(Uri.parse('$URL/api/v1/reviews?tour=$tourId'));
+   
+    if (response.statusCode == 200) {
+      setState(() {
+        final Map<String, dynamic> responseData =  jsonDecode(response.body);
+        tourReviews =  responseData["data"]["reviews"];
+       
       });
     } else {
       throw Exception('Failed to load Tour');
@@ -55,6 +74,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
   void initState() {
     super.initState();
     fetchTour();
+    fetchTourReview();
   
   }
 
@@ -102,7 +122,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
         ),
 
         body: 
-        isloading ? 
+        isloading1 ? 
         Center(
             child:CircularProgressIndicator(
               backgroundColor: Colors.grey[200], // Set the background color of the widget
@@ -114,53 +134,52 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
         Container(
           margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
           child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Divider(thickness: 1.0),
                 Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.15), // shadow color
-                      spreadRadius: 1.0, // how wide the shadow is
-                      blurRadius: 5.0, // how soft the shadow is
-                      offset: const Offset(0, 3), // offset of the shadow
-                    ),
-                  ],
-                ),
-                height: screenHeight * 0.3,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][0]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
-                    SizedBox(width: screenWidth * 0.03),
-                    Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][1]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
-                    SizedBox(width: screenWidth * 0.03),
-                    Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][2]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
-                  ]
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.15), // shadow color
+                        spreadRadius: 1.0, // how wide the shadow is
+                        blurRadius: 5.0, // how soft the shadow is
+                        offset: const Offset(0, 3), // offset of the shadow
+                      ),
+                    ],
                   ),
+                  height: screenHeight * 0.3,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][0]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
+                      SizedBox(width: screenWidth * 0.03),
+                      Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][1]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
+                      SizedBox(width: screenWidth * 0.03),
+                      Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][2]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
+                    ]
+                    ),
                 ),
-          
+            
                 SizedBox(height: screenHeight * 0.02),
-          //######################## Tour name #######################################################################################################               
+            //######################## Tour name #######################################################################################################               
                 Text(tourDetails['name'], style: TextStyle(fontSize: screenHeight *0.03, fontWeight: FontWeight.bold)),
                 SizedBox(height: screenHeight * 0.02),
-          
+            
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined, color: kPrimaryColor, size: 15.0,),
                     SizedBox(width: screenWidth * 0.005),
-          //######################## Tour location #######################################################################################################               
+            //######################## Tour location #######################################################################################################               
                     SizedBox(width: screenWidth * 0.85, child: Text(tourDetails['cities'], style: TextStyle(fontSize: screenHeight * 0.017 ),maxLines: 2, overflow: TextOverflow.ellipsis),), 
                   ],
                 ),
-          //######################## Tour Reviews #######################################################################################################               
+            //######################## Tour Reviews #######################################################################################################               
                 SizedBox(height: screenHeight * 0.02),
                 Row(children: [
                   RatingBarIndicator(
-                    rating: tourDetails["ratingsAverage"].toDouble(),
+                    rating: ((tourDetails["locationRatingsAverage"]+tourDetails["serviceRatingsAverage"])/2).toDouble(),
                     itemBuilder: (context, index) => const Icon(
                         Icons.star,
                         color: kPrimaryColor,
@@ -178,12 +197,12 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                   children: [
                     const Icon(Icons.sell_outlined, color: kPrimaryColor, size: 20.0,),
                     SizedBox(width: screenWidth * 0.02),
-          //######################## Tour Price #######################################################################################################               
+            //######################## Tour Price #######################################################################################################               
                      Text("\$ ${tourDetails['price']}", style: TextStyle(fontSize: screenHeight * 0.03, fontWeight: FontWeight.bold)),
                   ],
                 ),
                 SizedBox(height: screenHeight * 0.025),
-          //######################## Tour sub details duration, max people, min age, pick up #######################################################################################################               
+            //######################## Tour sub details duration, max people, min age, pick up #######################################################################################################               
                 Row(
                   children: [
                     Row(
@@ -225,9 +244,9 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                     ),
                   ],
                 ),
-
+          
                 SizedBox(height: screenHeight * 0.025),
-
+          
                 Row(
                   children: [
                     Row(
@@ -271,7 +290,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                   ],
                 ),
                SizedBox(height: screenHeight * 0.021),
-          //######################## submit review  #######################################################################################################               
+            //######################## submit review  #######################################################################################################               
               TextButton(
                   onPressed: () {
                     Navigator.push(
@@ -283,18 +302,19 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                   style: TextButton.styleFrom(
                     foregroundColor: kPrimaryColor,
                     textStyle: const TextStyle(
-                    decoration: TextDecoration.underline, // add underline style
+                    decoration: TextDecoration.underline,
+                    fontWeight: FontWeight.bold // add underline style
                   ),
                   ),
                   child: Text(
                     'Submit Review',
                     style: TextStyle(
-                      fontSize: screenHeight * 0.022,
+                      fontSize: screenHeight * 0.025,
                       color: kPrimaryColor,
                     ),
                   ),
                 ),
- //######################## Touroverview ...  #######################################################################################################               
+           //######################## Touroverview ...  #######################################################################################################               
                 DividerContainer(text: "Overview", press: () {
                   String tourDescription = tourDetails["description"];
                   Navigator.push(context,MaterialPageRoute(builder: (context) => OverviewScreen(tourDescription: tourDescription)));
@@ -314,7 +334,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                   Navigator.push(context,MaterialPageRoute(builder: (context) => TourPlanScreen(tourPlan: tourPlan)));
                 }),
                 const Divider(thickness: 1.0),
-  //#####################################      Tour Map   ##################################################################################        
+            //#####################################      Tour Map   ##################################################################################        
                 SizedBox(height: screenHeight * 0.012),
                 Text( "Tour Map", style: TextStyle(fontSize: screenHeight * 0.025,fontWeight: FontWeight.bold)),
                 SizedBox(height: screenHeight * 0.023),
@@ -329,11 +349,11 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                 SizedBox(height: screenHeight * 0.016),
                 Text( "Reviews", style: TextStyle(fontSize: screenHeight * 0.025,fontWeight: FontWeight.bold)),
                 SizedBox(height: screenHeight * 0.02),
-      //#####################################      Tour Review   ##################################################################################                    
+                //#####################################      Tour Review   ##################################################################################                    
                 Row(
                   children: [
                     RatingBarIndicator(
-                      rating: 1.5,
+                      rating: ((tourDetails["locationRatingsAverage"]+tourDetails["serviceRatingsAverage"])/2).toDouble(),
                       itemBuilder: (context, index) => const Icon(
                           Icons.star,
                           color: kPrimaryColor,
@@ -343,10 +363,12 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                       direction: Axis.horizontal,
                     ),
                     SizedBox(width: screenWidth * 0.05),
-                    Text("2 reviews", style: TextStyle(fontSize: screenHeight * 0.022)),
+                    Text("Based on * ratings", style: TextStyle(fontSize: screenHeight * 0.022)),
                   ],
                 ),
-                 SizedBox(height: screenHeight * 0.02),
+                SizedBox(height: screenHeight * 0.01),
+                Text("       (${((tourDetails["locationRatingsAverage"]+tourDetails["serviceRatingsAverage"])/2).toDouble()}/5)", style: TextStyle(fontSize: screenHeight * 0.022)),
+                SizedBox(height: screenHeight * 0.02),
                 Row(
                   children: [
                     Text("Location ", style: TextStyle(fontSize: screenHeight * 0.022)),
@@ -357,63 +379,129 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                       animation: true,
                       lineHeight: screenHeight * 0.022,
                       animationDuration: 2500,
-                      percent: 0.8,
-                      center: Text("80.0%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
+                      percent: ((tourDetails["locationRatingsAverage"]*100)/5.toDouble())/100,
+                      center: Text("${((tourDetails["locationRatingsAverage"]*100)/5)}%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
                       progressColor: kPrimaryColor,
                     ),
                   ],
                 ),
-  //#####################################      Person revieew   ##################################################################################                    
-
+                SizedBox(height: screenHeight * 0.02),
+                Row(
+                  children: [
+                    Text("Service ", style: TextStyle(fontSize: screenHeight * 0.022)),
+                    SizedBox(width: screenWidth * 0.05,),
+                    LinearPercentIndicator(
+                      width: screenWidth * 0.5,
+                      barRadius: Radius.circular(screenHeight * 0.02),
+                      animation: true,
+                      lineHeight: screenHeight * 0.022,
+                      animationDuration: 2500,
+                      percent: ((tourDetails["serviceRatingsAverage"]*100)/5.toDouble())/100,
+                      center: Text("${((tourDetails["serviceRatingsAverage"]*100)/5)}%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
+                      progressColor: kPrimaryColor,
+                    ),
+                  ],
+                ),
+            //#####################################      Person revieew   ##################################################################################                    
+          
                 SizedBox(height: screenHeight * 0.02,),
                 const Divider(thickness: 1.0),
-                Container(
-                  width: screenWidth,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage:NetworkImage('https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper.png'),
-                          ),
-                          SizedBox(width: screenWidth * 0.05,),
-                          Text("Name here", style: TextStyle(fontSize: screenHeight * 0.02,fontWeight: FontWeight.bold),),
-                        ],
-                      ),
-                      SizedBox(height: screenHeight * 0.01,),
-                      RatingBarIndicator(
-                        rating: 2.75,
-                        itemBuilder: (context, index) => Icon(
-                            Icons.star,
-                            color: kPrimaryColor,
+                SizedBox(
+                  height: screenHeight * 0.5,
+                  child: 
+                  tourReviews.isEmpty ? 
+                    Center(child: CircularProgressIndicator(
+                      backgroundColor: Colors.grey[200], // Set the background color of the widget
+                      valueColor: const AlwaysStoppedAnimation<Color>(kPrimaryColor), // Set the color of the progress indicator
+                      strokeWidth: 3, 
+                    )) 
+                  :
+                  ListView.builder(
+                    //shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemCount: tourReviews.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return 
+                      SizedBox(
+                        width: screenWidth,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const CircleAvatar(
+                                  backgroundImage:NetworkImage('https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper.png'),
+                                ),
+                                SizedBox(width: screenWidth * 0.05,),
+                                Text(tourReviews[index]['name'], style: TextStyle(fontSize: screenHeight * 0.02,fontWeight: FontWeight.bold),),
+                              ],
+                            ),
+                            //SizedBox(height: screenHeight * 0.01,),
+                            Row(
+                              //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Column(
+                                  children: [
+                                    const Text("Location"),
+                                    RatingBarIndicator(
+                                      rating: tourReviews[index]['locationRating'].toDouble(),
+                                      itemBuilder: (context, index) => const Icon(
+                                          Icons.star,
+                                          color: kPrimaryColor,
+                                      ),
+                                      itemCount: 5,
+                                      itemSize: screenHeight * 0.03,
+                                      direction: Axis.horizontal,
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(width: screenWidth * 0.05,),
+                                Column(
+                                  children: [
+                                    const Text("Service"),
+                                    RatingBarIndicator(
+                                      rating: tourReviews[index]['serviceRating'].toDouble(),
+                                      itemBuilder: (context, index) => const Icon(
+                                          Icons.star,
+                                          color: kPrimaryColor,
+                                      ),
+                                      itemCount: 5,
+                                      itemSize: screenHeight * 0.03,
+                                      direction: Axis.horizontal,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: screenHeight * 0.01,),
+                            ReadMoreText(
+                              tourReviews[index]['review'],
+                              trimLines: 2,
+                              colorClickableText: kPrimaryColor,
+                              trimMode: TrimMode.Line,
+                              trimCollapsedText: 'Read more',
+                              trimExpandedText: "",
+                              moreStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                              //lessStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: screenHeight * 0.01,),
+                            Row(
+                              children: [
+                                const Icon(Icons.calendar_month_outlined, color: kPrimaryColor,),
+                                SizedBox(width: screenWidth * 0.02),
+                                Text(tourReviews[index]['updatedAt'].split('T')[0]),
+                              ],
+                            ),
+                            const Divider(thickness: 1.0),
+                            
+                          ],
                         ),
-                        itemCount: 5,
-                        itemSize: screenHeight * 0.03,
-                        direction: Axis.horizontal,
-                      ),
-                      SizedBox(height: screenHeight * 0.01,),
-                      ReadMoreText(
-                        'Flutter is Google’s mobile UI open source framework to build high-quality native (super fast) interfaces for iOS and Android apps with the unified codebase.',
-                        trimLines: 2,
-                        colorClickableText: kPrimaryColor,
-                        trimMode: TrimMode.Line,
-                        trimCollapsedText: 'Read more',
-                        trimExpandedText: "",
-                        moreStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                        //lessStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: screenHeight * 0.01,),
-                      Row(
-                        children: [
-                          Icon(Icons.calendar_month_outlined, color: kPrimaryColor,),
-                          SizedBox(width: screenWidth * 0.02),
-                          Text("March 10, 2020"),
-                      ],)
-                    ],
+                      );
+                    }
                   ),
                 ),
-
+                
               ]
             ),
           ),

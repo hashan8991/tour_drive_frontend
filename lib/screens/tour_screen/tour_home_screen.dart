@@ -30,7 +30,6 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
       setState(() {
         final Map<String, dynamic> responseData =  jsonDecode(response.body);
         tours =  responseData["data"];
-         
       });
     } else {
       throw Exception('Failed to load Tour');
@@ -90,7 +89,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
             children: [
               Text("Explore Sri Lanka, One tour at a time", style: TextStyle(fontSize: screenHeight * 0.032, fontWeight: FontWeight.bold),),
               SizedBox(height: screenHeight * 0.02,),
-
+          
               tours.isEmpty 
               ? Center(
                   child:CircularProgressIndicator(
@@ -106,12 +105,13 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                   itemCount: tours.length,
                   itemBuilder: (BuildContext context, int index) {
                   final tour = tours[index];
-
+                      
                   return GestureDetector(
                     onTap: () async{
                       // Store the  tour ID in shared preferences
                       final prefs = await SharedPreferences.getInstance();
                       await prefs.setString('tourId', tour["_id"]);
+
                       
                       // ignore: use_build_context_synchronously
                       Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
@@ -166,7 +166,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                                     Row(
                                       children: [
                                        RatingBarIndicator(
-                                        rating: tour["ratingsAverage"].toDouble(),
+                                        rating: ((tour["locationRatingsAverage"]+tour["serviceRatingsAverage"])/2).toDouble(),
                                         itemBuilder: (context, index) => const Icon(
                                             Icons.star,
                                             color: kPrimaryColor,
