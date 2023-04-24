@@ -1,11 +1,16 @@
+// ignore_for_file: use_build_context_synchronously
+
 import "package:flutter/material.dart";
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
-import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
-import 'package:tour_drive_frontend/screens/authentication/sign_in/login_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
+
 
 class TourFeedbackForm extends StatefulWidget {
   const TourFeedbackForm({Key? key}) : super(key: key);
@@ -16,10 +21,43 @@ class TourFeedbackForm extends StatefulWidget {
 
 class _TourFeedbackFormState extends State<TourFeedbackForm> {
 
-  final formKey = GlobalKey<FormState>();
   String? name,email,comment;
-  double serviceRating = 0;
+  double locationRating = 1.0 ;
+  double serviceRating = 1.0;
 
+  bool isError = false;
+  String errorMessage = "";
+
+  final formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final reviewPasswordController = TextEditingController();
+
+  // Sending data to server
+Future submitReview(TextEditingController nameController,TextEditingController emailController,TextEditingController reviewPasswordController,double locationRating,double serviceRating) async {
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? tourId = prefs.getString('tourId');
+
+  final response = await http.post(                             // send data to server using post method
+    Uri.parse('$URL/api/v1/reviews'),             // end point url
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+ 
+    body: jsonEncode(<String, String>{                          // what we need to send to the server
+      "name": nameController.text,
+      "email": emailController.text,
+      "review": reviewPasswordController.text,
+      "locationRating": "$locationRating",
+      "serviceRating": "$serviceRating",
+      "reviewType":"tour",
+      "tour":"$tourId"
+    }),
+  );
+  return response;
+}
+  
   @override
   Widget build(BuildContext context) {
     
@@ -47,7 +85,11 @@ class _TourFeedbackFormState extends State<TourFeedbackForm> {
                     SizedBox(height: screenHeight *0.02,),
                     const Center(child: Text("Hey, Leave feedback about this",)),
                     SizedBox(height: screenHeight *0.02,),
-                    
+                    Visibility(
+                        visible: isError,
+                        child: Text("🛑 $errorMessage " , style: TextStyle(fontSize: screenHeight * 0.02, color: Colors.red,fontWeight: FontWeight.bold),),
+                      ),
+                    SizedBox(height: screenHeight * 0.04),
                     Form(
                       key: formKey,
                       child: Column(
@@ -58,8 +100,9 @@ class _TourFeedbackFormState extends State<TourFeedbackForm> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: screenHeight *0.01,),
+
                           TextFormField(
-                          //controller: firstNameController,
+                          controller: nameController,
                           onSaved: (value)  {
                             name = value!;
                           },
@@ -85,8 +128,9 @@ class _TourFeedbackFormState extends State<TourFeedbackForm> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: screenHeight *0.01,),
+
                           TextFormField(
-                            //controller: firstNameController,
+                            controller: emailController,
                             onSaved: (value)  {
                               email = value!;
                             },
@@ -115,8 +159,9 @@ class _TourFeedbackFormState extends State<TourFeedbackForm> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: screenHeight *0.01,),
+
                           TextFormField(
-                            //controller: firstNameController,
+                            controller: reviewPasswordController,
                             onSaved: (value)  {
                               comment = value!;
                             },
@@ -141,6 +186,33 @@ class _TourFeedbackFormState extends State<TourFeedbackForm> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Text(
+                                'Location',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              RatingBar.builder(
+                                initialRating: locationRating,
+                                minRating: 0,
+                                maxRating: 5,
+                                direction: Axis.horizontal,
+                                allowHalfRating: true,
+                                itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                itemBuilder: (context, _) => const Icon(
+                                  Icons.star,
+                                  color: kPrimaryColor,
+                                ),
+                                onRatingUpdate: (locationrating) {
+                                  setState(() {
+                                    locationRating = locationrating;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: screenHeight * 0.04),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
                                 'Service',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
@@ -155,32 +227,44 @@ class _TourFeedbackFormState extends State<TourFeedbackForm> {
                                   Icons.star,
                                   color: kPrimaryColor,
                                 ),
-                                onRatingUpdate: (rating) {
+                                onRatingUpdate: (servicerating) {
                                   setState(() {
-                                    serviceRating = rating;
+                                    serviceRating = servicerating;
+                                    
                                   });
                                 },
                               ),
                             ],
                           ),
                           ]
-                            ),
+                        ),
                      ),
-                    
-                    SizedBox(height: screenHeight *0.06,),
+                    SizedBox(height: screenHeight *0.05,),
                     SizedBox(
                       width: screenWidth *0.5,
-                      child: DefaultButton(text: "Submit Review", press: () {
-                              if (formKey.currentState!.validate()) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Review submit successfully'), 
-                                    backgroundColor: kPrimaryColor,
-                                    ),
-                                );
-                                //Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
+                      child: 
+                        DefaultButton(text: "Submit Review", press: () async {
+
+                          // get response from the server
+                          var response = await submitReview(nameController,emailController,reviewPasswordController,locationRating,serviceRating);
+                          
+                          if (formKey.currentState!.validate() && response.statusCode == 201) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Review submit successfully'), 
+                                backgroundColor: kPrimaryColor,
+                                ),
+                            );
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
+                          }else{
+                            final Map<String, dynamic> responseData = json.decode(response.body);
+                            errorMessage = responseData["message"];
+                            setState(() {
+                              isError = true;
+                            });
+                          }
                         }
-                      }),
+                        ),
                     ),
                     ],
                   ),

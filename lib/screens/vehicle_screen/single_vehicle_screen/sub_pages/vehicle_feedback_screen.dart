@@ -1,9 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen/single_vehicle_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
 
 class VehicleFeedbackScreen extends StatefulWidget {
   const VehicleFeedbackScreen({super.key});
@@ -14,9 +20,42 @@ class VehicleFeedbackScreen extends StatefulWidget {
 
 class _VehicleFeedbackScreenState extends State<VehicleFeedbackScreen> {
 
-  final formKey = GlobalKey<FormState>();
   String? name,email,comment;
-  double serviceRating = 0;
+  double driverRating = 1.0 ;
+  double vehicleRating = 1.0;
+
+  bool isError = false;
+  String errorMessage = "";
+
+  final formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final reviewPasswordController = TextEditingController();
+
+  // Sending data to server
+Future submitReview(TextEditingController nameController,TextEditingController emailController,TextEditingController reviewPasswordController,double driverRating,double vehicleRating) async {
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? vehicleId = prefs.getString('vehicleId');
+
+  final response = await http.post(                             // send data to server using post method
+    Uri.parse('$URL/api/v1/reviews'),             // end point url
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+ 
+    body: jsonEncode(<String, String>{                          // what we need to send to the server
+      "name": nameController.text,
+      "email": emailController.text,
+      "review": reviewPasswordController.text,
+      "driverRating": "$driverRating",
+      "vehicleRating": "$vehicleRating",
+      "reviewType":"vehicle",
+      "vehicle":"$vehicleId"
+    }),
+  );
+  return response;
+}
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +84,11 @@ class _VehicleFeedbackScreenState extends State<VehicleFeedbackScreen> {
                     SizedBox(height: screenHeight *0.02,),
                     const Center(child: Text("Hey, Leave feedback about this",)),
                     SizedBox(height: screenHeight *0.02,),
+                    Visibility(
+                        visible: isError,
+                        child: Text("🛑 $errorMessage " , style: TextStyle(fontSize: screenHeight * 0.02, color: Colors.red,fontWeight: FontWeight.bold),),
+                      ),
+                    SizedBox(height: screenHeight * 0.04),
                     
                     Form(
                       key: formKey,
@@ -56,8 +100,9 @@ class _VehicleFeedbackScreenState extends State<VehicleFeedbackScreen> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: screenHeight *0.01,),
+
                           TextFormField(
-                          //controller: firstNameController,
+                          controller: nameController,
                           onSaved: (value)  {
                             name = value!;
                           },
@@ -83,8 +128,9 @@ class _VehicleFeedbackScreenState extends State<VehicleFeedbackScreen> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: screenHeight *0.01,),
+
                           TextFormField(
-                            //controller: firstNameController,
+                            controller: emailController,
                             onSaved: (value)  {
                               email = value!;
                             },
@@ -113,8 +159,9 @@ class _VehicleFeedbackScreenState extends State<VehicleFeedbackScreen> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: screenHeight *0.01,),
+
                           TextFormField(
-                            //controller: firstNameController,
+                            controller: reviewPasswordController,
                             onSaved: (value)  {
                               comment = value!;
                             },
@@ -143,7 +190,7 @@ class _VehicleFeedbackScreenState extends State<VehicleFeedbackScreen> {
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               RatingBar.builder(
-                                initialRating: serviceRating,
+                                initialRating: driverRating,
                                 minRating: 0,
                                 maxRating: 5,
                                 direction: Axis.horizontal,
@@ -155,7 +202,7 @@ class _VehicleFeedbackScreenState extends State<VehicleFeedbackScreen> {
                                 ),
                                 onRatingUpdate: (rating) {
                                   setState(() {
-                                    serviceRating = rating;
+                                    driverRating = rating;
                                   });
                                 },
                               ),
@@ -170,7 +217,7 @@ class _VehicleFeedbackScreenState extends State<VehicleFeedbackScreen> {
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               RatingBar.builder(
-                                initialRating: serviceRating,
+                                initialRating: vehicleRating,
                                 minRating: 0,
                                 maxRating: 5,
                                 direction: Axis.horizontal,
@@ -180,9 +227,9 @@ class _VehicleFeedbackScreenState extends State<VehicleFeedbackScreen> {
                                   Icons.star,
                                   color: kPrimaryColor,
                                 ),
-                                onRatingUpdate: (rating) {
+                                onRatingUpdate: (ratings) {
                                   setState(() {
-                                    serviceRating = rating;
+                                    vehicleRating = ratings;
                                   });
                                 },
                               ),
@@ -191,21 +238,31 @@ class _VehicleFeedbackScreenState extends State<VehicleFeedbackScreen> {
                           ]
                             ),
                      ),
-                    
-                    SizedBox(height: screenHeight *0.06,),
+                    SizedBox(height: screenHeight *0.05,),
                     SizedBox(
                       width: screenWidth *0.5,
-                      child: DefaultButton(text: "Submit Review", press: () {
-                              if (formKey.currentState!.validate()) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Review submit successfully'), 
-                                    backgroundColor: kPrimaryColor,
-                                    ),
-                                );
-                                //Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
+                      child: DefaultButton(text: "Submit Review", press: () async{
+                        // get response from the server
+                          var response = await submitReview(nameController,emailController,reviewPasswordController,driverRating,vehicleRating);
+                          
+                          if (formKey.currentState!.validate() && response.statusCode == 201) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Review submit successfully'), 
+                                backgroundColor: kPrimaryColor,
+                                ),
+                            );
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleVehicleScreen()));
+                          }else{
+                            final Map<String, dynamic> responseData = json.decode(response.body);
+                            errorMessage = responseData["message"];
+                            setState(() {
+                              isError = true;
+                            });
+                          }
                         }
-                      }),
+                        ),
+                      
                     ),
                     ],
                   ),

@@ -13,13 +13,14 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
+
 // Sending data to server
 Future loginUser(TextEditingController emailController,TextEditingController passwordController) async {
   final response = await http.post(                             // send data to server using post method
-    Uri.parse('http://localhost:8000/api/v1/auth/login'),             // end point url
-    //Uri.parse('http://192.168.8.152:8000/api/v1/auth/login'), // hashan router ip    
+    Uri.parse('$URL/api/v1/auth/login'),            // end point url   
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
+       'cookie': 'jwt=cookie_value',
     },
     body: jsonEncode(<String, String>{                          // what we need to send to the server
       "email": emailController.text,
@@ -74,6 +75,12 @@ class _LogInScreenState extends State<LogInScreen> {
                       SizedBox(height: screenHeight * 0.02),
                       const Text(
                         "Hey, Enter your details to get sign in ",
+                      ),
+                      //  display error message      
+                      SizedBox(height: screenHeight * 0.02),       
+                      Visibility(
+                        visible: isError,
+                        child: Text("🛑 $errorMessage " , style: TextStyle(fontSize: screenHeight * 0.02, color: Colors.red,fontWeight: FontWeight.bold),),
                       ),
                       SizedBox(height: screenHeight * 0.04),
                       Form(
@@ -167,11 +174,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.02),
-             //  display error message             
-                      Visibility(
-                        visible: isError,
-                        child: Text("🛑 $errorMessage " , style: TextStyle(fontSize: screenHeight * 0.02, color: Colors.red),),
-                      ),
+             
                       TextButton(
                         onPressed: () {
                           Navigator.push(
@@ -198,11 +201,11 @@ class _LogInScreenState extends State<LogInScreen> {
                         press: () async {
                           // get response from the server
                           var response = await loginUser(emailController, passwordController);
-
+                          print("pakaya");
                           if( formKey.currentState!.validate() && response.statusCode == 200 ) {   
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Profile creation successfully'), 
+                                content: Text('Login successfully'), 
                                 backgroundColor: kPrimaryColor,
                                 ),
                             );
@@ -210,6 +213,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
                             // register successful, extract the  user ID from the response body
                             final Map<String, dynamic> responseData = json.decode(response.body);
+                            print(responseData);
                             final String userId = responseData['data']["user"]["_id"];
 
                             // Store the  user ID in shared preferences

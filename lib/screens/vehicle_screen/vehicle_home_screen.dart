@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.dart';
 import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen/single_vehicle_screen.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class VehicleHomeScreen extends StatefulWidget {
   const VehicleHomeScreen({super.key});
@@ -11,21 +16,41 @@ class VehicleHomeScreen extends StatefulWidget {
 }
 
 class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
+
+   // ####################################################################################################################
+        // Backend Integration
+  List<dynamic> vehicles = [];
+
+  Future<void> fetchVehicles() async {
+    final response = await http
+        .get(Uri.parse('$URL/api/v1/vehicles'));
+
+    if (response.statusCode == 200) {
+      setState(() {
+        final Map<String, dynamic> responseData =  jsonDecode(response.body);
+        vehicles =  responseData["data"];
+         
+      });
+    } else {
+      throw Exception('Failed to load Tour');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchVehicles();
+  }
+
+// ####################################################################################################################
+
   @override
   Widget build(BuildContext context) {
     
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
-    Text buildRatingStars(double rating) {
-
-      String stars = '';
-      for (double i = 0; i < rating; i++) {
-        stars += '⭐ ';
-      }
-      stars.trim();
-      return Text(stars, style: TextStyle(fontSize: screenHeight * 0.015),);
-    }
+    
 
      return SafeArea(
       child: Scaffold(
@@ -65,15 +90,33 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
             children: [
               Text("Choose Your best vehicle here", style: TextStyle(fontSize: screenHeight * 0.032, fontWeight: FontWeight.bold),),
               SizedBox(height: screenHeight * 0.02,),
+
+              vehicles.isEmpty 
+              ? Center(
+                  child:CircularProgressIndicator(
+                    backgroundColor: Colors.grey[200], // Set the background color of the widget
+                    valueColor: const AlwaysStoppedAnimation<Color>(kPrimaryColor), // Set the color of the progress indicator
+                    strokeWidth: 3, // Set the width of the progress indicator
+                  )
+                )
+              :
               Expanded(
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
-                  itemCount: 5,
+                  itemCount: vehicles.length,
                   itemBuilder: (BuildContext context, int index) {
-                  
+                  final vehicle = vehicles[index];
+
                   return GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+
+                      // Store the  vehicle ID in shared preferences
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setString('vehicleId', vehicle["_id"]);
+
+                      // ignore: use_build_context_synchronously
                       Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleVehicleScreen()));
+
                     },
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0,0,0,16),
@@ -101,7 +144,7 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
                             children: [
                               ClipRRect( 
                                 borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                                child: Image.network('https://images.unsplash.com/photo-1638618164682-12b986ec2a75?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
+                                child: Image.network('$URL/vehicle-uploads/${vehicle["cover_URL"]}', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
                               SizedBox(width: screenWidth * 0.03),
                               Container(
                                 height: screenHeight * 0.14,
@@ -113,16 +156,29 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Toyota Prius", style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.02), maxLines: 2, overflow: TextOverflow.ellipsis,),
+                                    Text("${vehicle["brand"]} ${vehicle["model"]}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.02), maxLines: 2, overflow: TextOverflow.ellipsis,),
                                     SizedBox(height: screenHeight * 0.008,),
                                     Row(
                                       children: [
                                         const Icon(Icons.construction_outlined, color: kPrimaryColor, size: 12.0,),
-                                        SizedBox(width: screenWidth * 0.4, child: Text(" Brandnew condition", style: TextStyle(fontSize: screenHeight * 0.018), maxLines:1, overflow: TextOverflow.ellipsis,)),
+                                        SizedBox(width: screenWidth * 0.4, child: Text(" ${vehicle['transmission']}", style: TextStyle(fontSize: screenHeight * 0.018), maxLines:1, overflow: TextOverflow.ellipsis,)),
                                       ],
                                     ),
                                     SizedBox(height: screenHeight * 0.008,),
-                                    Row(children: [buildRatingStars(3), SizedBox(width: screenWidth * 0.02,),Text("2 reviews", style: TextStyle(fontSize: screenHeight *0.015),)]),
+                                    Row(
+                                      children: [
+                                        RatingBarIndicator(
+                                        rating: vehicle["vehicleRatingsAverage"].toDouble(),
+                                        itemBuilder: (context, index) => const Icon(
+                                            Icons.star,
+                                            color: kPrimaryColor,
+                                        ),
+                                        itemCount: 5,
+                                        itemSize: screenHeight * 0.021,
+                                        direction: Axis.horizontal,
+                                      ),
+                                        SizedBox(width: screenWidth * 0.02,),
+                                        Text("${vehicle["ratingsQuantity"]} reviews", style: TextStyle(fontSize: screenHeight *0.015),)]),
                                     SizedBox(height: screenHeight * 0.007,),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -131,10 +187,10 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
                                           children: [
                                             Icon(Icons.airline_seat_recline_normal_sharp, color: kPrimaryColor, size: screenHeight * 0.02,),
                                             SizedBox(width: screenWidth *0.005,),
-                                            Text("4 seats"),
+                                            Text("${vehicle["seats"]} seats"),
                                           ],
                                         ),
-                                        Text("\$ 200", style: TextStyle(fontSize: screenHeight * 0.022,fontWeight: FontWeight.bold),)
+                                        Text("\$ ${vehicle["price_per_day_without_dr"]}", style: TextStyle(fontSize: screenHeight * 0.022,fontWeight: FontWeight.bold),)
                                       ],
                                     ),
                                   ],
