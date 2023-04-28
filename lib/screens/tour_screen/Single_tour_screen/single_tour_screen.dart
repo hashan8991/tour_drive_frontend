@@ -48,6 +48,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
         final Map<String, dynamic> responseData =  jsonDecode(response.body);
         tourDetails =  responseData["data"];
         isloading1 = false;
+        print(tourDetails);
       });
     } else {
       throw Exception('Failed to load Tour');
@@ -67,6 +68,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
         tourReviews =  responseData["data"]["reviews"];
         numOfReview = responseData["results"];
         isloading2 = false;
+
       });
     } else {
       throw Exception('Failed to load Tour');
@@ -153,15 +155,39 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                     ],
                   ),
                   height: screenHeight * 0.3,
-                  child: ListView(
+                  child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    children: [
-                      Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][0]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
-                      SizedBox(width: screenWidth * 0.03),
-                      Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][1]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
-                      SizedBox(width: screenWidth * 0.03),
-                      Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][2]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
-                    ]
+                    itemCount: tourDetails["tour_gallery"].length,
+                    itemBuilder: ((context, index) {
+                      return Column(
+                        children: [
+                          Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][index]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,
+                          errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29,)),
+                          SizedBox(width: screenWidth * 0.03,)
+
+                      ],);
+                    }
+                  ),
+                  // child: ListView.builder(
+                  //   scrollDirection: Axis.horizontal,
+                  //   itemCount: tourDetails["tour_gallery"],
+                  //   itemBuilder: (BuildContext context, int index) {
+                  //     return 
+                  //       Column(
+                  //         children: [
+                  //           Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][index]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,
+                  //           errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, ),
+                  //           SizedBox(width: screenWidth * 0.03),
+                  //           ))];
+                        
+                  //   }
+                    // children: [
+                    //   Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][0]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, ),),
+                    //   SizedBox(width: screenWidth * 0.03),
+                    //   //Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][1]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
+                    //   SizedBox(width: screenWidth * 0.03),
+                    //   //Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][2]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, ),),
+                    // ]
                     ),
                 ),
             

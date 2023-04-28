@@ -20,13 +20,17 @@ Future loginUser(TextEditingController emailController,TextEditingController pas
     Uri.parse('$URL/api/v1/auth/login'),            // end point url   
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
-       'cookie': 'jwt=cookie_value',
+      'cookie': 'jwt=cookie_value',
     },
     body: jsonEncode(<String, String>{                          // what we need to send to the server
       "email": emailController.text,
       "password": passwordController.text,
     }),
   );
+    print("responsse");
+    response.headers.forEach((names, values) {
+    print('$names: $values');
+  });
   return response;
 }
 
@@ -201,7 +205,6 @@ class _LogInScreenState extends State<LogInScreen> {
                         press: () async {
                           // get response from the server
                           var response = await loginUser(emailController, passwordController);
-                          print("pakaya");
                           if( formKey.currentState!.validate() && response.statusCode == 200 ) {   
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -213,7 +216,6 @@ class _LogInScreenState extends State<LogInScreen> {
 
                             // register successful, extract the  user ID from the response body
                             final Map<String, dynamic> responseData = json.decode(response.body);
-                            print(responseData);
                             final String userId = responseData['data']["user"]["_id"];
 
                             // Store the  user ID in shared preferences

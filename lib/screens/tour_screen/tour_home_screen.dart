@@ -52,6 +52,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
       setState(() {
         final Map<String, dynamic> responseData =  jsonDecode(response.body);
         tours =  responseData["data"];
+        print('$URL/tour-uploads/${tours[0]["tour_cover"]}');
         isloading = false;
       });
     } else {
@@ -106,9 +107,9 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Explore Sri Lanka, One tour at a time", style: TextStyle(fontSize: screenHeight * 0.032, fontWeight: FontWeight.bold),),
+              SizedBox(height: screenHeight * 0.01,),
+              Text("Explore Sri Lanka, One tour at a time", style: TextStyle(fontSize: screenHeight * 0.026, fontWeight: FontWeight.bold),),
               SizedBox(height: screenHeight * 0.02,),
-          
               isloading 
               ? Center(
                   child:CircularProgressIndicator(
@@ -120,12 +121,11 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
               :
               tours.isEmpty ? 
               Column(
-                
                 children: [
-                  SizedBox(height: screenHeight * 0.15,),
+                  SizedBox(height: screenHeight * 0.2,),
                   Container(
-                    padding: EdgeInsets.all(screenHeight * 0.1),
-                    child: Text("👀 Sorry, we couldn't find any results that match your search criteria.", style: TextStyle(fontSize: screenHeight * 0.03,fontWeight: FontWeight.bold, color: kPrimaryColor),)
+                    padding: EdgeInsets.all(screenHeight * 0.05),
+                    child: Text("👀 Sorry, we couldn't find any results that match your search criteria.", style: TextStyle(fontSize: screenHeight * 0.016,fontWeight: FontWeight.bold, color: kPrimaryColor),)
                   ),
                 ],
               )

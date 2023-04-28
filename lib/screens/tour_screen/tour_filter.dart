@@ -38,8 +38,16 @@ class _TourFilterState extends State<TourFilter> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: screenHeight * 0.02,),
-                Text("Catergories", style: TextStyle(fontSize: screenHeight * 0.025, fontWeight: FontWeight.bold)),
+                SizedBox(height: screenHeight * 0.01,),
+                Row(
+                  children: [
+                    TextButton(onPressed: () {
+                      Navigator.pop(context,MaterialPageRoute(builder: (context) => const TourHomeScreen()));
+                    }, child: Text("❌", style: TextStyle(fontSize: screenHeight * 0.02, fontWeight: FontWeight.bold),),),
+                    SizedBox(width: screenWidth * 0.14,),
+                    Text("Catergories", style: TextStyle(fontSize: screenHeight * 0.025, fontWeight: FontWeight.bold)),
+                  ],
+                ),
                 SizedBox(height: screenHeight * 0.01,),
 
                 Column(
