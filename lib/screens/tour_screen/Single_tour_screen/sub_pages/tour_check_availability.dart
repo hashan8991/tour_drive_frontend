@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
+
+import 'package:http/http.dart' as http;
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 class TourCheckAvailabilityScreen extends StatefulWidget {
   const TourCheckAvailabilityScreen({super.key});
@@ -12,6 +17,96 @@ class TourCheckAvailabilityScreen extends StatefulWidget {
 }
 
 class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScreen> {
+// #######################################################################################################
+  late Map<String, dynamic> paymentIntent;
+
+  Future<void> makePayment() async {
+    try{
+      paymentIntent = await createPaymentIntent('20','USD');
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: paymentIntent['client_secret'],
+          // applePay: const PaymentSheetApplePay(merchantCountryCode: '+94'),
+          // googlePay: const PaymentSheetGooglePay(testEnv: true,currencyCode: 'USD',merchantCountryCode: '+94'),
+          style: ThemeMode.dark,
+          merchantDisplayName: 'manoj')).then((value){
+        });
+
+        displayPaymentSheet();
+    }
+    catch(e){
+      print(e);
+    }
+  }
+
+  displayPaymentSheet() async {
+    try{
+      await Stripe.instance.presentPaymentSheet(
+      ).then((value) {
+        showDialog(
+          context: context, 
+          builder: (_) =>  AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.check_circle,color: Colors.green,),
+                    Text("payment Successfully"),
+                  ],
+                ),
+              ],
+            ),
+          )
+
+        );
+      }).onError((error, stackTrace) {
+          print("error=>>>$error $stackTrace");
+      } );
+    } on StripeException catch(e) {
+      print(e);
+
+      showDialog(
+        context: context, 
+        builder: (_) => const AlertDialog(
+          content: Text("concelled"),
+        ));
+    }catch(e){
+      print(e);
+    }
+    
+  }
+
+  createPaymentIntent(String amount,String currency) async {
+    try{
+      Map<String,dynamic> body = {
+        'amount' : calculateAmount(amount),
+        'currency' : currency,
+        'payment_method_types[]' : 'card',
+      };
+
+      var response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        headers: {
+          'Authorization' : 'Bearer sk_test_51N1atlGJCiP6SiMGoa1ZNe0WC5awUqfk1f26dCHZH1JuRWVvqa6kGH6OWt0opjypCirKxq1ui0u8LUthSCEiiEWe00gXpZ4cpc',
+          'Contert-Type' : 'application/x-www-form-urlencoded'
+        },
+        body: body,
+      );
+      print('payment Intent body->>>${response.body.toString()}');
+      return jsonDecode(response.body);
+    }
+    catch(e){
+      print(e);
+    }
+  }
+
+  calculateAmount(String amount) {
+    final calculateAmount = (int.parse(amount))*100 ;
+    return calculateAmount.toString();
+  }
+
+// ###################################################################################################
   @override
   Widget build(BuildContext context) {
     
@@ -131,8 +226,8 @@ class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScree
                               ),
                             ),
                             SizedBox(height: screenHeight * 0.06,),
-                            DefaultButton(text: "Book Now", press: () {
-                              //Navigator.push(context, MaterialPageRoute(builder: (context) => const ()));
+                            DefaultButton(text: "Book Now", press: () async{
+                              await makePayment();
                             })
                           ],
                         ),
