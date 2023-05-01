@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import "package:flutter/material.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
@@ -13,27 +12,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
-
-// Sending data to server
-Future loginUser(TextEditingController emailController,TextEditingController passwordController) async {
-  final response = await http.post(                             // send data to server using post method
-    Uri.parse('$URL/api/v1/auth/login'),            // end point url   
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'cookie': 'jwt=cookie_value',
-    },
-    body: jsonEncode(<String, String>{                          // what we need to send to the server
-      "email": emailController.text,
-      "password": passwordController.text,
-    }),
-  );
-    print("responsse");
-    response.headers.forEach((names, values) {
-    print('$names: $values');
-  });
-  return response;
-}
-
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
 
@@ -42,12 +20,40 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
+
   late final String email, password;
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool isError = false;
   String errorMessage = "";
+  late bool isloading = false ;
+
+  // Sending data to server
+  Future loginUser(TextEditingController emailController,TextEditingController passwordController) async {
+
+    setState(() {
+      isloading = true;
+    });
+
+    final response = await http.post( // send data to server using post method
+      Uri.parse('$URL/api/v1/auth/login'), // end point url
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'cookie': 'jwt=cookie_value',
+      },
+      body: jsonEncode(<String, String>{ // what we need to send to the server
+        "email": emailController.text,
+        "password": passwordController.text,
+      }),
+    );
+
+    setState(() {
+      isloading = false ;
+    });
+    
+    return response;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +69,7 @@ class _LogInScreenState extends State<LogInScreen> {
               Header(
                 text: "Sign In",
                 press: () {
-                  Navigator.push(
+                  Navigator.pop(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const LoadingScreen()));
@@ -80,6 +86,16 @@ class _LogInScreenState extends State<LogInScreen> {
                       const Text(
                         "Hey, Enter your details to get sign in ",
                       ),
+                      SizedBox(height: screenHeight * 0.02),
+                      isloading ?
+                      Center(
+                          child:CircularProgressIndicator(
+                            backgroundColor: Colors.grey[200], // Set the background color of the widget
+                            valueColor: const AlwaysStoppedAnimation<Color>(kPrimaryColor), // Set the color of the progress indicator
+                            strokeWidth: 3, // Set the width of the progress indicator
+                          )
+                      )
+                      :
                       //  display error message      
                       SizedBox(height: screenHeight * 0.02),       
                       Visibility(
@@ -203,9 +219,11 @@ class _LogInScreenState extends State<LogInScreen> {
                       DefaultButton(
                         text: "Login",
                         press: () async {
+                          
                           // get response from the server
                           var response = await loginUser(emailController, passwordController);
-                          if( formKey.currentState!.validate() && response.statusCode == 200 ) {   
+                         
+                          if( formKey.currentState!.validate() && response.statusCode == 200 ) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Login successfully'), 
@@ -222,11 +240,14 @@ class _LogInScreenState extends State<LogInScreen> {
                             final prefs = await SharedPreferences.getInstance();
                             await prefs.setString('userId', userId);
                           }else{
+
                             final Map<String, dynamic> responseData = json.decode(response.body);
                             errorMessage = responseData["message"];
+
                             setState(() {
                               isError = true;
                             });
+                            
                           }
                         }
                       ),

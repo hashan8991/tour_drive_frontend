@@ -11,22 +11,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
-// Sending data to server
-Future registerUser(TextEditingController emailController,TextEditingController passwordController,TextEditingController confirmPasswordController) async {
-  final response = await http.post(                             // send data to server using post method
-    Uri.parse('$URL/api/v1/auth/signup'),             // end point url
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'cookie': 'jwt=cookie_value',
-    },
-    body: jsonEncode(<String, String>{                          // what we need to send to the server
-      "email": emailController.text,
-      "password": passwordController.text,
-      "passwordConfirm": confirmPasswordController.text,
-    }),
-  );
-  return response;
-}
+
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -43,6 +28,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final confirmPasswordController = TextEditingController();
   bool isError = false;
   String errorMessage = "";
+  late bool isloading = false;
+
+  // Sending data to server
+Future registerUser(TextEditingController emailController,TextEditingController passwordController,TextEditingController confirmPasswordController) async {
+  setState(() {
+    isloading = true;
+  });
+  final response = await http.post(                             // send data to server using post method
+    Uri.parse('$URL/api/v1/auth/signup'),             // end point url
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'cookie': 'jwt=cookie_value',
+    },
+    body: jsonEncode(<String, String>{                          // what we need to send to the server
+      "email": emailController.text,
+      "password": passwordController.text,
+      "passwordConfirm": confirmPasswordController.text,
+    }),
+  );
+  setState(() {
+    isloading = false;
+  });
+  return response;
+}
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: Column(
             children: [
               Header(text: "Sign Up", press: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
+                Navigator.pop(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
               } ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
@@ -69,6 +78,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       SizedBox(height: screenHeight * 0.01),
                       const Text("Please enter your profile information.",),
                       SizedBox(height: screenHeight * 0.02),
+
+                      isloading ?
+                      Center(
+                            child:CircularProgressIndicator(
+                              backgroundColor: Colors.grey[200], // Set the background color of the widget
+                              valueColor: const AlwaysStoppedAnimation<Color>(kPrimaryColor), // Set the color of the progress indicator
+                              strokeWidth: 3, // Set the width of the progress indicator
+                            )
+                      )
+                      :
                       //  display error message             
                       Visibility(
                         visible: isError,
@@ -175,10 +194,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(height: screenHeight * 0.02),
-             
-                      SizedBox(height: screenHeight * 0.02),
-
+                      SizedBox(height: screenHeight * 0.04),
+                      
                       DefaultButton(
                         text: "Submit", 
                         press: () async {
