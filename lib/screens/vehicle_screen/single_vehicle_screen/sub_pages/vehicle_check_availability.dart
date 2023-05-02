@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:intl/intl.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen/single_vehicle_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class VehicleCheckAvailability extends StatefulWidget {
   const VehicleCheckAvailability({super.key});
@@ -15,6 +18,11 @@ class VehicleCheckAvailability extends StatefulWidget {
 class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
 
   TextEditingController dateController = TextEditingController();
+  TextEditingController fromDateController = TextEditingController();
+  TextEditingController toDateController = TextEditingController();
+   late Map<String, dynamic> paymentIntent;
+   final formKey = GlobalKey<FormState>();
+
   String drivingOption = "With driver";
   var items = [
     "With driver",
@@ -46,6 +54,93 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
     }
   }
 
+
+  Future<void> makePayment(String totalAmount) async {
+    try{
+      paymentIntent = await createPaymentIntent(totalAmount,'USD');
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: paymentIntent['client_secret'],
+          // applePay: const PaymentSheetApplePay(merchantCountryCode: '+94'),
+          // googlePay: const PaymentSheetGooglePay(testEnv: true,currencyCode: 'USD',merchantCountryCode: '+94'),
+          style: ThemeMode.dark,
+          merchantDisplayName: 'TourDrive')).then((value){
+        });
+
+        displayPaymentSheet();
+    }
+    catch(e){
+      print(e);
+    }
+  }
+
+  displayPaymentSheet() async {
+    try{
+      await Stripe.instance.presentPaymentSheet(
+      ).then((value) {
+        showDialog(
+          context: context, 
+          builder: (_) =>  AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: const [
+                    Icon(Icons.check_circle,color: kPrimaryColor,),
+                    Text("payment Successfully"),
+                  ],
+                ),
+              ],
+            ),
+          )
+
+        );
+      }).onError((error, stackTrace) {
+          print("error=>>>$error $stackTrace");
+      } );
+    } on StripeException catch(e) {
+      print(e);
+
+      showDialog(
+        context: context, 
+        builder: (_) => const AlertDialog(
+          content: Text("concelled"),
+        ));
+    }catch(e){
+      print(e);
+    }
+    
+  }
+
+  createPaymentIntent(String amount,String currency) async {
+    try{
+      Map<String,dynamic> body = {
+        'amount' : calculateAmount(amount),
+        'currency' : currency,
+        'payment_method_types[]' : 'card',
+      };
+
+      var response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        headers: {
+          'Authorization' : 'Bearer sk_test_51N1atlGJCiP6SiMGoa1ZNe0WC5awUqfk1f26dCHZH1JuRWVvqa6kGH6OWt0opjypCirKxq1ui0u8LUthSCEiiEWe00gXpZ4cpc',
+          'Contert-Type' : 'application/x-www-form-urlencoded'
+        },
+        body: body,
+      );
+      //print('payment Intent body->>>${response.body.toString()}');
+      return jsonDecode(response.body);
+    }
+    catch(e){
+      print(e);
+    }
+  }
+
+   calculateAmount(String amount) {
+    final calculateAmount = (int.parse(amount))*100 ;
+    return calculateAmount.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     
@@ -59,7 +154,7 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
           child: Column(
             children: [
               Header(text: "", press: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleVehicleScreen()));
+                Navigator.pop(context, MaterialPageRoute(builder: (context) => const SingleVehicleScreen()));
               }),
               SizedBox(height: screenHeight * 0.04,),
               Container(
@@ -100,92 +195,103 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
                           Text("\$ 200", style: TextStyle(fontSize: screenHeight * 0.04, fontWeight: FontWeight.bold),),
                           const Divider(thickness: 1.0),
                           SizedBox(height: screenHeight * 0.02,),
-                          Text("From", style: TextStyle(fontSize: screenHeight * 0.025,letterSpacing: screenWidth * 0.003, fontWeight: FontWeight.bold),),
-                          SizedBox(height: screenHeight * 0.01,),
-                          Container(
-                            height: screenHeight * 0.07,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFE4F9FB),
-                              borderRadius: BorderRadius.circular(screenHeight * 0.02),
-                            ),
-                            child: Container(
-                              margin:  EdgeInsets.symmetric( horizontal: screenWidth * 0.05),
-    //##########################################   From date  ######################################################################################                           
-                              child: TextFormField(
-                                controller: dateController,
-                                //focusNode: _dateFocus,
-                                decoration: InputDecoration(
-                                  hintText: 'Select Date',
-                                  border: InputBorder.none,
-                                  suffixIcon: IconButton(
-                                    icon: Icon(Icons.date_range,color: kPrimaryColor,),
-                                    onPressed: () => _selectDate(context),
+                          Form(
+                            key: formKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("From", style: TextStyle(fontSize: screenHeight * 0.025,letterSpacing: screenWidth * 0.003, fontWeight: FontWeight.bold),),
+                                SizedBox(height: screenHeight * 0.01,),
+                                Container(
+                                  height: screenHeight * 0.07,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFE4F9FB),
+                                    borderRadius: BorderRadius.circular(screenHeight * 0.02),
+                                  ),
+                                  child: Container(
+                                    margin:  EdgeInsets.symmetric( horizontal: screenWidth * 0.05),
+                                  //##########################################   From date  ######################################################################################                           
+                                    child: TextFormField(
+                                      controller: dateController,
+                                      //focusNode: _dateFocus,
+                                      decoration: InputDecoration(
+                                        hintText: 'Select Date',
+                                        border: InputBorder.none,
+                                        suffixIcon: IconButton(
+                                          icon: const Icon(Icons.date_range,color: kPrimaryColor,),
+                                          onPressed: () => _selectDate(context),
+                                        ),
+                                      ),
+                                    )
                                   ),
                                 ),
-                              )
-                            ),
-                          ),
-                          SizedBox(height: screenHeight * 0.02,),
-                          Text("To", style: TextStyle(fontSize: screenHeight * 0.025,letterSpacing: screenWidth * 0.003, fontWeight: FontWeight.bold),),
-                          SizedBox(height: screenHeight * 0.01,),
-                          Container(
-                            height: screenHeight * 0.07,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFE4F9FB),
-                              borderRadius: BorderRadius.circular(screenHeight * 0.02),
-                            ),
-                            child: Container(
-                              margin:  EdgeInsets.symmetric( horizontal: screenWidth * 0.05),
-                              child: 
-//##########################################   To date  ######################################################################################                           
-                              TextFormField(
-                                controller: dateController,
-                                //focusNode: _dateFocus,
-                                decoration: InputDecoration(
-                                  hintText: 'Select Date',
-                                  border: InputBorder.none,
-                                  suffixIcon: IconButton(
-                                    icon: Icon(Icons.date_range,color: kPrimaryColor,),
-                                    onPressed: () => _selectDate(context),
+                                SizedBox(height: screenHeight * 0.02,),
+                                Text("To", style: TextStyle(fontSize: screenHeight * 0.025,letterSpacing: screenWidth * 0.003, fontWeight: FontWeight.bold),),
+                                SizedBox(height: screenHeight * 0.01,),
+                                Container(
+                                  height: screenHeight * 0.07,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFE4F9FB),
+                                    borderRadius: BorderRadius.circular(screenHeight * 0.02),
+                                  ),
+                                  child: Container(
+                                    margin:  EdgeInsets.symmetric( horizontal: screenWidth * 0.05),
+                                    child: 
+                              //##########################################   To date  ######################################################################################                           
+                                    TextFormField(
+                                      controller: dateController,
+                                      //focusNode: _dateFocus,
+                                      decoration: InputDecoration(
+                                        hintText: 'Select Date',
+                                        border: InputBorder.none,
+                                        suffixIcon: IconButton(
+                                          icon: const Icon(Icons.date_range,color: kPrimaryColor,),
+                                          onPressed: () => _selectDate(context),
+                                        ),
+                                      ),
+                                    )
                                   ),
                                 ),
-                              )
+                                                
+                                SizedBox(height: screenHeight * 0.02,),
+                                Text("Driving Option", style: TextStyle(fontSize: screenHeight * 0.025,letterSpacing: screenWidth * 0.003, fontWeight: FontWeight.bold),),
+                                SizedBox(height: screenHeight * 0.01,),
+                                Container(
+                                  height: screenHeight * 0.07,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFE4F9FB),
+                                    borderRadius: BorderRadius.circular(screenHeight * 0.02),
+                                  ),
+                                //##########################################  Driving option ######################################################################################                                                     
+                                  child: Container(
+                                    margin:  EdgeInsets.symmetric( horizontal: screenWidth * 0.05),
+                                    child: DropdownButton(
+                                      value: drivingOption,
+                                      icon: const Icon(Icons.keyboard_arrow_down), 
+                                      items: items.map((String items) {
+                                        return DropdownMenuItem(
+                                          value: items,
+                                          child: Text(items),
+                                        );
+                                      }).toList(),
+                                    onChanged: (String? newValue) { 
+                                      setState(() {
+                                        drivingOption = newValue!;
+                                      });
+                                    }
+                                    ),
+                                    
+                                  ),
+                                ),
+                                SizedBox(height: screenHeight * 0.06,),
+                              ],
                             ),
                           ),
-                  
-                          SizedBox(height: screenHeight * 0.02,),
-                          Text("Driving Option", style: TextStyle(fontSize: screenHeight * 0.025,letterSpacing: screenWidth * 0.003, fontWeight: FontWeight.bold),),
-                          SizedBox(height: screenHeight * 0.01,),
-                          Container(
-                            height: screenHeight * 0.07,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFE4F9FB),
-                              borderRadius: BorderRadius.circular(screenHeight * 0.02),
-                            ),
-  //##########################################  Driving option ######################################################################################                                                     
-                            child: Container(
-                              margin:  EdgeInsets.symmetric( horizontal: screenWidth * 0.05),
-                              child: DropdownButton(
-                                value: drivingOption,
-                                icon: const Icon(Icons.keyboard_arrow_down), 
-                                items: items.map((String items) {
-                                  return DropdownMenuItem(
-                                    value: items,
-                                    child: Text(items),
-                                  );
-                                }).toList(),
-                              onChanged: (String? newValue) { 
-                                setState(() {
-                                  drivingOption = newValue!;
-                                });
+                          
+                          DefaultButton(text: "Rent Now", press: () async{
+                            if( formKey.currentState!.validate()) { 
+                                await makePayment(100.toString());
                               }
-                              ),
-                              
-                            ),
-                          ),
-                          SizedBox(height: screenHeight * 0.06,),
-                          DefaultButton(text: "Rent Now", press: () {
-                            //Navigator.push(context, MaterialPageRoute(builder: (context) => const ()));
                           })
                         ],
                       ),
