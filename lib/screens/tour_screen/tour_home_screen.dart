@@ -1,3 +1,5 @@
+// ignore_for_file: await_only_futures
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,22 +41,28 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
     // send get reqest to server get all tours
     final http.Response response;
     if (catergories == null && minPrice == null && maxPrice == null) {
+
          response = await http.get(Uri.parse('$URL/api/v1/tours?limit=10&price[gte]=0&price[lte]=2000'));
+
     }else {
+
       String url = "$URL/api/v1/tours?limit=10";
       url += (catergories!.isEmpty) ? "" : "&category=${catergories!.join(",")}"; 
       url += "&price[gte]=$minPrice";
       url += "&price[lte]=$maxPrice";
       response = await http.get(Uri.parse(url));
+
     }
     
     if (response.statusCode == 200) {
+      
       setState(() {
         final Map<String, dynamic> responseData =  jsonDecode(response.body);
         tours =  responseData["data"];
-        print('$URL/tour-uploads/${tours[0]["tour_cover"]}');
+        //print(tours[0]["tour_cover"]);
         isloading = false;
       });
+
     } else {
       throw Exception('Failed to load Tour');
     }
@@ -80,6 +88,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
           backgroundColor: Colors.transparent,
           leading: IconButton(
             onPressed: () async{
+
               final kprefs = await SharedPreferences.getInstance();
               await kprefs.remove('tourCatergories');
               await kprefs.remove('tourReviewScore');
@@ -87,8 +96,10 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
               await kprefs.remove('tourMaxPrice');
               // ignore: use_build_context_synchronously
               Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));
+
             }, 
-            icon: const Icon(Icons.arrow_back, color:Colors.black, )),
+            icon: const Icon(Icons.arrow_back, color:Colors.black, )
+          ),
           elevation: 0,
           title: Image.asset("assets/images/logoPic.png", width: screenWidth * 0.55,),
           centerTitle: true,
@@ -171,8 +182,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                             children: [
                               ClipRRect( 
                                 borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                                child: Image.network('$URL/tour-uploads/${tour["tour_cover"]}',errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, ), fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
-                                // child: Image.network('	https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
+                                child: Image.network('$urlPhoto/tour-uploads/${tour["tour_cover"]}',errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, ), fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
                               SizedBox(width: screenWidth * 0.03),
                               Container(
                                 height: screenHeight * 0.14,
@@ -247,7 +257,6 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
               ),
             ],
           ),
-          
         ),
       ),
     );

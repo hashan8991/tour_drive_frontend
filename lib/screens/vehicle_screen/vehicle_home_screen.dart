@@ -1,3 +1,5 @@
+// ignore_for_file: await_only_futures
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,8 +47,8 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
 
     if (vehicleType == null && fuelType == null && transmission == null && minPrice == null && maxPrice == null) {
          response = await http.get(Uri.parse('$URL/api/v1/vehicles?vehicle_state=available&limit=10&price_per_day_without_dr[gte]=0&price_per_day_without_dr[lte]=2000'));
-          print("default ek wade");
     } else {
+
       String url = "$URL/api/v1/vehicles?vehicle_state=available&limit=10";
       url += (vehicleType!.isEmpty) ? "" : "&vehicle_type=${vehicleType!.join(",")}"; 
       url += (fuelType!.isEmpty) ? "" : "&fuel=${fuelType!.join(",")}";
@@ -58,11 +60,13 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
     }
 
     if (response.statusCode == 200) {
+
       setState(() {
         final Map<String, dynamic> responseData =  jsonDecode(response.body);
         vehicles =  responseData["data"];
         isloading = false;
       });
+      
     } else {
       throw Exception('Failed to vehicle Tour');
     }
@@ -186,7 +190,7 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
                             children: [
                               ClipRRect( 
                                 borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                                child: Image.network('$URL/vehicle-uploads/${vehicle["cover_URL"]}', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
+                                child: Image.network('$urlPhoto/vehicle-uploads/${vehicle["cover_URL"]}', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, ))),
                               SizedBox(width: screenWidth * 0.03),
                               Container(
                                 height: screenHeight * 0.14,

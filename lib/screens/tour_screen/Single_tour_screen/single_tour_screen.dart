@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -18,7 +20,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-
 class SingleTourScreen extends StatefulWidget {
   const SingleTourScreen({super.key});
 
@@ -30,7 +31,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
 
   // ####################################################################################################################
     // Backend Integration
-  var tourDetails ;
+  var tourDetails;
   List<dynamic> tourReviews  = [];
   var numOfReview;
   bool isloading1 = true;
@@ -48,7 +49,6 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
         final Map<String, dynamic> responseData =  jsonDecode(response.body);
         tourDetails =  responseData["data"];
         isloading1 = false;
-        print(tourDetails);
       });
     } else {
       throw Exception('Failed to load Tour');
@@ -103,7 +103,10 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
               backgroundColor: kPrimaryColor,
               foregroundColor: Colors.white,
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourCheckAvailabilityScreen())); 
+                String tourStartDate = tourDetails["start_date"];
+                String tourEndDate = tourDetails["end_date"];
+                int price = tourDetails['price'];
+                Navigator.push(context,MaterialPageRoute(builder: (context) => TourCheckAvailabilityScreen(tourStartDate: tourStartDate, tourEndDate: tourEndDate, price: price))); 
               },
               label: const Text('Check availability'),
             ),
@@ -114,7 +117,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
           elevation: 0,
           backgroundColor: Colors.transparent,
           leading: IconButton(
-            onPressed: () { Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourHomeScreen())); }, 
+            onPressed: () { Navigator.pop(context,MaterialPageRoute(builder: (context) =>const TourHomeScreen())); }, 
             icon: const Icon(Icons.arrow_back, color:Colors.black, )
             ),
           actions: <Widget>[
@@ -159,36 +162,16 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                     scrollDirection: Axis.horizontal,
                     itemCount: tourDetails["tour_gallery"].length,
                     itemBuilder: ((context, index) {
-                      return Column(
+                      return Row(
                         children: [
-                          Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][index]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,
-                          errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29,)),
+                          Image.network('$urlPhoto/tour-uploads/${tourDetails["tour_gallery"][index]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,
+                          errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.3,width: screenWidth * 0.7,)),
                           SizedBox(width: screenWidth * 0.03,)
 
                       ],);
                     }
-                  ),
-                  // child: ListView.builder(
-                  //   scrollDirection: Axis.horizontal,
-                  //   itemCount: tourDetails["tour_gallery"],
-                  //   itemBuilder: (BuildContext context, int index) {
-                  //     return 
-                  //       Column(
-                  //         children: [
-                  //           Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][index]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,
-                  //           errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, ),
-                  //           SizedBox(width: screenWidth * 0.03),
-                  //           ))];
-                        
-                  //   }
-                    // children: [
-                    //   Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][0]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, ),),
-                    //   SizedBox(width: screenWidth * 0.03),
-                    //   //Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][1]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
-                    //   SizedBox(width: screenWidth * 0.03),
-                    //   //Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][2]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, ),),
-                    // ]
                     ),
+                  ),
                 ),
             
                 SizedBox(height: screenHeight * 0.02),

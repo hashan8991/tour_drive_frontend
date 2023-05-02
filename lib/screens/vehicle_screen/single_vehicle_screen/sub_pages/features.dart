@@ -18,14 +18,13 @@ class _FeaturesScreenState extends State<FeaturesScreen> {
   void initState()  {
     super.initState();
     vehicleFeatureList =  widget.vehicleFeatures.split('\n');
-    print(vehicleFeatureList);
   }
   
 
   @override
   Widget build(BuildContext context) {
 
-    final double screenWidth = MediaQuery.of(context).size.width;
+    //final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight= MediaQuery.of(context).size.height;
 
     return SafeArea(
@@ -34,7 +33,7 @@ class _FeaturesScreenState extends State<FeaturesScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Header(text: "Features", press: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleVehicleScreen()));
+              Navigator.pop(context, MaterialPageRoute(builder: (context) => const SingleVehicleScreen()));
             } ),
             Expanded(
               child: ListView.builder(

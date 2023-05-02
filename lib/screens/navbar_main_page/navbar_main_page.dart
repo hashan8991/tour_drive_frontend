@@ -15,11 +15,11 @@ class NavbarMainPage extends StatefulWidget {
 
 class _NavbarMainPageState extends State<NavbarMainPage> {
   List pages = [
-    LandingScreen(),
-    TourOptionScreen(),
-    EmergencyScreen(),
-    DriveOptionScreen(),
-    ProfileScreen(),
+    const LandingScreen(),
+    const TourOptionScreen(),
+    const EmergencyScreen(),
+    const DriveOptionScreen(),
+    const ProfileScreen(),
   ];
 
   int currentIndex = 0;
@@ -68,6 +68,7 @@ class _NavbarMainPageState extends State<NavbarMainPage> {
     );
   }
 
+  // ignore: non_constant_identifier_names
   BottomNavigationBar navBar_Widget() {
     return BottomNavigationBar(
       type: BottomNavigationBarType

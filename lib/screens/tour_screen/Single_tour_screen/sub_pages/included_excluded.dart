@@ -25,7 +25,7 @@ class _IncludeExcludeScreenState extends State<IncludeExcludeScreen> {
   @override
   Widget build(BuildContext context) {
 
-    final double screenWidth = MediaQuery.of(context).size.width;
+    //final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight= MediaQuery.of(context).size.height;
 
     return SafeArea(
@@ -36,7 +36,7 @@ class _IncludeExcludeScreenState extends State<IncludeExcludeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(text: "Included/Excluded", press: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
+                Navigator.pop(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
               } ),
               SizedBox(height: screenHeight * 0.02,),
               Text("    What's Included", style: TextStyle(fontSize: screenHeight * 0.022,fontWeight: FontWeight.bold),),
