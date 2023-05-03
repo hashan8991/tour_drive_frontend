@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.tour_drive_frontend">
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
    <application
         android:label="tour_drive_frontend"
         android:name="${applicationName}"

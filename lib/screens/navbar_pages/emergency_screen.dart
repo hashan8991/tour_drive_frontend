@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
+import 'package:geolocator/geolocator.dart';
 
 class EmergencyScreen extends StatefulWidget {
   const EmergencyScreen({super.key});
@@ -10,6 +11,18 @@ class EmergencyScreen extends StatefulWidget {
 }
 
 class _EmergencyScreenState extends State<EmergencyScreen> {
+
+  String latitude = '';
+  String longtitude = '';
+
+  void getLocation() async{
+    await Geolocator.checkPermission();
+    await Geolocator.requestPermission();
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
+    latitude = position.latitude.toString();
+    longtitude = position.longitude.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -44,8 +57,16 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
             Text("Let's ride safely!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.025),),
             SizedBox(height: screenHeight * 0.03,),
             Text("When You ride using this profile ,preference will be selected by default.", style: TextStyle( fontSize: screenHeight * 0.02),),
+            
             SizedBox(height: screenHeight * 0.04,),
-            DefaultButton(text: "ADD SOS", press: (){}),
+            DefaultButton(text: "ADD SOS", press: (){
+              getLocation();
+              if(latitude == '' && longtitude == ''){
+            
+              }
+             
+               
+            }),
           ],
         ),
         ),

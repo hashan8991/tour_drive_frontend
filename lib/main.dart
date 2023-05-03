@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:tour_drive_frontend/screens/authentication/sign_in/login_screen.dart';
 import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
 // import 'package:tour_drive_frontend/screens/navbar_pages/drive_option_screen.dart';
 // import 'package:tour_drive_frontend/screens/navbar_pages/emergency_screen.dart';
@@ -47,10 +48,10 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(color: Colors.white, elevation: 0),
       ),
 
-      //home: const LogInScreen(),
+      home: const LogInScreen(),
       //home: const ForgetPasswordScreen(),
        //home: const SignUpScreen(),
-      home: const LoadingScreen(), // first page of the app
+     // home: const LoadingScreen(), // first page of the app
 
       //home: const FeedbackForm(),
 
