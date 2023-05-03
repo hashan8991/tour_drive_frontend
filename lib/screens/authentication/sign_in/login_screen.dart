@@ -36,7 +36,8 @@ class _LogInScreenState extends State<LogInScreen> {
       isloading = true;
     });
 
-    final response = await http.post( // send data to server using post method
+    final response = await http.post(
+     // send data to server using post method
       Uri.parse('$URL/api/v1/auth/login'), // end point url
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -47,9 +48,9 @@ class _LogInScreenState extends State<LogInScreen> {
         "password": passwordController.text,
       }),
     );
-
+    
     setState(() {
-      isloading = false ;
+      isloading = false;
     });
     
     return response;
@@ -57,6 +58,7 @@ class _LogInScreenState extends State<LogInScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
@@ -221,8 +223,8 @@ class _LogInScreenState extends State<LogInScreen> {
                         press: () async {
                           
                           // get response from the server
-                          var response = await loginUser(emailController, passwordController);
-                         
+                        var response = await loginUser(emailController, passwordController);
+
                           if( formKey.currentState!.validate() && response.statusCode == 200 ) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -231,6 +233,11 @@ class _LogInScreenState extends State<LogInScreen> {
                                 ),
                             );
                             Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));
+
+                            // get the cookiis from the response
+                            final cookies =  await response.headers["set-cookie"];
+                            final pref = await SharedPreferences.getInstance();
+                            await pref.setString('Cookie', cookies);
 
                             // register successful, extract the  user ID from the response body
                             final Map<String, dynamic> responseData = json.decode(response.body);
