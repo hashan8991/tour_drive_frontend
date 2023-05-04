@@ -352,7 +352,8 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                 SizedBox(height: screenHeight * 0.023),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourMapScreen()));
+                    List<dynamic> locations = tourDetails["locations"];
+                    Navigator.push(context,MaterialPageRoute(builder: (context) => TourMapScreen(locations: locations)));
                   },
                   child: Image.asset('assets/images/map.jpeg', fit: BoxFit.fill, height: screenHeight * 0.15, width: screenWidth,)
                 ),

@@ -12,7 +12,7 @@ import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
 // import 'package:tour_drive_frontend/screens/navbar_pages/landing_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/landing_screen.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen2.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
 // import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
 // import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_page_sreen.dart';
 // import 'package:tour_drive_frontend/screens/authentication/sign_in/login_screen.dart';

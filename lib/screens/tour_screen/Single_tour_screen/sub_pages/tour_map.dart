@@ -1,52 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
-import 'package:tour_drive_frontend/widgets/header.dart';
-// import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:tour_drive_frontend/constants.dart';
+import 'package:flutter_map/flutter_map.dart';
+// ignore: depend_on_referenced_packages
+import 'package:latlong2/latlong.dart';
 
 class TourMapScreen extends StatefulWidget {
-  const TourMapScreen({super.key});
+  final List<dynamic> locations;
+  const TourMapScreen({super.key,required this.locations});
 
   @override
   State<TourMapScreen> createState() => _TourMapScreenState();
 }
 
 class _TourMapScreenState extends State<TourMapScreen> {
-  // List<LatLng> locations = [
-  // LatLng(37.7749, -122.4194), // San Francisco
-  // LatLng(40.7128, -74.0060), // New York
-  // LatLng(51.5074, -0.1278), // London
-// ];
-@override
-  void initState() {
-    super.initState();
-    //MapboxMapController.registerWith();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
 
-    final double screenWidth = MediaQuery.of(context).size.width;
 
     return SafeArea(
       child: Scaffold(
-        // body: MapboxMap(
-        //       accessToken: 'pk.eyJ1IjoiY2hlcmlucGl5dW1hbnRoYSIsImEiOiJja2xuNGprczQwZnBjMm5uM3NwZ2Q1bjY5In0.WmrYfERdPhdhkkuXwcDC8g',
-        //       initialCameraPosition: CameraPosition(
-        //         target: locations[0],
-        //         zoom: 4,
-        //       ),
-        //       onMapCreated: (MapboxMapController controller) {
-        //         // You can customize the map here
-        //         for (var location in locations) {
-        //           controller.addSymbol(SymbolOptions(
-        //             geometry: location,
-        //             iconImage: 'airport-15',
-        //             iconSize: 1.5,
-        //             iconColor: '#FF0000', // This is an example icon
-        //           ));
-        //         }
-        //       },
-        //     ),
+        appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: const Text('Tour Locations', style: TextStyle(color: Colors.white),),
+        ),
+        body: Stack(
+          children: [
+            FlutterMap(
+              options: MapOptions(
+                center: LatLng(widget.locations[0][0],widget.locations[0][1]),
+                zoom: 8.0,
+              ),
+              children: [
+                TileLayer(
+                    urlTemplate: 'https://api.mapbox.com/styles/v1/zerorobot/clh7yxz0k00xp01pg2l12c2af/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiemVyb3JvYm90IiwiYSI6ImNqOWgyajN2cjM1NnkycW5ycXF2Yms0M2kifQ.qDsoRRUqa9XsWBtcGNt9aQ',
+                    additionalOptions: const {
+                    'mapStyleId': 'mapbox://styles/zerorobot/clh7yxz0k00xp01pg2l12c2af',
+                    'accessToken': 'pk.eyJ1IjoiemVyb3JvYm90IiwiYSI6ImNqOWgyajN2cjM1NnkycW5ycXF2Yms0M2kifQ.qDsoRRUqa9XsWBtcGNt9aQ',
+                  },
+                ),
+                MarkerLayer(
+                    markers: widget.locations
+                    .map((location) => Marker(
+                          width: 80.0,
+                          height: 80.0,
+                          point: LatLng(location[0], location[1]), // convert the location to a LatLng object
+                          builder: (ctx) => const Icon(Icons.location_on, color: kPrimaryColor, size:40.0,),
+                        ))
+                    .toList()
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
