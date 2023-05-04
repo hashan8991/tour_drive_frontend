@@ -5,7 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen2.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
