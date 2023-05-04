@@ -7,7 +7,7 @@ import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_p
 import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/included_excluded.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/overview.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/tour_highlights.dart';
-import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/tour_map.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/tour_map_mapbox.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/tour_plan.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/tour_home_screen.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/sub_pages/tour_feedback_screen.dart';
