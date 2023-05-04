@@ -33,10 +33,14 @@ dependencies:
   device_preview: ^1.1.0
   flutter:
     sdk: flutter
+  flutter_map: ^3.1.0
   flutter_rating_bar: ^4.0.1
+  flutter_stripe: ^9.1.1
   font_awesome_flutter: ^10.4.0
+  geolocator: ^9.0.2
   http: ^0.13.5
   intl: ^0.17.0
+  latlng: ^1.0.0
   percent_indicator: ^4.2.3
   provider: ^6.0.5
   readmore: ^2.2.0

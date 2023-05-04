@@ -1,3 +1,5 @@
+// ignore_for_file: await_only_futures
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +9,7 @@ import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:tour_drive_frontend/screens/vehicle_screen/vehicle_filter.dart';
 
 class VehicleHomeScreen extends StatefulWidget {
   const VehicleHomeScreen({super.key});
@@ -20,19 +23,52 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
    // ####################################################################################################################
         // Backend Integration
   List<dynamic> vehicles = [];
+  List<String>? vehicleType = [];
+  //List<String> VehicleReviewScore = [];
+  List<String>? fuelType = [];
+  List<String>? transmission = [];
+  int? minPrice = 0;
+  int? maxPrice = 2000;
+  bool isloading = true;
 
   Future<void> fetchVehicles() async {
-    final response = await http
-        .get(Uri.parse('$URL/api/v1/vehicles'));
+
+    // Get filter values
+    final pref = await SharedPreferences.getInstance();
+    vehicleType = await pref.getStringList('VehicleType');
+    fuelType = await pref.getStringList('FuelType');
+    transmission = await pref.getStringList('TransmissionType');
+    // String? jsonString = await (prefs.getString('VehicleReviewScore'));
+    // VehicleReviewScore = (jsonString == null) ? "" : json.decode(jsonString);
+    minPrice = await pref.getInt('VehicleMinPrice');
+    maxPrice = await pref.getInt('VehicleMaxPrice');
+    
+    final http.Response response;
+
+    if (vehicleType == null && fuelType == null && transmission == null && minPrice == null && maxPrice == null) {
+         response = await http.get(Uri.parse('$URL/api/v1/vehicles?vehicle_state=available&limit=10&price_per_day_without_dr[gte]=0&price_per_day_without_dr[lte]=2000'));
+    } else {
+
+      String url = "$URL/api/v1/vehicles?vehicle_state=available&limit=10";
+      url += (vehicleType!.isEmpty) ? "" : "&vehicle_type=${vehicleType!.join(",")}"; 
+      url += (fuelType!.isEmpty) ? "" : "&fuel=${fuelType!.join(",")}";
+      url += (transmission!.isEmpty) ? "" : "&transmission=${transmission!.join(",")}";
+      url += "&price_per_day_without_dr[gte]=$minPrice";
+      url += "&price_per_day_without_dr[lte]=$maxPrice";
+      response = await http.get(Uri.parse(url));
+      
+    }
 
     if (response.statusCode == 200) {
+
       setState(() {
         final Map<String, dynamic> responseData =  jsonDecode(response.body);
         vehicles =  responseData["data"];
-         
+        isloading = false;
       });
+      
     } else {
-      throw Exception('Failed to load Tour');
+      throw Exception('Failed to vehicle Tour');
     }
   }
 
@@ -50,33 +86,31 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
-    
-
      return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           leading: IconButton(
-            onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));}, 
+            onPressed: () async{
+              final kpref = await SharedPreferences.getInstance();
+              await kpref.remove('VehicleType');
+              await kpref.remove('FuelType');
+              await kpref.remove('TransmissionType');
+              await kpref.remove('VehicleReviewScore');
+              await kpref.remove('VehicleMinPrice');
+              await kpref.remove('VehicleMaxPrice');
+              // ignore: use_build_context_synchronously
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));
+            }, 
             icon: const Icon(Icons.arrow_back, color:Colors.black, )),
           elevation: 0,
-          title: Image.asset("assets/images/logoPic.png"),
+          title: Image.asset("assets/images/logoPic.png", width: screenWidth * 0.55,),
           centerTitle: true,
           actions: <Widget>[
-            Container(
-              margin: const EdgeInsets.all(3),
-              child: IconButton(
-                alignment: Alignment.centerRight,
-                icon: const Icon(Icons.search, color: Colors.black,),
-                onPressed: () {
- 
-                },
-              ),
-            ),
             IconButton(
               icon: const Icon(Icons.filter_list, color: Colors.black, ),
               onPressed: () {
-
+                Navigator.push(context,MaterialPageRoute(builder: (context) => const VehicleFilter()));
               },
             ),
           ],
@@ -88,10 +122,11 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Choose Your best vehicle here", style: TextStyle(fontSize: screenHeight * 0.032, fontWeight: FontWeight.bold),),
+              SizedBox(height: screenHeight * 0.01,),
+              Text("Choose Your best vehicle here", style: TextStyle(fontSize: screenHeight * 0.026, fontWeight: FontWeight.bold),),
               SizedBox(height: screenHeight * 0.02,),
 
-              vehicles.isEmpty 
+              isloading 
               ? Center(
                   child:CircularProgressIndicator(
                     backgroundColor: Colors.grey[200], // Set the background color of the widget
@@ -99,6 +134,17 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
                     strokeWidth: 3, // Set the width of the progress indicator
                   )
                 )
+              :
+              vehicles.isEmpty ?
+              Column(
+                children: [
+                  SizedBox(height: screenHeight * 0.2,),
+                  Container(
+                    padding: EdgeInsets.all(screenHeight * 0.05),
+                    child: Text("👀 Sorry, we couldn't find any results that match your search criteria.", style: TextStyle(fontSize: screenHeight * 0.016,fontWeight: FontWeight.bold, color: kPrimaryColor),)
+                  ),
+                ],
+              )
               :
               Expanded(
                 child: ListView.builder(
@@ -144,7 +190,7 @@ class _VehicleHomeScreenState extends State<VehicleHomeScreen> {
                             children: [
                               ClipRRect( 
                                 borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                                child: Image.network('$URL/vehicle-uploads/${vehicle["cover_URL"]}', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
+                                child: Image.network('$urlPhoto/vehicle-uploads/${vehicle["cover_URL"]}', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, ))),
                               SizedBox(width: screenWidth * 0.03),
                               Container(
                                 height: screenHeight * 0.14,

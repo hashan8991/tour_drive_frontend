@@ -26,6 +26,7 @@ class _VehicleFeedbackScreenState extends State<VehicleFeedbackScreen> {
 
   bool isError = false;
   String errorMessage = "";
+  late bool isloading = false ;
 
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
@@ -34,6 +35,10 @@ class _VehicleFeedbackScreenState extends State<VehicleFeedbackScreen> {
 
   // Sending data to server
 Future submitReview(TextEditingController nameController,TextEditingController emailController,TextEditingController reviewPasswordController,double driverRating,double vehicleRating) async {
+
+  setState(() {
+      isloading = true;
+  });
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? vehicleId = prefs.getString('vehicleId');
@@ -54,6 +59,9 @@ Future submitReview(TextEditingController nameController,TextEditingController e
       "vehicle":"$vehicleId"
     }),
   );
+  setState(() {
+      isloading = false;
+  });
   return response;
 }
 
@@ -71,7 +79,7 @@ Future submitReview(TextEditingController nameController,TextEditingController e
           child: Column(
             children: [
               Header(text: "Create Review", press: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleVehicleScreen()));
+                        Navigator.pop(context, MaterialPageRoute(builder: (context) => const SingleVehicleScreen()));
               }),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
@@ -84,6 +92,15 @@ Future submitReview(TextEditingController nameController,TextEditingController e
                     SizedBox(height: screenHeight *0.02,),
                     const Center(child: Text("Hey, Leave feedback about this",)),
                     SizedBox(height: screenHeight *0.02,),
+                    isloading ?
+                      Center(
+                          child:CircularProgressIndicator(
+                            backgroundColor: Colors.grey[200], // Set the background color of the widget
+                            valueColor: const AlwaysStoppedAnimation<Color>(kPrimaryColor), // Set the color of the progress indicator
+                            strokeWidth: 3, // Set the width of the progress indicator
+                          )
+                      )
+                    :
                     Visibility(
                         visible: isError,
                         child: Text("🛑 $errorMessage " , style: TextStyle(fontSize: screenHeight * 0.02, color: Colors.red,fontWeight: FontWeight.bold),),

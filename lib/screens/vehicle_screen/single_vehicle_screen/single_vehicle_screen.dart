@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -40,16 +42,18 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
     final response = await http.get(Uri.parse('$URL/api/v1/vehicles/$vehicleId'));
     
     if (response.statusCode == 200) {
+
       setState(() {
         final Map<String, dynamic> responseData =  jsonDecode(response.body);
         vehicleDetails =  responseData["data"];
         isloading1 = false;
-        print(vehicleDetails["driverRatingsAverage"]);
-        //print(((vehicleDetails["driverRatingAverage"]*100)/5.toDouble())/100);
       });
+
     } else {
+
       throw Exception('Failed to vehicle Tour');
     }
+    
   }
 
   Future<void> fetchVehicleReview() async {
@@ -103,7 +107,7 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
               onPressed: () {
                 Navigator.push(context,MaterialPageRoute(builder: (context) =>const VehicleCheckAvailability())); 
               },
-              label: Text('Check availability'),
+              label: const Text('Check availability'),
             ),
          ),
        ),
@@ -154,15 +158,19 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                   ],
                 ),
                 height: screenHeight * 0.3,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    Image.network('$URL/vehicle-uploads/${vehicleDetails["images_URL"][0]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
-                    SizedBox(width: screenWidth * 0.03),
-                    Image.network('$URL/vehicle-uploads/${vehicleDetails["images_URL"][1]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
-                    SizedBox(width: screenWidth * 0.03),
-                    Image.network('$URL/vehicle-uploads/${vehicleDetails["images_URL"][2]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
-                  ]
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: vehicleDetails["images_URL"].length,
+                    itemBuilder: ((context, index) {
+                      return Row(
+                        children: [
+                          Image.network('$urlPhoto/vehicle-uploads/${vehicleDetails["images_URL"][index]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,
+                          errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.3,width: screenWidth * 0.7,)),
+                          SizedBox(width: screenWidth * 0.03,)
+
+                      ],);
+                    }
+                    ),
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.02),

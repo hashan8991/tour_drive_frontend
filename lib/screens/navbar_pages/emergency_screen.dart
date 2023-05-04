@@ -1,6 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
+import 'package:geolocator/geolocator.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class EmergencyScreen extends StatefulWidget {
   const EmergencyScreen({super.key});
@@ -10,6 +17,53 @@ class EmergencyScreen extends StatefulWidget {
 }
 
 class _EmergencyScreenState extends State<EmergencyScreen> {
+
+  String latitude = '';
+  String longtitude = '';
+  bool isloading = false;
+  final formKey = GlobalKey<FormState>();
+  final messageController = TextEditingController();
+
+  Future createEmergencie(String message) async {
+    
+    setState(() {
+      isloading = true;
+    });
+
+    final prefs = await SharedPreferences.getInstance();
+    final cookie = await prefs.getString('Cookie');
+    final userid = await prefs.getString('userId');
+
+   
+    await Geolocator.checkPermission();
+    await Geolocator.requestPermission();
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
+    latitude = position.latitude.toString();
+    longtitude = position.longitude.toString();
+    
+
+    final response = await http
+        .post(Uri.parse('$URL/api/v1/emergencies'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'cookie': (cookie == null) ? "" : cookie,
+        },
+        body: jsonEncode(<String, String>{  // what we need to send to the server
+          "user": (userid == null) ? "" : userid,
+          "message": message,
+          "latitude": latitude,
+          "longtitude": longtitude
+        }),
+    );
+
+    setState(() {
+      isloading = false;
+    });
+
+    return response;
+    
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -44,8 +98,94 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
             Text("Let's ride safely!", style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.025),),
             SizedBox(height: screenHeight * 0.03,),
             Text("When You ride using this profile ,preference will be selected by default.", style: TextStyle( fontSize: screenHeight * 0.02),),
+            SizedBox(height: screenHeight * 0.05,),
+            isloading ? 
+            Center(
+                child:CircularProgressIndicator(
+                  backgroundColor: Colors.grey[200], // Set the background color of the widget
+                  valueColor: const AlwaysStoppedAnimation<Color>(kPrimaryColor), // Set the color of the progress indicator
+                  strokeWidth: 3, // Set the width of the progress indicator
+                )
+              )
+            :
+            SizedBox(height: screenHeight * 0.02,),
+            Text("Message", style: TextStyle( fontSize: screenHeight * 0.02),),
+            SizedBox(height: screenHeight * 0.02,),
+            Form(
+              key: formKey,
+              child: TextFormField(
+                controller: messageController,
+                
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return '* Please enter message shortly';
+                  }
+                  return null;
+                },
+                keyboardType: TextInputType.name,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: kPrimaryColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: kPrimaryColor),
+                  )
+                ),
+              ),
+            ),
             SizedBox(height: screenHeight * 0.04,),
-            DefaultButton(text: "ADD SOS", press: (){}),
+            DefaultButton(text: "ADD SOS", press: () async {
+
+              // ignore: prefer_typing_uninitialized_variables
+              var response;
+
+              if( formKey.currentState!.validate())   {
+                response = await createEmergencie(messageController.text);
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text("TourDrive Emergencie"),
+                      content: const Text("Our customer service team will review your request and respond as soon as possible."),
+                      actions: [
+                        TextButton(onPressed: () {
+                          Navigator.pop(context);
+                        }, 
+                        child: const Text("Ok"))
+                      ],
+                    );
+                  }
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Emergency Request successfully'), 
+                    backgroundColor: kPrimaryColor,
+                    ),
+                );
+                
+              }else  {
+
+                final Map<String, dynamic> responseData = json.decode(response.body);
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text("TourDrive Emergencie"),
+                      content: Text(responseData["message"]),
+                      actions: [
+                        TextButton(onPressed: () {
+                          Navigator.pop(context);
+                        }, 
+                        child: const Text("Ok"))
+                      ],
+                    );
+                  }
+                );
+
+              }
+              
+               
+            }),
           ],
         ),
         ),

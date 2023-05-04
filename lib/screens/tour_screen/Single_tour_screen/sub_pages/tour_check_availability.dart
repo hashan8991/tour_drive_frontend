@@ -1,17 +1,119 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
 
+import 'package:http/http.dart' as http;
+import 'package:flutter_stripe/flutter_stripe.dart';
+
+// ignore: must_be_immutable
 class TourCheckAvailabilityScreen extends StatefulWidget {
-  const TourCheckAvailabilityScreen({super.key});
+
+  String tourStartDate ;
+  String tourEndDate;
+  int price;
+
+  TourCheckAvailabilityScreen({super.key,required this.tourStartDate, required this.tourEndDate, required this.price});
 
   @override
   State<TourCheckAvailabilityScreen> createState() => _TourCheckAvailabilityScreenState();
 }
 
 class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScreen> {
+// #######################################################################################################
+  late Map<String, dynamic> paymentIntent;
+  final needSeats = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  Future<void> makePayment(String totalAmount) async {
+    try{
+      paymentIntent = await createPaymentIntent(totalAmount,'USD');
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: paymentIntent['client_secret'],
+          // applePay: const PaymentSheetApplePay(merchantCountryCode: '+94'),
+          // googlePay: const PaymentSheetGooglePay(testEnv: true,currencyCode: 'USD',merchantCountryCode: '+94'),
+          style: ThemeMode.dark,
+          merchantDisplayName: 'TourDrive')).then((value){
+        });
+
+        displayPaymentSheet();
+    }
+    catch(e){
+      print(e);
+    }
+  }
+
+  displayPaymentSheet() async {
+    try{
+      await Stripe.instance.presentPaymentSheet(
+      ).then((value) {
+        showDialog(
+          context: context, 
+          builder: (_) =>  AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: const [
+                    Icon(Icons.check_circle,color: kPrimaryColor,),
+                    Text("payment Successfully"),
+                  ],
+                ),
+              ],
+            ),
+          )
+
+        );
+      }).onError((error, stackTrace) {
+          print("error=>>>$error $stackTrace");
+      } );
+    } on StripeException catch(e) {
+      print(e);
+
+      showDialog(
+        context: context, 
+        builder: (_) => const AlertDialog(
+          content: Text("concelled"),
+        ));
+    }catch(e){
+      print(e);
+    }
+    
+  }
+
+  createPaymentIntent(String amount,String currency) async {
+    try{
+      Map<String,dynamic> body = {
+        'amount' : calculateAmount(amount),
+        'currency' : currency,
+        'payment_method_types[]' : 'card',
+      };
+
+      var response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        headers: {
+          'Authorization' : 'Bearer sk_test_51N1atlGJCiP6SiMGoa1ZNe0WC5awUqfk1f26dCHZH1JuRWVvqa6kGH6OWt0opjypCirKxq1ui0u8LUthSCEiiEWe00gXpZ4cpc',
+          'Contert-Type' : 'application/x-www-form-urlencoded'
+        },
+        body: body,
+      );
+      //print('payment Intent body->>>${response.body.toString()}');
+      return jsonDecode(response.body);
+    }
+    catch(e){
+      print(e);
+    }
+  }
+
+   calculateAmount(String amount) {
+    final calculateAmount = (int.parse(amount))*100 ;
+    return calculateAmount.toString();
+  }
+
+// ###################################################################################################
   @override
   Widget build(BuildContext context) {
     
@@ -25,16 +127,15 @@ class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScree
           child: Column(
             children: [
               Header(text: "", press: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
+                Navigator.pop(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
               }),
-              SizedBox(height: screenHeight * 0.04,),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Container(
                     width: screenWidth * 0.9 ,
-                    height: screenHeight * 0.8,
+                    height: screenHeight * 0.88,
                     decoration: BoxDecoration(
                       // color: const Color.fromARGB(115, 155, 239, 254),
                       color: Colors.white,
@@ -60,17 +161,17 @@ class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScree
                               children: [
                                 const Icon(Icons.sell_outlined, color: kPrimaryColor, size: 25.0,),
                                 SizedBox(width: screenWidth * 0.02),
-                                Text("From", style: TextStyle(fontSize: screenHeight * 0.04, )),
+                                Text("From", style: TextStyle(fontSize: screenHeight * 0.03, )),
                               ],
                             ),
                             SizedBox(height: screenHeight * 0.02,),
-                            Text("\$ 200", style: TextStyle(fontSize: screenHeight * 0.04, fontWeight: FontWeight.bold),),
+                            Text("\$ ${widget.price}", style: TextStyle(fontSize: screenHeight * 0.03, fontWeight: FontWeight.bold),),
                             const Divider(thickness: 1.0),
                             SizedBox(height: screenHeight * 0.02,),
-                            Text("Check In", style: TextStyle(fontSize: screenHeight * 0.025,letterSpacing: screenWidth * 0.003, fontWeight: FontWeight.bold),),
+                            Text("Check In", style: TextStyle(fontSize: screenHeight * 0.02,letterSpacing: screenWidth * 0.003, fontWeight: FontWeight.bold),),
                             SizedBox(height: screenHeight * 0.01,),
                             Container(
-                              height: screenHeight * 0.07,
+                              height: screenHeight * 0.06,
                               decoration: BoxDecoration(
                                 color: const Color(0xFFE4F9FB),
                                 borderRadius: BorderRadius.circular(screenHeight * 0.02),
@@ -81,17 +182,17 @@ class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScree
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("03/02/2014", style: TextStyle( fontSize: screenHeight * 0.03),),
-                                    Icon(Icons.date_range, color: kPrimaryColor, size: screenHeight * 0.04,),
+                                    Text(widget.tourStartDate.split('T')[0], style: TextStyle( fontSize: screenHeight * 0.025),),
+                                    Icon(Icons.date_range, color: kPrimaryColor, size: screenHeight * 0.03,),
                                   ],
                                 ),
                               ),
                             ),
                             SizedBox(height: screenHeight * 0.02,),
-                            Text("Check Out", style: TextStyle(fontSize: screenHeight * 0.025,letterSpacing: screenWidth * 0.003, fontWeight: FontWeight.bold),),
+                            Text("Check Out", style: TextStyle(fontSize: screenHeight * 0.02,letterSpacing: screenWidth * 0.003, fontWeight: FontWeight.bold),),
                             SizedBox(height: screenHeight * 0.01,),
                             Container(
-                              height: screenHeight * 0.07,
+                              height: screenHeight * 0.06,
                               decoration: BoxDecoration(
                                 color: const Color(0xFFE4F9FB),
                                 borderRadius: BorderRadius.circular(screenHeight * 0.02),
@@ -102,18 +203,17 @@ class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScree
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("03/02/2014", style: TextStyle( fontSize: screenHeight * 0.03),),
-                                    Icon(Icons.date_range, color: kPrimaryColor, size: screenHeight * 0.04,),
+                                    Text(widget.tourEndDate.split('T')[0], style: TextStyle( fontSize: screenHeight * 0.025),),
+                                    Icon(Icons.date_range, color: kPrimaryColor, size: screenHeight * 0.03,),
                                   ],
                                 ),
                               ),
                             ),
-                                        
                             SizedBox(height: screenHeight * 0.02,),
-                            Text("Available Seats", style: TextStyle(fontSize: screenHeight * 0.025,letterSpacing: screenWidth * 0.003, fontWeight: FontWeight.bold),),
+                            Text("Already booked", style: TextStyle(fontSize: screenHeight * 0.02,letterSpacing: screenWidth * 0.003, fontWeight: FontWeight.bold),),
                             SizedBox(height: screenHeight * 0.01,),
                             Container(
-                              height: screenHeight * 0.07,
+                              height: screenHeight * 0.06,
                               decoration: BoxDecoration(
                                 color: const Color(0xFFE4F9FB),
                                 borderRadius: BorderRadius.circular(screenHeight * 0.02),
@@ -124,15 +224,71 @@ class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScree
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("10", style: TextStyle( fontSize: screenHeight * 0.03),),
-                                    Icon(Icons.airline_seat_recline_normal_outlined, color: kPrimaryColor, size: screenHeight * 0.04,),
+                                    Text("05", style: TextStyle( fontSize: screenHeight * 0.025),),
+                                    Icon(Icons.book_outlined, color: kPrimaryColor, size: screenHeight * 0.03,),
                                   ],
                                 ),
                               ),
                             ),
-                            SizedBox(height: screenHeight * 0.06,),
-                            DefaultButton(text: "Book Now", press: () {
-                              //Navigator.push(context, MaterialPageRoute(builder: (context) => const ()));
+                            SizedBox(height: screenHeight * 0.02,),
+                            Text("Available Seats", style: TextStyle(fontSize: screenHeight * 0.02,letterSpacing: screenWidth * 0.003, fontWeight: FontWeight.bold),),
+                            SizedBox(height: screenHeight * 0.01,),
+                            Container(
+                              height: screenHeight * 0.06,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFE4F9FB),
+                                borderRadius: BorderRadius.circular(screenHeight * 0.02),
+                              ),
+                              child: Container(
+                                margin:  EdgeInsets.symmetric( horizontal: screenWidth * 0.05),
+                                child: 
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("10", style: TextStyle( fontSize: screenHeight * 0.025),),
+                                    Icon(Icons.airline_seat_recline_normal_outlined, color: kPrimaryColor, size: screenHeight * 0.03,),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: screenHeight * 0.02,),
+                            Text("How many seats do you need?", style: TextStyle(fontSize: screenHeight * 0.02,letterSpacing: screenWidth * 0.003, fontWeight: FontWeight.bold),),
+                            SizedBox(height: screenHeight * 0.01,),
+                            Form(
+                              key: formKey,
+                              child: TextFormField(
+                                controller: needSeats,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return '* Please enter How many seats do you need?';
+                                  }
+                                  return null;
+                                },
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  labelText: "Seats Count",
+                                  floatingLabelStyle: const TextStyle(color: kPrimaryColor),
+                                  contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
+                                  hintText: 'Enter your Num Of Seats',
+                                  suffixIcon: const Icon(Icons.chair_alt_outlined, color: kPrimaryColor,),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(screenHeight * 0.025),
+                                    borderSide: const BorderSide(color: kPrimaryColor),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(screenHeight * 0.025),
+                                    borderSide: const BorderSide(color: kPrimaryColor),
+                                  )
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: screenHeight * 0.05,),
+                            DefaultButton(text: "Book Now", press: () async{
+                            
+                              if( formKey.currentState!.validate()) { 
+                                //await makePayment(((needSeats.text) * (widget.price)).toString());
+                                await makePayment(100.toString());
+                              }  
                             })
                           ],
                         ),

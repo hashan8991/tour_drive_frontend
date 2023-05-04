@@ -33,7 +33,7 @@ class _TourPlanScreenState extends State<TourPlanScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Header(text: "Tour Plan", press: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
+              Navigator.pop(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
             } ),
             SizedBox(height: screenHeight * 0.01,),
             Expanded(
@@ -65,7 +65,7 @@ class _TourPlanScreenState extends State<TourPlanScreen> {
                                 color: kPrimaryColor,
                               ),
                               child:  Center (
-                                child: Text(splitList[0], style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),
+                                child: Text(splitList[0], style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.white)),
                               ),
                             ),
                             SizedBox(width: screenWidth * 0.02,),

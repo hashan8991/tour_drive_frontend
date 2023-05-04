@@ -22,7 +22,7 @@ class _TourhighlightScreenState extends State<TourhighlightScreen> {
   @override
   Widget build(BuildContext context) {
 
-    final double screenWidth = MediaQuery.of(context).size.width;
+    //final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight= MediaQuery.of(context).size.height;
 
     return SafeArea(
@@ -31,7 +31,7 @@ class _TourhighlightScreenState extends State<TourhighlightScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Header(text: "Tour Highlights", press: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
+              Navigator.pop(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
             } ),
             Expanded(
               child: ListView.builder(

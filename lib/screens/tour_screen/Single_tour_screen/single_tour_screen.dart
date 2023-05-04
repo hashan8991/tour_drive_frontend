@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -18,7 +20,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-
 class SingleTourScreen extends StatefulWidget {
   const SingleTourScreen({super.key});
 
@@ -30,7 +31,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
 
   // ####################################################################################################################
     // Backend Integration
-  var tourDetails ;
+  var tourDetails;
   List<dynamic> tourReviews  = [];
   var numOfReview;
   bool isloading1 = true;
@@ -67,6 +68,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
         tourReviews =  responseData["data"]["reviews"];
         numOfReview = responseData["results"];
         isloading2 = false;
+
       });
     } else {
       throw Exception('Failed to load Tour');
@@ -101,7 +103,10 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
               backgroundColor: kPrimaryColor,
               foregroundColor: Colors.white,
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourCheckAvailabilityScreen())); 
+                String tourStartDate = tourDetails["start_date"];
+                String tourEndDate = tourDetails["end_date"];
+                int price = tourDetails['price'];
+                Navigator.push(context,MaterialPageRoute(builder: (context) => TourCheckAvailabilityScreen(tourStartDate: tourStartDate, tourEndDate: tourEndDate, price: price))); 
               },
               label: const Text('Check availability'),
             ),
@@ -112,7 +117,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
           elevation: 0,
           backgroundColor: Colors.transparent,
           leading: IconButton(
-            onPressed: () { Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourHomeScreen())); }, 
+            onPressed: () { Navigator.pop(context,MaterialPageRoute(builder: (context) =>const TourHomeScreen())); }, 
             icon: const Icon(Icons.arrow_back, color:Colors.black, )
             ),
           actions: <Widget>[
@@ -153,16 +158,20 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                     ],
                   ),
                   height: screenHeight * 0.3,
-                  child: ListView(
+                  child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    children: [
-                      Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][0]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
-                      SizedBox(width: screenWidth * 0.03),
-                      Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][1]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
-                      SizedBox(width: screenWidth * 0.03),
-                      Image.network('$URL/tour-uploads/${tourDetails["tour_gallery"][2]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,),
-                    ]
+                    itemCount: tourDetails["tour_gallery"].length,
+                    itemBuilder: ((context, index) {
+                      return Row(
+                        children: [
+                          Image.network('$urlPhoto/tour-uploads/${tourDetails["tour_gallery"][index]}', fit: BoxFit.fill, height: screenHeight * 0.3, width: screenWidth * 0.7,
+                          errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.3,width: screenWidth * 0.7,)),
+                          SizedBox(width: screenWidth * 0.03,)
+
+                      ],);
+                    }
                     ),
+                  ),
                 ),
             
                 SizedBox(height: screenHeight * 0.02),
@@ -343,7 +352,8 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                 SizedBox(height: screenHeight * 0.023),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context,MaterialPageRoute(builder: (context) =>const TourMapScreen()));
+                    List<dynamic> locations = tourDetails["locations"];
+                    Navigator.push(context,MaterialPageRoute(builder: (context) => TourMapScreen(locations: locations)));
                   },
                   child: Image.asset('assets/images/map.jpeg', fit: BoxFit.fill, height: screenHeight * 0.15, width: screenWidth,)
                 ),

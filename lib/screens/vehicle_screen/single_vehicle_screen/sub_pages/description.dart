@@ -26,7 +26,7 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(text: "Description", press: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleVehicleScreen()));
+                Navigator.pop(context, MaterialPageRoute(builder: (context) => const SingleVehicleScreen()));
               } ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),

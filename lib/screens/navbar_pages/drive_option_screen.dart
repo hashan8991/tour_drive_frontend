@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class DriveOptionScreen extends StatefulWidget {
   const DriveOptionScreen({super.key});
@@ -9,6 +13,53 @@ class DriveOptionScreen extends StatefulWidget {
 }
 
 class _DriveOptionScreenState extends State<DriveOptionScreen> {
+
+  // ###############################################################################################################
+  List<dynamic> vehicleBookingDetails = [];
+  late bool isloading = false ;
+  late int numofbooking;
+
+  Future<void> fetchVehicleBooking() async {
+
+    setState(() {
+      isloading = true;
+    });
+
+    final prefs = await SharedPreferences.getInstance();
+    final cookie = await prefs.getString('Cookie');
+    
+    final response = await http
+        .get(Uri.parse('$URL/api/v1/booking/my-bookings/vehicles'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'cookie': (cookie==null) ? "" : cookie,
+        },
+    );
+
+    if (response.statusCode == 200) {
+      setState(() {
+        final Map<String, dynamic> responseData =  jsonDecode(response.body);
+        vehicleBookingDetails =  responseData["data"]["bookings"];
+        numofbooking = responseData["records"];
+      });
+    } else {
+      throw Exception('Failed to load vehicleBooking Details');
+    }
+
+    setState(() {
+      isloading = false;
+    });
+
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchVehicleBooking();
+  }
+
+
+  // #############################################################################################################
   @override
   Widget build(BuildContext context) {
 
@@ -38,10 +89,20 @@ class _DriveOptionScreenState extends State<DriveOptionScreen> {
         margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
         child: Column(
           children: [
+            isloading ? 
+            Center(
+                child:CircularProgressIndicator(
+                  backgroundColor: Colors.grey[200], // Set the background color of the widget
+                  valueColor: const AlwaysStoppedAnimation<Color>(kPrimaryColor), // Set the color of the progress indicator
+                  strokeWidth: 3, // Set the width of the progress indicator
+                )
+              )
+            :
+            (numofbooking < 1) ? Text("No booking vehicles yet",style: TextStyle(fontSize: screenHeight * 0.02,fontWeight: FontWeight.bold),):
             Expanded(
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: 2,
+                itemCount: vehicleBookingDetails.length,
                 itemBuilder: (BuildContext context, int index){
                   return Padding(
                       padding: const EdgeInsets.fromLTRB(0,0,0,16),
@@ -69,7 +130,7 @@ class _DriveOptionScreenState extends State<DriveOptionScreen> {
                             children: [
                               ClipRRect( 
                                 borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                                child: Image.network('https://images.unsplash.com/photo-1638618164682-12b986ec2a75?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
+                                child: Image.network('$urlPhoto/vehicle-uploads/${vehicleBookingDetails[index]["vehicle"]["cover_URL"]}',errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, ), fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
                               SizedBox(width: screenWidth * 0.03),
                               Container(
                                 height: screenHeight * 0.14,
@@ -81,13 +142,13 @@ class _DriveOptionScreenState extends State<DriveOptionScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Toyota Prius", style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.02), maxLines: 2, overflow: TextOverflow.ellipsis,),
+                                    Text("${vehicleBookingDetails[index]["vehicle"]["brand"]} ${vehicleBookingDetails[index]["vehicle"]["model"]}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.02), maxLines: 2, overflow: TextOverflow.ellipsis,),
                                     SizedBox(height: screenHeight * 0.008,),                                    
-                                    Text("\$ 200", style: TextStyle(fontSize: screenHeight * 0.022,fontWeight: FontWeight.bold),),
+                                    Text("\$ ${vehicleBookingDetails[index]["vehicle"]["price_per_day_without_dr"]}", style: TextStyle(fontSize: screenHeight * 0.022,fontWeight: FontWeight.bold),),
                                     SizedBox(height: screenHeight * 0.008,),
-                                    Text("Check In    :   31/05/2023", style: TextStyle(fontSize: screenHeight * 0.018)), 
+                                    Text("Check In    :   ${vehicleBookingDetails[index]["vehicle"]["form"].split('T')[0]}", style: TextStyle(fontSize: screenHeight * 0.018)), 
                                     SizedBox(height: screenHeight * 0.008,),
-                                    Text("Check Out :   31/05/2023 ", style: TextStyle(fontSize: screenHeight * 0.018)),  
+                                    Text("Check Out :   ${vehicleBookingDetails[index]["vehicle"]["to"].split('T')[0]} ", style: TextStyle(fontSize: screenHeight * 0.018)),  
                                   ],
                                 ),
                               ),

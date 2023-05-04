@@ -1,3 +1,5 @@
+// ignore_for_file: await_only_futures
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,30 +9,60 @@ import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/singl
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:tour_drive_frontend/screens/tour_screen/tour_filter.dart';
 
 class TourHomeScreen extends StatefulWidget {
-  
-  const TourHomeScreen({super.key,  });
+
+  const TourHomeScreen({super.key});
 
   @override
   State<TourHomeScreen> createState() => _TourHomeScreenState();
 }
 
 class _TourHomeScreenState extends State<TourHomeScreen> {
-
-  // ####################################################################################################################
-        // Backend Integration
+// ####################################################################################################################
+  // Backend Integration
   List<dynamic> tours = [];
-
+  List<String>? catergories = [];
+  //List<String> reviewScore = [];
+  int? minPrice = 0;
+  int? maxPrice = 2000;
+  bool isloading = true;
+  
   Future<void> fetchTours() async {
-    final response = await http
-        .get(Uri.parse('$URL/api/v1/tours'));
+    // Get filter values
+    final prefs = await SharedPreferences.getInstance();
+    catergories = await prefs.getStringList('tourCatergories');
+    // String? jsonString = await (prefs.getString('tourReviewScore'));
+    // reviewScore = (jsonString == null) ? "" : json.decode(jsonString);
+    minPrice = await prefs.getInt('tourMinPrice');
+    maxPrice = await prefs.getInt('tourMaxPrice');
 
+    // send get reqest to server get all tours
+    final http.Response response;
+    if (catergories == null && minPrice == null && maxPrice == null) {
+
+         response = await http.get(Uri.parse('$URL/api/v1/tours?limit=10&price[gte]=0&price[lte]=2000'));
+
+    }else {
+
+      String url = "$URL/api/v1/tours?limit=10";
+      url += (catergories!.isEmpty) ? "" : "&category=${catergories!.join(",")}"; 
+      url += "&price[gte]=$minPrice";
+      url += "&price[lte]=$maxPrice";
+      response = await http.get(Uri.parse(url));
+
+    }
+    
     if (response.statusCode == 200) {
+      
       setState(() {
         final Map<String, dynamic> responseData =  jsonDecode(response.body);
         tours =  responseData["data"];
+        //print(tours[0]["tour_cover"]);
+        isloading = false;
       });
+
     } else {
       throw Exception('Failed to load Tour');
     }
@@ -44,7 +76,6 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
 
 // ####################################################################################################################
 
-
   @override
   Widget build(BuildContext context) {
     
@@ -56,41 +87,41 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           leading: IconButton(
-            onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));}, 
-            icon: const Icon(Icons.arrow_back, color:Colors.black, )),
+            onPressed: () async{
+
+              final kprefs = await SharedPreferences.getInstance();
+              await kprefs.remove('tourCatergories');
+              await kprefs.remove('tourReviewScore');
+              await kprefs.remove('tourMinPrice');
+              await kprefs.remove('tourMaxPrice');
+              // ignore: use_build_context_synchronously
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const NavbarMainPage()));
+
+            }, 
+            icon: const Icon(Icons.arrow_back, color:Colors.black, )
+          ),
           elevation: 0,
-          title: Image.asset("assets/images/logoPic.png"),
+          title: Image.asset("assets/images/logoPic.png", width: screenWidth * 0.55,),
           centerTitle: true,
           actions: <Widget>[
-            Container(
-              margin: const EdgeInsets.all(3),
-              child: IconButton(
-                alignment: Alignment.centerRight,
-                icon: const Icon(Icons.search, color: Colors.black,),
-                onPressed: () {
- 
-                },
-              ),
-            ),
             IconButton(
               icon: const Icon(Icons.filter_list, color: Colors.black, ),
               onPressed: () {
-
+                Navigator.push(context,MaterialPageRoute(builder: (context) => const TourFilter()));
               },
             ),
           ],
         ),
-        
 
         body: Container(
           margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Explore Sri Lanka, One tour at a time", style: TextStyle(fontSize: screenHeight * 0.032, fontWeight: FontWeight.bold),),
+              SizedBox(height: screenHeight * 0.01,),
+              Text("Explore Sri Lanka, One tour at a time", style: TextStyle(fontSize: screenHeight * 0.026, fontWeight: FontWeight.bold),),
               SizedBox(height: screenHeight * 0.02,),
-          
-              tours.isEmpty 
+              isloading 
               ? Center(
                   child:CircularProgressIndicator(
                     backgroundColor: Colors.grey[200], // Set the background color of the widget
@@ -98,6 +129,17 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                     strokeWidth: 3, // Set the width of the progress indicator
                   )
                 )
+              :
+              tours.isEmpty ? 
+              Column(
+                children: [
+                  SizedBox(height: screenHeight * 0.2,),
+                  Container(
+                    padding: EdgeInsets.all(screenHeight * 0.05),
+                    child: Text("👀 Sorry, we couldn't find any results that match your search criteria.", style: TextStyle(fontSize: screenHeight * 0.016,fontWeight: FontWeight.bold, color: kPrimaryColor),)
+                  ),
+                ],
+              )
               :
               Expanded(
                 child: ListView.builder(
@@ -111,8 +153,6 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                       // Store the  tour ID in shared preferences
                       final prefs = await SharedPreferences.getInstance();
                       await prefs.setString('tourId', tour["_id"]);
-
-                      
                       // ignore: use_build_context_synchronously
                       Navigator.push(context, MaterialPageRoute(builder: (context) => const SingleTourScreen()));
                     },
@@ -142,7 +182,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                             children: [
                               ClipRRect( 
                                 borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                                child: Image.network('$URL/tour-uploads/${tour["tour_cover"]}', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
+                                child: Image.network('$urlPhoto/tour-uploads/${tour["tour_cover"]}',errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, ), fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
                               SizedBox(width: screenWidth * 0.03),
                               Container(
                                 height: screenHeight * 0.14,
@@ -203,7 +243,6 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                                       ],
                                     ),
                                     SizedBox(height: screenHeight * 0.001,),
-                                    
                                   ],
                                 ),
                               ),
@@ -218,7 +257,6 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
               ),
             ],
           ),
-          
         ),
       ),
     );
