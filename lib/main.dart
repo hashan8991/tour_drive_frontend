@@ -11,6 +11,8 @@ import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
 // import 'package:tour_drive_frontend/screens/authentication/forget_password/forget_password_screen.dart';
 // import 'package:tour_drive_frontend/screens/navbar_pages/landing_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.dart';
+import 'package:tour_drive_frontend/screens/navbar_pages/landing_screen.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
 // import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
 // import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_page_sreen.dart';
 // import 'package:tour_drive_frontend/screens/authentication/sign_in/login_screen.dart';
@@ -48,7 +50,7 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(color: Colors.white, elevation: 0),
       ),
 
-      home: const LogInScreen(),
+      //home: const LogInScreen(),
       //home: const ForgetPasswordScreen(),
        //home: const SignUpScreen(),
      // home: const LoadingScreen(), // first page of the app
@@ -58,7 +60,7 @@ class MyApp extends StatelessWidget {
       //home: const TourFeedbackForm(),
 
       //home: const TourHomeScreen(),
-     //home: const NavbarMainPage(),  // navbar screen
+     home: const NavbarMainPage(),  // navbar screen
       //initialRoute: LoadingScreen.routeName,
       // routes: routes,
       //home: const LandingScreen(),
