@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tour_drive_frontend/constants.dart';
+import 'package:tour_drive_frontend/widgets/list_tile_phone_call.dart';
 import 'package:tour_drive_frontend/widgets/list_tiles2.dart';
 
 class ContactUs extends StatelessWidget {
@@ -81,9 +82,14 @@ class ContactUs extends StatelessWidget {
                                   'No.455, West Orchard Street, Kings Mountain, NC 280876',
                             ),
                             Divider(),
-                            MyListTile2(
+                            // MyListTile2(
+                            //   iconLeading: Icons.phone_in_talk_outlined,
+                            //   title: '+088(006)992-99-10',
+                            // ),
+                            PhoneCallListTile(
                               iconLeading: Icons.phone_in_talk_outlined,
-                              title: '+088(006)992-99-10',
+                              title:
+                                  '+088(006)992-99-10', // add this phone number to the definition of this list_tile
                             ),
                             Divider(),
                             MyListTile2(

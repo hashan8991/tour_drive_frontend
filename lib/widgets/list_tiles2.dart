@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tour_drive_frontend/constants.dart';
 
 class MyListTile2 extends StatelessWidget {
   final IconData iconLeading;
@@ -18,7 +19,10 @@ class MyListTile2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Icon(iconLeading),
-      title: Text(title),
+      title: Text(
+        title,
+        style: const TextStyle(color: kTextColor),
+      ),
       // trailing: Icon(iconTail),
       // onTap: press,
     );
