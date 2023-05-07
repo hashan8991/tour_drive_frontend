@@ -1,12 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/about_us/about_us_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/contact_us/contact_us.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_details_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/support/support.dart';
 
 import '../../../constants.dart';
+import '../../../provider/sign_in_provider.dart';
+import '../../../util/next_screen.dart';
 import '../../../widgets/default_button.dart';
 import '../../../widgets/list_tiles1.dart';
+import '../../authentication/sign_in/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -20,6 +25,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+    final sp = context.watch<SignInProvider>();
+    final user = FirebaseAuth.instance.currentUser!;
     return SafeArea(
       child: Scaffold(
         // backgroundColor: Colors.red,
@@ -29,17 +36,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
           iconTheme: const IconThemeData(color: kPrimaryColor),
           backgroundColor: const Color.fromARGB(0, 255, 255, 255),
           // shadowColor: const Color.fromARGB(0, 37, 97, 107),
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-                Icons.arrow_back_ios), //replace with our own icon data.
-          ),
+          // leading: IconButton(
+          //   onPressed: () {
+          //     Navigator.pop(context);
+          //   },
+          //   icon: const Icon(
+          //       Icons.arrow_back_ios), //replace with our own icon data.
+          // ),
           title: const Text(
             'Profile',
             textAlign: TextAlign.center,
-            style: TextStyle(color: kPrimaryColor),
+            style: TextStyle(
+                color: kPrimaryColor,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2),
           ),
         ),
         backgroundColor: Colors.white,
@@ -66,17 +76,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           CircleAvatar(
                             radius: screenWidth * 0.1,
                             backgroundColor: kTextColor,
-                            backgroundImage:
-                                const AssetImage('assets/images/avatar2.png'),
+                            backgroundImage: NetworkImage(user.photoURL!),
                           ),
                         ],
                       ),
                     ),
-                    const Text(
-                      'Udaya Anushanka',
-                      style: TextStyle(
+                    Text(
+                      user.displayName!,
+                      style: const TextStyle(
                           fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                          // fontWeight: FontWeight.bold,
                           color: kTextColor),
                     )
                   ],
@@ -146,7 +155,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: DefaultButton(
                     text: 'Sign Out',
                     press: () {
-                      //sign out function goes here..
+                      sp.userSignOut();
+                      nextScreenReplace(context, const LogInScreen());
                     },
                   ),
                 )
