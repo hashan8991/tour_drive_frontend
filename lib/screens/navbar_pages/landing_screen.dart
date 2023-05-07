@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/tour_home_screen.dart';
 import 'package:tour_drive_frontend/screens/vehicle_screen/vehicle_home_screen.dart';
@@ -21,13 +22,14 @@ class _LandingScreenState extends State<LandingScreen> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+    // final user = FirebaseAuth.instance.currentUser!;
 
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          centerTitle: true,    //title eka center krnne meken
-          backgroundColor: Colors.transparent, 
+          centerTitle: true, //title eka center krnne meken
+          backgroundColor: Colors.transparent,
           title: Image.asset(
             'assets/images/logoPic.png',
             fit: BoxFit.fill,

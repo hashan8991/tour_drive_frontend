@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_page_edit.dart';
 // import 'package:proftest1/components/list_tile2.dart';
@@ -18,6 +19,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+    final user = FirebaseAuth.instance.currentUser!;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -75,8 +77,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                           CircleAvatar(
                             radius: screenWidth * 0.1,
                             backgroundColor: kTextColor,
-                            backgroundImage:
-                                const AssetImage('assets/images/avatar2.png'),
+                            backgroundImage: NetworkImage(user.photoURL!),
                           ),
                         ],
                       ),
@@ -85,26 +86,25 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                 ),
                 const Divider(),
                 Column(
-                  children: const [
+                  children: [
                     MyListTile2(
                         iconLeading: Icons.perm_identity,
-                        title: 'Udaya Anushanka'),
-                    Divider(),
-                    MyListTile2(
-                        iconLeading: Icons.email,
-                        title: 'beligahamullage@gmail.com'),
-                    Divider(),
-                    MyListTile2(iconLeading: Icons.call, title: '0775632256'),
-                    Divider(),
-                    MyListTile2(
+                        title: user.displayName!),
+                    const Divider(),
+                    MyListTile2(iconLeading: Icons.email, title: user.email!),
+                    const Divider(),
+                    const MyListTile2(
+                        iconLeading: Icons.call, title: '0775632256'),
+                    const Divider(),
+                    const MyListTile2(
                         iconLeading: Icons.person_pin,
                         title:
                             'No.136, Mulana, Narawala, Poddala, Galle, Sri Lanka'),
-                    Divider(),
-                    MyListTile2(
+                    const Divider(),
+                    const MyListTile2(
                         iconLeading: Icons.fingerprint_rounded,
                         title: '970671870v'),
-                    Divider(),
+                    const Divider(),
                   ],
                 )
               ],
