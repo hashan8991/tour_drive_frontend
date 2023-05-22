@@ -102,10 +102,14 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
               backgroundColor: kPrimaryColor,
               foregroundColor: Colors.white,
               onPressed: () {
-                String tourStartDate = tourDetails["start_date"];
-                String tourEndDate = tourDetails["end_date"];
+
+                String tourname = tourDetails['name'];
+                String tourdes = tourDetails['description'];
                 int price = tourDetails['price'];
-                Navigator.push(context,MaterialPageRoute(builder: (context) => TourCheckAvailabilityScreen(tourStartDate: tourStartDate, tourEndDate: tourEndDate, price: price))); 
+                String tourStartDate = tourDetails["start_date"].split('T')[0];
+                String tourEndDate = tourDetails["end_date"].split('T')[0];
+         
+                Navigator.push(context,MaterialPageRoute(builder: (context) => TourCheckAvailabilityScreen(tourname: tourname, tourdes: tourdes, tourStartDate: tourStartDate, tourEndDate: tourEndDate, price: price))); 
               },
               label: const Text('Check availability'),
             ),
