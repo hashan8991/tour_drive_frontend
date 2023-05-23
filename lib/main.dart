@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
       //home: const LogInScreen(),
       //home: const ForgetPasswordScreen(),
        //home: const SignUpScreen(),
-     //home: const LoadingScreen(), // first page of the app
+     home: const LoadingScreen(), // first page of the app
 
       //home: const FeedbackForm(),
 
@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
       //home: TourHomeScreen(),
       //home: TourFilter(),
       //home:  TourCheckAvailabilityScreen(),
-      home: TourOptionNewScreen(),
+      //home: TourOptionNewScreen(),
     );
   }
 }
