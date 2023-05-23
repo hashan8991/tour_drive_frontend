@@ -1,21 +1,28 @@
+// ignore_for_file: unnecessary_string_interpolations
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:flutter_stripe/flutter_stripe.dart';
 
 // ignore: must_be_immutable
 class TourCheckAvailabilityScreen extends StatefulWidget {
 
-  String tourStartDate ;
-  String tourEndDate;
-  int price;
+  final String tourname;
+  final String tourdes;
+  final String tourStartDate ;
+  final String tourEndDate;
+  final int price;
+  final String capacity1;
+  final int alreadybooking;
+  
 
-  TourCheckAvailabilityScreen({super.key,required this.tourStartDate, required this.tourEndDate, required this.price});
+   const TourCheckAvailabilityScreen({super.key, required this.tourname, required this.tourdes, required this.tourStartDate, required this.tourEndDate, required this.price, required this.capacity1, required this.alreadybooking});
 
   @override
   State<TourCheckAvailabilityScreen> createState() => _TourCheckAvailabilityScreenState();
@@ -25,7 +32,54 @@ class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScree
 // #######################################################################################################
   late Map<String, dynamic> paymentIntent;
   final needSeats = TextEditingController();
+  late int seats;
+  late int totalAmount ;
+  late int availableSeat;
   final formKey = GlobalKey<FormState>();
+
+  // ########################## booking request #################################################################
+
+    Future<void> tourBooking() async {
+
+    final prefs = await SharedPreferences.getInstance();
+    final cookie = await prefs.getString('Cookie');
+    final userid = await prefs.getString('userId');
+    final tourid = await prefs.getString('tourId');
+  
+    final response = await http
+        .post(Uri.parse('$URL/api/v1/booking/create-checkout-session'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'cookie': (cookie == null) ? "" : cookie,
+        },
+        body: jsonEncode(<String, String>{  // what we need to send to the server
+          "user": (userid == null) ? "" : userid,
+          "tourID": (tourid == null) ? "" : tourid,
+          "bookingType": "tour",
+          "tourName": widget.tourname,
+          "tourDesc": widget.tourdes,
+          "noOfSeats": "$seats",
+          "price": "$totalAmount",
+          "from": "${widget.tourStartDate}",
+          "to": "${widget.tourEndDate}"
+          
+        }),
+    );
+
+    if (response.statusCode == 201) {
+      print("payment success");
+
+    } else {
+
+      final Map<String, dynamic> responseData =  jsonDecode(response.body);
+        String message =  responseData["message"];
+        throw Exception('Failed to TourBooking ');
+    }
+
+  }
+
+    
+  // ############################ payment request ##################################################################
 
   Future<void> makePayment(String totalAmount) async {
     try{
@@ -33,8 +87,6 @@ class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScree
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
           paymentIntentClientSecret: paymentIntent['client_secret'],
-          // applePay: const PaymentSheetApplePay(merchantCountryCode: '+94'),
-          // googlePay: const PaymentSheetGooglePay(testEnv: true,currencyCode: 'USD',merchantCountryCode: '+94'),
           style: ThemeMode.dark,
           merchantDisplayName: 'TourDrive')).then((value){
         });
@@ -48,6 +100,7 @@ class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScree
 
   displayPaymentSheet() async {
     try{
+      
       await Stripe.instance.presentPaymentSheet(
       ).then((value) {
         showDialog(
@@ -67,16 +120,20 @@ class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScree
           )
 
         );
+// ############### send backed to tour booking detail #######################################
+        tourBooking();
+
       }).onError((error, stackTrace) {
           print("error=>>>$error $stackTrace");
       } );
+
     } on StripeException catch(e) {
       print(e);
 
       showDialog(
         context: context, 
         builder: (_) => const AlertDialog(
-          content: Text("concelled"),
+          content: Text("Cancelled"),
         ));
     }catch(e){
       print(e);
@@ -111,6 +168,12 @@ class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScree
    calculateAmount(String amount) {
     final calculateAmount = (int.parse(amount))*100 ;
     return calculateAmount.toString();
+  }
+
+  @override
+    void initState() {
+      super.initState();
+      availableSeat = int.parse(widget.capacity1) - (widget.alreadybooking);
   }
 
 // ###################################################################################################
@@ -224,7 +287,7 @@ class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScree
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("05", style: TextStyle( fontSize: screenHeight * 0.025),),
+                                    Text("${widget.alreadybooking}", style: TextStyle( fontSize: screenHeight * 0.025),),
                                     Icon(Icons.book_outlined, color: kPrimaryColor, size: screenHeight * 0.03,),
                                   ],
                                 ),
@@ -245,7 +308,7 @@ class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScree
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("10", style: TextStyle( fontSize: screenHeight * 0.025),),
+                                    Text("$availableSeat", style: TextStyle( fontSize: screenHeight * 0.025),),
                                     Icon(Icons.airline_seat_recline_normal_outlined, color: kPrimaryColor, size: screenHeight * 0.03,),
                                   ],
                                 ),
@@ -261,6 +324,9 @@ class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScree
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return '* Please enter How many seats do you need?';
+                                  }
+                                  if (int.parse(needSeats.text) > availableSeat) {
+                                    return '* Please enter correct available seat count';
                                   }
                                   return null;
                                 },
@@ -286,8 +352,12 @@ class _TourCheckAvailabilityScreenState extends State<TourCheckAvailabilityScree
                             DefaultButton(text: "Book Now", press: () async{
                             
                               if( formKey.currentState!.validate()) { 
-                                //await makePayment(((needSeats.text) * (widget.price)).toString());
-                                await makePayment(100.toString());
+                                setState(() {
+                                  seats = int.parse(needSeats.text);
+                                  totalAmount = seats * widget.price;
+                                });
+                                String totalamout = totalAmount.toString().split('.')[0];
+                                makePayment(totalamout);
                               }  
                             })
                           ],
