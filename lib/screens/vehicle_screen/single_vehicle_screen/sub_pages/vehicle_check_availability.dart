@@ -180,7 +180,7 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
       showDialog(
         context: context, 
         builder: (_) => const AlertDialog(
-          content: Text("concelled"),
+          content: Text("cancelled"),
         ));
     }catch(e){
       print(e);
@@ -396,9 +396,8 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
                                     price = widget.priceWithoutDriver;
                                   });
                                 }
-                                String totalamout = price.toString();
-                                //print(totalamout);
-                                //makePayment("10.00");
+                                String totalamout = price.toString().split('.')[0];
+                                makePayment(totalamout);
                                 
                               }
                           })

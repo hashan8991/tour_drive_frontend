@@ -33,6 +33,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
   var tourDetails;
   List<dynamic> tourReviews  = [];
   var numOfReview;
+  var alreadybooking;
   bool isloading1 = true;
   bool isloading2 = true;
 
@@ -74,11 +75,35 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
     }
   }
 
+  Future<void> getTotalBooking() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? tourId = prefs.getString('tourId');
+    final cookie = await prefs.getString('Cookie');
+
+    final response = await http
+    .get(Uri.parse('$URL/api/v1/booking/bookings-count/$tourId'),
+      headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'cookie': (cookie == null) ? "" : cookie,
+        },
+      );
+   
+    if (response.statusCode == 200) {
+      setState(() {
+        final Map<String, dynamic> responseData =  jsonDecode(response.body);
+        alreadybooking = responseData['data']['bookingCount'];
+      });
+    } else {
+      throw Exception('Failed to get total booking');
+    }
+  }
   @override
   void initState() {
     super.initState();
     fetchTour();
     fetchTourReview();
+    getTotalBooking();
   
   }
 
@@ -108,8 +133,10 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                 int price = tourDetails['price'];
                 String tourStartDate = tourDetails["start_date"].split('T')[0];
                 String tourEndDate = tourDetails["end_date"].split('T')[0];
+                String capacity = tourDetails['capacity'];
+                
          
-                Navigator.push(context,MaterialPageRoute(builder: (context) => TourCheckAvailabilityScreen(tourname: tourname, tourdes: tourdes, tourStartDate: tourStartDate, tourEndDate: tourEndDate, price: price))); 
+                Navigator.push(context,MaterialPageRoute(builder: (context) => TourCheckAvailabilityScreen(tourname: tourname, tourdes: tourdes, tourStartDate: tourStartDate, tourEndDate: tourEndDate, price: price, capacity1: capacity, alreadybooking: alreadybooking))); 
               },
               label: const Text('Check availability'),
             ),
