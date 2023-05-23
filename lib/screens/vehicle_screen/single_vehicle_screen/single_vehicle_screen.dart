@@ -91,9 +91,6 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
-   
-
-    
     return SafeArea(
       child: Scaffold(
 
@@ -105,7 +102,10 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
               backgroundColor: kPrimaryColor,
               foregroundColor: Colors.white,
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (context) =>const VehicleCheckAvailability())); 
+                String vehicleName = "${vehicleDetails['brand']} ${vehicleDetails['model']}";
+                double priceWithDriver = vehicleDetails['price_per_day_with_dr'];
+                double priceWithoutDriver = vehicleDetails['price_per_day_without_dr'];
+                Navigator.push(context,MaterialPageRoute(builder: (context) => VehicleCheckAvailability(vehicleName: vehicleName, priceWithDriver: priceWithDriver, priceWithoutDriver: priceWithoutDriver))); 
               },
               label: const Text('Check availability'),
             ),

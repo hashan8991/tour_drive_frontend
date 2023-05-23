@@ -1,6 +1,9 @@
+// ignore_for_file: unnecessary_string_interpolations
+
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen/single_vehicle_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
@@ -9,7 +12,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class VehicleCheckAvailability extends StatefulWidget {
-  const VehicleCheckAvailability({super.key});
+
+  final String vehicleName;
+  final double priceWithDriver;
+  final double priceWithoutDriver;
+  const VehicleCheckAvailability({super.key, required this.vehicleName, required this.priceWithDriver, required this.priceWithoutDriver});
 
   @override
   State<VehicleCheckAvailability> createState() => _VehicleCheckAvailabilityState();
@@ -20,8 +27,10 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
   TextEditingController dateController = TextEditingController();
   TextEditingController fromDateController = TextEditingController();
   TextEditingController toDateController = TextEditingController();
-   late Map<String, dynamic> paymentIntent;
-   final formKey = GlobalKey<FormState>();
+  late Map<String, dynamic> paymentIntent;
+  final formKey = GlobalKey<FormState>();
+  // late final double price;
+  late var price = widget.priceWithDriver;
 
   String drivingOption = "With driver";
   var items = [
@@ -29,7 +38,7 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
     "Without driver"
   ];
 
-  void _selectDate(BuildContext context) async {
+  void _selectDate1(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -50,10 +59,75 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
     );
 
     if (picked != null) {
-        dateController.text = DateFormat('dd/MM/yyyy').format(picked);
+        fromDateController.text = DateFormat('dd/MM/yyyy').format(picked);
     }
+    
   }
 
+  void _selectDate2(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2100),
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: const ColorScheme.light(
+                primary: kPrimaryColor, // header background color
+                onPrimary: Colors.black, // header text color
+                onSurface: Colors.black, // body text color
+              )
+            ),
+            child: child!,
+          );
+        },
+    );
+
+    if (picked != null) {
+        toDateController.text = DateFormat('dd/MM/yyyy').format(picked);
+    }
+    
+  }
+
+  Future<void> vehicleBooking() async {
+
+    final prefs = await SharedPreferences.getInstance();
+    final cookie = await prefs.getString('Cookie');
+    final userid = await prefs.getString('userId');
+    final vehicleId = await prefs.getString('vehicleId');
+  
+    final response = await http
+        .post(Uri.parse('$URL/api/v1/booking/create-checkout-session'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'cookie': (cookie == null) ? "" : cookie,
+        },
+        body: jsonEncode(<String, String>{  // what we need to send to the server
+          "user": (userid == null) ? "" : userid,
+          "vehicle": (vehicleId == null) ? "" : vehicleId,
+          "bookingType": "vehicle",
+          "vehicleName": widget.vehicleName,
+          "noOfSeats": "0",
+          "price": "$price",
+          "from": "${fromDateController.text}",
+          "to": "${toDateController.text}"
+          
+        }),
+    );
+
+    if (response.statusCode == 201) {
+      print("payment success");
+
+    } else {
+
+      final Map<String, dynamic> responseData =  jsonDecode(response.body);
+        String message =  responseData["message"];
+        print(message);
+        throw Exception('Failed to vehicleBooking ');
+    }
+
+  }
 
   Future<void> makePayment(String totalAmount) async {
     try{
@@ -95,6 +169,8 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
           )
 
         );
+  // ############### send backed to tour booking detail #######################################
+        vehicleBooking();
       }).onError((error, stackTrace) {
           print("error=>>>$error $stackTrace");
       } );
@@ -192,7 +268,7 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
                           ),
                           SizedBox(height: screenHeight * 0.02,),
     //##########################################   Price  ######################################################################################                      
-                          Text("\$ 200", style: TextStyle(fontSize: screenHeight * 0.04, fontWeight: FontWeight.bold),),
+                          Text("\$ $price", style: TextStyle(fontSize: screenHeight * 0.04, fontWeight: FontWeight.bold),),
                           const Divider(thickness: 1.0),
                           SizedBox(height: screenHeight * 0.02,),
                           Form(
@@ -212,14 +288,20 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
                                     margin:  EdgeInsets.symmetric( horizontal: screenWidth * 0.05),
                                   //##########################################   From date  ######################################################################################                           
                                     child: TextFormField(
-                                      controller: dateController,
+                                      controller: fromDateController,
                                       //focusNode: _dateFocus,
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return '* Please enter from date?';
+                                        }
+                                        return null;
+                                      },
                                       decoration: InputDecoration(
                                         hintText: 'Select Date',
                                         border: InputBorder.none,
                                         suffixIcon: IconButton(
                                           icon: const Icon(Icons.date_range,color: kPrimaryColor,),
-                                          onPressed: () => _selectDate(context),
+                                          onPressed: () => _selectDate1(context),
                                         ),
                                       ),
                                     )
@@ -239,14 +321,20 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
                                     child: 
                               //##########################################   To date  ######################################################################################                           
                                     TextFormField(
-                                      controller: dateController,
+                                      controller: toDateController,
                                       //focusNode: _dateFocus,
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return '* Please enter to date?';
+                                        }
+                                        return null;
+                                      },
                                       decoration: InputDecoration(
                                         hintText: 'Select Date',
                                         border: InputBorder.none,
                                         suffixIcon: IconButton(
                                           icon: const Icon(Icons.date_range,color: kPrimaryColor,),
-                                          onPressed: () => _selectDate(context),
+                                          onPressed: () => _selectDate2(context),
                                         ),
                                       ),
                                     )
@@ -277,6 +365,15 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
                                     onChanged: (String? newValue) { 
                                       setState(() {
                                         drivingOption = newValue!;
+                                        if(drivingOption == "With driver"){
+                                         
+                                            price = widget.priceWithDriver;
+                                          
+                                        }else{
+                                            
+                                            price = widget.priceWithoutDriver;
+                                          
+                                        }
                                       });
                                     }
                                     ),
@@ -290,7 +387,19 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
                           
                           DefaultButton(text: "Rent Now", press: () async{
                             if( formKey.currentState!.validate()) { 
-                                await makePayment(100.toString());
+                                if(drivingOption == "With driver"){
+                                  setState(() {
+                                    price = widget.priceWithDriver;
+                                  });
+                                }else{
+                                    setState(() {
+                                    price = widget.priceWithoutDriver;
+                                  });
+                                }
+                                String totalamout = price.toString();
+                                //print(totalamout);
+                                //makePayment("10.00");
+                                
                               }
                           })
                         ],
