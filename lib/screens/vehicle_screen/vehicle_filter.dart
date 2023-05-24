@@ -143,29 +143,29 @@ class _VehicleFilterState extends State<VehicleFilter> {
                   ],
                 ),
                 SizedBox(height: screenHeight * 0.02,),
-                Text("Reviews Score", style: TextStyle(fontSize: screenHeight * 0.025, fontWeight: FontWeight.bold)),
-                Column(
-                  children: _vehicleReviewScore.map((option) {
-                    int index = _vehicleReviewScore.indexOf(option);
-                    return CheckboxListTile(
-                      title: Text(option),
-                      visualDensity:  const VisualDensity(horizontal: -4, vertical: -4),
-                      activeColor: kPrimaryColor,
-                      value: _vehicleReviewSelected[index],
-                      onChanged: (value) {
-                        setState(() {
-                          _vehicleReviewSelected[index] = value!;
-                          if(value){
-                          vehicleReviewScore.add((option.length.toInt()));
-                          //print(option);
-                        } else {
-                          vehicleReviewScore.remove((option.length.toInt()));
-                        }
-                        });
-                      },
-                    );
-                  }).toList(),
-                 ),
+                // Text("Reviews Score", style: TextStyle(fontSize: screenHeight * 0.025, fontWeight: FontWeight.bold)),
+                // Column(
+                //   children: _vehicleReviewScore.map((option) {
+                //     int index = _vehicleReviewScore.indexOf(option);
+                //     return CheckboxListTile(
+                //       title: Text(option),
+                //       visualDensity:  const VisualDensity(horizontal: -4, vertical: -4),
+                //       activeColor: kPrimaryColor,
+                //       value: _vehicleReviewSelected[index],
+                //       onChanged: (value) {
+                //         setState(() {
+                //           _vehicleReviewSelected[index] = value!;
+                //           if(value){
+                //           vehicleReviewScore.add((option.length.toInt()));
+                //           //print(option);
+                //         } else {
+                //           vehicleReviewScore.remove((option.length.toInt()));
+                //         }
+                //         });
+                //       },
+                //     );
+                //   }).toList(),
+                //  ),
                 SizedBox(height: screenHeight * 0.01,),
                 Text("Filter Price", style: TextStyle(fontSize: screenHeight * 0.025, fontWeight: FontWeight.bold)),
                 RangeSlider(

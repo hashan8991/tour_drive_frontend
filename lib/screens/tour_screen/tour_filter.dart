@@ -73,32 +73,32 @@ class _TourFilterState extends State<TourFilter> {
                 ),
 
                 SizedBox(height: screenHeight * 0.02,),
-                Text("Reviews Score", style: TextStyle(fontSize: screenHeight * 0.025, fontWeight: FontWeight.bold)),
-                SizedBox(height: screenHeight * 0.01,),
+                // Text("Reviews Score", style: TextStyle(fontSize: screenHeight * 0.025, fontWeight: FontWeight.bold)),
+                // SizedBox(height: screenHeight * 0.01,),
 
-                Column(
-                  children: _reviewScore.map((option) {
-                    int index = _reviewScore.indexOf(option);
+                // Column(
+                //   children: _reviewScore.map((option) {
+                //     int index = _reviewScore.indexOf(option);
 
-                    return CheckboxListTile(
-                      title: Text(option),
-                      visualDensity:  const VisualDensity(horizontal: -4, vertical: -4),
-                      activeColor: kPrimaryColor,
-                      value: _reviewSelected[index],
-                      onChanged: (value) {
-                        setState(() {
-                          _reviewSelected[index] = value!;
-                          if(value){
-                          reviewScore.add((option.length.toInt()));
-                          //print(option);
-                        } else {
-                          reviewScore.remove((option.length.toInt()));
-                        }
-                        });
-                      },
-                    );
-                  }).toList(),
-                ),
+                //     return CheckboxListTile(
+                //       title: Text(option),
+                //       visualDensity:  const VisualDensity(horizontal: -4, vertical: -4),
+                //       activeColor: kPrimaryColor,
+                //       value: _reviewSelected[index],
+                //       onChanged: (value) {
+                //         setState(() {
+                //           _reviewSelected[index] = value!;
+                //           if(value){
+                //           reviewScore.add((option.length.toInt()));
+                //           //print(option);
+                //         } else {
+                //           reviewScore.remove((option.length.toInt()));
+                //         }
+                //         });
+                //       },
+                //     );
+                //   }).toList(),
+                // ),
 
                 SizedBox(height: screenHeight * 0.02,),
                 Text("Filter Price", style: TextStyle(fontSize: screenHeight * 0.025, fontWeight: FontWeight.bold)),
