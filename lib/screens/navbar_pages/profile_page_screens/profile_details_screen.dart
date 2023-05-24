@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_page_edit.dart';
-// import 'package:proftest1/components/list_tile2.dart';
-
+import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_page_sreen.dart';
 import '../../../constants.dart';
 import '../../../widgets/list_tiles2.dart';
-// import '../constants.dart';
+
 
 class ProfileDetails extends StatefulWidget {
   const ProfileDetails({super.key});
@@ -14,6 +15,35 @@ class ProfileDetails extends StatefulWidget {
 }
 
 class _ProfileDetailsState extends State<ProfileDetails> {
+
+  String? name,email,country,passportID;
+  int? mobileNum;
+  bool isloading = true;
+  
+  void setDetails() async{
+
+    final prefl = await SharedPreferences.getInstance();
+    name = await prefl.getString('name');
+    email = await prefl.getString('email');
+    mobileNum = await prefl.getInt('mobile');
+    country = await prefl.getString('country');
+    passportID = await prefl.getString('passportID');
+
+    setState(() {
+      isloading = false;
+    });
+    
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setDetails();
+    
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -28,7 +58,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
           // shadowColor: const Color.fromARGB(0, 37, 97, 107),
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>  const NavbarMainPage()));
             },
             icon: const Icon(
                 Icons.arrow_back_ios), //replace with our own icon data.
@@ -60,6 +90,15 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                 SizedBox(
                   height: screenHeight * 0.02,
                 ),
+                isloading 
+                ? Center(
+                    child:CircularProgressIndicator(
+                      backgroundColor: Colors.grey[200], // Set the background color of the widget
+                      valueColor: const AlwaysStoppedAnimation<Color>(kPrimaryColor), // Set the color of the progress indicator
+                      strokeWidth: 3, // Set the width of the progress indicator
+                    )
+                  )
+                :
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -85,26 +124,26 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                 ),
                 const Divider(),
                 Column(
-                  children: const [
+                  children:  [
                     MyListTile2(
                         iconLeading: Icons.perm_identity,
-                        title: 'Udaya Anushanka'),
-                    Divider(),
+                        title: '$name'),
+                    const Divider(),
                     MyListTile2(
                         iconLeading: Icons.email,
-                        title: 'beligahamullage@gmail.com'),
-                    Divider(),
-                    MyListTile2(iconLeading: Icons.call, title: '0775632256'),
-                    Divider(),
+                        title: '$email'),
+                    const Divider(),
+                    MyListTile2(iconLeading: Icons.call, title: '$mobileNum'),
+                    const Divider(),
                     MyListTile2(
                         iconLeading: Icons.person_pin,
                         title:
-                            'No.136, Mulana, Narawala, Poddala, Galle, Sri Lanka'),
-                    Divider(),
+                            '$country'),
+                    const Divider(),
                     MyListTile2(
                         iconLeading: Icons.fingerprint_rounded,
-                        title: '970671870v'),
-                    Divider(),
+                        title: '$passportID'),
+                    const Divider(),
                   ],
                 )
               ],
