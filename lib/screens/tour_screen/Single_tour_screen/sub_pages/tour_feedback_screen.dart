@@ -42,7 +42,9 @@ Future submitReview(TextEditingController nameController,TextEditingController e
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? tourId = prefs.getString('tourId');
-
+  String? name = prefs.getString('name');
+  String? email = prefs.getString('email');
+  
   final response = await http.post(                             // send data to server using post method
     Uri.parse('$URL/api/v1/reviews'),             // end point url
     headers: <String, String>{
@@ -50,8 +52,8 @@ Future submitReview(TextEditingController nameController,TextEditingController e
     },
  
     body: jsonEncode(<String, String>{                          // what we need to send to the server
-      "name": nameController.text,
-      "email": emailController.text,
+      "name": "$name",
+      "email": "$email",
       "review": reviewPasswordController.text,
       "locationRating": "$locationRating",
       "serviceRating": "$serviceRating",
@@ -105,7 +107,7 @@ Future submitReview(TextEditingController nameController,TextEditingController e
                     :
                     Visibility(
                         visible: isError,
-                        child: Text("🛑 $errorMessage " , style: TextStyle(fontSize: screenHeight * 0.02, color: Colors.red,fontWeight: FontWeight.bold),),
+                        child: Text("🛑 ${errorMessage}" , style: TextStyle(fontSize: screenHeight * 0.02, color: Colors.red,fontWeight: FontWeight.bold),),
                       ),
                     SizedBox(height: screenHeight * 0.04),
                     Form(
@@ -113,64 +115,64 @@ Future submitReview(TextEditingController nameController,TextEditingController e
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Name',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: screenHeight *0.01,),
+                          // const Text(
+                          //   'Name',
+                          // style: TextStyle(fontWeight: FontWeight.bold),
+                          // ),
+                          // SizedBox(height: screenHeight *0.01,),
 
-                          TextFormField(
-                          controller: nameController,
-                          onSaved: (value)  {
-                            name = value!;
-                          },
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return '* Please enter your name';
-                            }
-                            return null;
-                          },
-                          keyboardType: TextInputType.name,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(color: kPrimaryColor),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: kPrimaryColor),
-                            )
-                          ),
-                          ),
-                          SizedBox(height: screenHeight * 0.02),
-                          const Text(
-                            'Email',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: screenHeight *0.01,),
+                          // TextFormField(
+                          // controller: nameController,
+                          // onSaved: (value)  {
+                          //   name = value!;
+                          // },
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return '* Please enter your name';
+                          //   }
+                          //   return null;
+                          // },
+                          // keyboardType: TextInputType.name,
+                          // decoration: const InputDecoration(
+                          //   border: OutlineInputBorder(
+                          //     borderSide: BorderSide(color: kPrimaryColor),
+                          //   ),
+                          //   focusedBorder: OutlineInputBorder(
+                          //     borderSide: BorderSide(color: kPrimaryColor),
+                          //   )
+                          // ),
+                          // ),
+                          // SizedBox(height: screenHeight * 0.02),
+                          // const Text(
+                          //   'Email',
+                          //   style: TextStyle(fontWeight: FontWeight.bold),
+                          // ),
+                          // SizedBox(height: screenHeight *0.01,),
 
-                          TextFormField(
-                            controller: emailController,
-                            onSaved: (value)  {
-                              email = value!;
-                            },
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return '* Please enter your email';
-                              }
-                              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                                return '* Please enter a valid email';
-                              }
-                              return null;
-                            },
-                            keyboardType: TextInputType.name,
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(color: kPrimaryColor),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: kPrimaryColor),
-                              )
-                            ),
-                          ),
+                          // TextFormField(
+                          //   controller: emailController,
+                          //   onSaved: (value)  {
+                          //     email = value!;
+                          //   },
+                          //   validator: (value) {
+                          //     if (value!.isEmpty) {
+                          //       return '* Please enter your email';
+                          //     }
+                          //     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                          //       return '* Please enter a valid email';
+                          //     }
+                          //     return null;
+                          //   },
+                          //   keyboardType: TextInputType.name,
+                          //   decoration: const InputDecoration(
+                          //     border: OutlineInputBorder(
+                          //       borderSide: BorderSide(color: kPrimaryColor),
+                          //     ),
+                          //     focusedBorder: OutlineInputBorder(
+                          //       borderSide: BorderSide(color: kPrimaryColor),
+                          //     )
+                          //   ),
+                          // ),
                           SizedBox(height: screenHeight *0.02,),
                           const Text(
                             'Comment',
@@ -262,9 +264,12 @@ Future submitReview(TextEditingController nameController,TextEditingController e
                       width: screenWidth *0.5,
                       child: 
                         DefaultButton(text: "Submit Review", press: () async {
-
+                            var response;
                           // get response from the server
-                          var response = await submitReview(nameController,emailController,reviewPasswordController,locationRating,serviceRating);
+                          if( formKey.currentState!.validate()){
+                             response = await submitReview(nameController,emailController,reviewPasswordController,locationRating,serviceRating);
+                          }
+                          
                           
                           if (formKey.currentState!.validate() && response.statusCode == 201) {
                             ScaffoldMessenger.of(context).showSnackBar(
