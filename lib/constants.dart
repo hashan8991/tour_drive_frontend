@@ -7,8 +7,8 @@ const kTextColor = Color(0xFF757575);
 // const URL = "http://192.168.8.152:8000"; // hashan router ip
 // const urlPhoto = "http://192.168.8.152:3000";
 //const URL = "http://192.168.8.106:8000";// h
-// const URL = "http://192.168.43.121:8000"; // hashan router ip
-// const urlPhoto = "http://192.168.43.121:3000";
+const URL = "http://192.168.43.121:8000"; // hashan router ip
+const urlPhoto = "http://192.168.43.121:3000";
 
-const URL = "http://192.168.8.118:8000"; // anushanka router ip
-const urlPhoto = "http://192.168.8.118:3000";
+// const URL = "http://192.168.8.118:8000"; // anushanka router ip
+// const urlPhoto = "http://192.168.8.118:3000";

@@ -242,10 +242,29 @@ class _LogInScreenState extends State<LogInScreen> {
                             // register successful, extract the  user ID from the response body
                             final Map<String, dynamic> responseData = json.decode(response.body);
                             final String userId = responseData['data']["user"]["_id"];
+                            final String name = responseData['data']['user']['name'];
+                            final String email = responseData['data']['user']['email'];
+                            final int mobile = responseData['data']['user']['mobile'];
+                            final String country = responseData['data']['user']['country'];
+                            final String passportID = responseData['data']['user']['passportID'];
 
                             // Store the  user ID in shared preferences
                             final prefs = await SharedPreferences.getInstance();
                             await prefs.setString('userId', userId);
+                            await prefs.setString('name', name);
+                            await prefs.setString('email', email);
+                            await prefs.setInt('mobile', mobile);
+                            await prefs.setString('country', country);
+                            await prefs.setString('passportID', passportID);
+
+                            // print(await prefs.getString('userId'));
+                            // print(await prefs.getString('name'));
+                            // print(await prefs.getString('email'));
+                            // print(await prefs.getInt('mobile'));
+                            // print(await prefs.getString('country'));
+                            
+                            // print(await prefs.getString('passportID'));
+                           
                           }else{
 
                             final Map<String, dynamic> responseData = json.decode(response.body);

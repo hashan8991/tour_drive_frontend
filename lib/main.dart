@@ -14,7 +14,9 @@ import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.da
 import 'package:tour_drive_frontend/screens/navbar_pages/landing_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_page_sreen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/tour_option_new.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/Single_tour_screen/sub_pages/tour_feedback_screen.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
+import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen/single_vehicle_screen.dart';
 // import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
 // import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_page_sreen.dart';
 // import 'package:tour_drive_frontend/screens/authentication/sign_in/login_screen.dart';
@@ -55,7 +57,7 @@ class MyApp extends StatelessWidget {
       //home: const LogInScreen(),
       //home: const ForgetPasswordScreen(),
       //home: const SignUpScreen(),
-      //  home: const LoadingScreen(), // first page of the app
+       home: const LoadingScreen(), // first page of the app
 
       //home: const FeedbackForm(),
 
@@ -66,7 +68,7 @@ class MyApp extends StatelessWidget {
       //initialRoute: LoadingScreen.routeName,
       // routes: routes,
       //home: const LandingScreen(),
-      home: const ProfileScreen(),
+      //home: const ProfileScreen(),
       // home: SingleTourScreen(),
       //home: SingleTourScreen(),
       //home: VehicleHomeScreen(),
@@ -78,6 +80,7 @@ class MyApp extends StatelessWidget {
       //home: TourFilter(),
       //home:  TourCheckAvailabilityScreen(),
       //home: TourOptionNewScreen(),
+      
     );
   }
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/about_us/about_us_screen.dart';
-import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/contact_us/contact_us.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_details_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/support/support.dart';
-
 import '../../../constants.dart';
 import '../../../widgets/default_button.dart';
 import '../../../widgets/list_tiles1.dart';
@@ -16,6 +15,26 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
+  String? name;
+  bool isloading = true;
+  
+  void setName() async{
+    final pre = await SharedPreferences.getInstance();
+    name = await pre.getString('name');
+    setState(() {
+      isloading = false;
+    });
+    
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setName();
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -28,13 +47,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           centerTitle: true,
           iconTheme: const IconThemeData(color: kPrimaryColor),
           backgroundColor: const Color.fromARGB(0, 255, 255, 255),
-          // shadowColor: const Color.fromARGB(0, 37, 97, 107),
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+             
             },
             icon: const Icon(
-                Icons.arrow_back_ios), //replace with our own icon data.
+                Icons.arrow_back_ios, color: Colors.white,), //replace with our own icon data.
           ),
           title: const Text(
             'Profile',
@@ -52,6 +70,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(
                   height: screenHeight * 0.02,
                 ),
+                isloading 
+                ? Center(
+                    child:CircularProgressIndicator(
+                      backgroundColor: Colors.grey[200], // Set the background color of the widget
+                      valueColor: const AlwaysStoppedAnimation<Color>(kPrimaryColor), // Set the color of the progress indicator
+                      strokeWidth: 3, // Set the width of the progress indicator
+                    )
+                  )
+                :
                 Row(
                   children: [
                     SizedBox(
@@ -72,9 +99,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                     ),
-                    const Text(
-                      'Udaya Anushanka',
-                      style: TextStyle(
+                    Text(
+                      '$name',
+                      style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: kTextColor),
@@ -110,19 +137,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           );
                         }),
                     const Divider(),
-                    MyListTile(
-                        iconLeading: Icons.phone_in_talk_outlined,
-                        title: 'Contact Us',
-                        iconTail: Icons.navigate_next,
-                        press: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ContactUs(),
-                            ),
-                          );
-                        }),
-                    const Divider(),
+                    // MyListTile(
+                    //     iconLeading: Icons.phone_in_talk_outlined,
+                    //     title: 'Contact Us',
+                    //     iconTail: Icons.navigate_next,
+                    //     press: () {
+                    //       Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //           builder: (context) => const ContactUs(),
+                    //         ),
+                    //       );
+                    //     }),
+                    // const Divider(),
                     MyListTile(
                         iconLeading: Icons.info_outline_rounded,
                         title: 'About Us',

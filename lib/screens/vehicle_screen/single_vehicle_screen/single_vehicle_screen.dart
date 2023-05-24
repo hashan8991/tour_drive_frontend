@@ -120,11 +120,11 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
             icon: const Icon(Icons.arrow_back, color:Colors.black, )
             ),
           actions: <Widget>[
-            IconButton(
-              icon: const MyFavoriteIconWidget(),
-              onPressed: () {},
-              alignment: Alignment.centerLeft,
-            ),
+            // IconButton(
+            //   icon: const MyFavoriteIconWidget(),
+            //   onPressed: () {},
+            //   alignment: Alignment.centerLeft,
+            // ),
           ],
         ),
 
