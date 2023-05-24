@@ -44,6 +44,7 @@ dependencies:
   google_sign_in: ^6.1.1
   http: ^0.13.5
   intl: ^0.17.0
+  kommunicate_flutter: ^1.6.5
   latlng: ^1.0.0
   percent_indicator: ^4.2.3
   provider: ^6.0.5

@@ -8,6 +8,8 @@ import 'package:tour_drive_frontend/widgets/list_tiles2.dart';
 import 'package:tour_drive_frontend/widgets/list_tiles3.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../widgets/list_tile_phone_call.dart';
+
 class Support extends StatelessWidget {
   const Support({super.key});
 
@@ -100,10 +102,16 @@ class Support extends StatelessWidget {
                                     scrollDirection: Axis.vertical,
                                     child: Column(
                                       children: [
-                                        const MyListTile2(
-                                            iconLeading:
-                                                Icons.phone_android_outlined,
-                                            title: '011 - xxx xx xx'),
+                                        //   const MyListTile2(
+                                        //       iconLeading:
+                                        //           Icons.phone_android_outlined,
+                                        //       title: '011 - xxx xx xx'),
+                                        const PhoneCallListTile(
+                                          iconLeading:
+                                              Icons.phone_android_outlined,
+                                          title:
+                                              '+088(006)992-99-10', // add this phone number to the definition of this list_tile
+                                        ),
                                         const MyListTile2(
                                             iconLeading: Icons.email_outlined,
                                             title: 'tourdrive@gmail.com'),

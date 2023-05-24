@@ -119,19 +119,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           );
                         }),
                     const Divider(),
-                    MyListTile(
-                        iconLeading: Icons.phone_in_talk_outlined,
-                        title: 'Contact Us',
-                        iconTail: Icons.navigate_next,
-                        press: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ContactUs(),
-                            ),
-                          );
-                        }),
-                    const Divider(),
+                    // MyListTile(
+                    //     iconLeading: Icons.phone_in_talk_outlined,
+                    //     title: 'Contact Us',
+                    //     iconTail: Icons.navigate_next,
+                    //     press: () {
+                    //       Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //           builder: (context) => const ContactUs(),
+                    //         ),
+                    //       );
+                    //     }),
+                    // const Divider(),
                     MyListTile(
                         iconLeading: Icons.info_outline_rounded,
                         title: 'About Us',

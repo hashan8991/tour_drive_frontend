@@ -12,3 +12,6 @@ const kTextColor = Color(0xFF757575);
 
 const URL = "http://192.168.8.118:8000"; // anushanka router ip
 const urlPhoto = "http://192.168.8.118:3000";
+
+// const URL = "http://10.48.35.188:8000"; // CS rad  router ip
+// const urlPhoto = "http://10.48.35.188:3000";
