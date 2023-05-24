@@ -4,6 +4,7 @@ import 'package:tour_drive_frontend/screens/navbar_pages/drive_option_screen.dar
 import 'package:tour_drive_frontend/screens/navbar_pages/emergency_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/landing_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_page_sreen.dart';
+import 'package:tour_drive_frontend/screens/navbar_pages/tour_option_new.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/tour_option_screen.dart';
 
 class NavbarMainPage extends StatefulWidget {
@@ -16,7 +17,8 @@ class NavbarMainPage extends StatefulWidget {
 class _NavbarMainPageState extends State<NavbarMainPage> {
   List pages = [
     const LandingScreen(),
-    const TourOptionScreen(),
+    //const TourOptionScreen(),
+    const TourOptionNewScreen(),
     const EmergencyScreen(),
     const DriveOptionScreen(),
     const ProfileScreen(),
@@ -84,17 +86,15 @@ class _NavbarMainPageState extends State<NavbarMainPage> {
           currentIndex, // default index value eka meka, methana nm zero wenna oona mn hithanne
       selectedItemColor: Colors.amber,
       unselectedItemColor: Colors.grey.withOpacity(0.5),
-      showSelectedLabels: false, //selected icon labels hide kla
-      showUnselectedLabels: false, //unselected icon labels hide kla
+      showSelectedLabels: true, //selected icon labels hide kla
+      showUnselectedLabels: true, //unselected icon labels hide kla
       elevation: 0,
       items: const [
         BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home)),
         BottomNavigationBarItem(label: 'Explore', icon: Icon(Icons.explore)),
-        BottomNavigationBarItem(
-            label: 'Drive', icon: Icon(FontAwesomeIcons.truckMedical)),
+        BottomNavigationBarItem(label: 'Drive', icon: Icon(FontAwesomeIcons.truckMedical)),
         BottomNavigationBarItem(label: 'Drive', icon: Icon(Icons.drive_eta)),
-        BottomNavigationBarItem(
-            label: 'Profile', icon: Icon(Icons.account_circle)),
+        BottomNavigationBarItem(label: 'Profile', icon: Icon(Icons.account_circle)),
       ],
     );
   }

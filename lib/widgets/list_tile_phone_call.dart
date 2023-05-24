@@ -26,7 +26,7 @@ class PhoneCallListTile extends StatefulWidget {
 class _PhoneCallListTileState extends State<PhoneCallListTile> {
   bool _hasCallSupport = false;
   Future<void>? _launched;
-  String _phone = '+088(006)992-99-10'; // add the relevant phone number here
+  String _phone = '011 123 4567'; // add the relevant phone number here
 
   @override
   void initState() {
