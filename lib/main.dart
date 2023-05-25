@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:kommunicate_flutter/kommunicate_flutter.dart';
 import 'package:tour_drive_frontend/screens/authentication/sign_in/login_screen.dart';
 import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
 // import 'package:tour_drive_frontend/screens/navbar_pages/drive_option_screen.dart';
@@ -30,6 +31,7 @@ import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  // KommunicateFlutterPlugin.init('34e04acdb9a116993404c149b30ae0fad');
   Stripe.publishableKey =
       "pk_test_51N1atlGJCiP6SiMGdIAuABxakpw7SAEIIhIfUJMX2i6PzeRLVTH88yj79nnURfSybXGxKAC6iFcXfIdfdFJzjcgh00ZjbmbfNr";
   runApp(const MyApp());
@@ -58,14 +60,14 @@ class MyApp extends StatelessWidget {
       //home: const LogInScreen(),
       //home: const ForgetPasswordScreen(),
       //home: const SignUpScreen(),
-       home: const LoadingScreen(), // first page of the app
+      //  home: const LoadingScreen(), // first page of the app
 
       //home: const FeedbackForm(),
 
       //home: const TourFeedbackForm(),
 
       //home: const TourHomeScreen(),
-      //home: const NavbarMainPage(),  // navbar screen
+      home: const NavbarMainPage(),  // navbar screen
       //initialRoute: LoadingScreen.routeName,
       // routes: routes,
       //home: const LandingScreen(),

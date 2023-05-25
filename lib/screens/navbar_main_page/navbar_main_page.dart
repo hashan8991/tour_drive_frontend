@@ -7,6 +7,7 @@ import 'package:tour_drive_frontend/screens/navbar_pages/landing_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_page_sreen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/tour_option_new.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/tour_option_screen.dart';
+import 'package:kommunicate_flutter/kommunicate_flutter.dart';
 
 class NavbarMainPage extends StatefulWidget {
   const NavbarMainPage({Key? key}) : super(key: key);
@@ -53,21 +54,30 @@ class _NavbarMainPageState extends State<NavbarMainPage> {
       body: pages[
           currentIndex], //danata select wechcha ekee index eka meeken pennanne
       bottomNavigationBar: navBar_Widget(),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: () {
-      //     //action to perform when the button is pressed...
-      //   },
-      //   label: Text('Customize'),
-      //   icon: Image.asset(
-      //     // 'assets/images/customize.png',
-      //     'assets/images/Vector.png',
-      //     width: 24,
-      //     height: 24,
-      //   ),
-      //   backgroundColor: Colors.amber, //floating button colors background
-      //   foregroundColor: Colors.white, //floating button colors foreground
-      // ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          //action to perform when the button is pressed...
+          try {
+     dynamic conversationObject = {
+         'appId': '34e04acdb9a116993404c149b30ae0fad' // The [APP_ID](https://dashboard.kommunicate.io/settings/install) obtained from kommunicate dashboard.
+     };
+      dynamic result = await KommunicateFlutterPlugin.buildConversation(conversationObject);
+      print("Conversation builder success : " + result.toString());
+    } on Exception catch (e) {
+      print("Conversation builder error occurred : " + e.toString());
+    }
+        },
+        backgroundColor: kPrimaryColor, //floating button colors background
+        foregroundColor: Colors.white,
+        // label: Text('Customize'),
+        child: Image.asset(
+          // 'assets/images/customize.png',
+          'assets/images/Kommunicate_logo.png',
+          width: 34,
+          height: 34,
+        ), //floating button colors foreground
+      ),
     );
   }
 
