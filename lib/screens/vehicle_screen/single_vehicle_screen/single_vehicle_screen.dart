@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -103,8 +105,8 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
               foregroundColor: Colors.white,
               onPressed: () {
                 String vehicleName = "${vehicleDetails['brand']} ${vehicleDetails['model']}";
-                double priceWithDriver = vehicleDetails['price_per_day_with_dr'];
-                double priceWithoutDriver = vehicleDetails['price_per_day_without_dr'];
+                num priceWithDriver = vehicleDetails['price_per_day_with_dr'];
+                num priceWithoutDriver = vehicleDetails['price_per_day_without_dr'];
                 Navigator.push(context,MaterialPageRoute(builder: (context) => VehicleCheckAvailability(vehicleName: vehicleName, priceWithDriver: priceWithDriver, priceWithoutDriver: priceWithoutDriver))); 
               },
               label: const Text('Check availability'),
