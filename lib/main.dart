@@ -16,6 +16,7 @@ import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/pr
 import 'package:tour_drive_frontend/screens/navbar_pages/tour_option_new.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/Single_tour_screen/sub_pages/tour_feedback_screen.dart';
 import 'package:tour_drive_frontend/screens/tour_screen/single_tour_screen/single_tour_screen.dart';
+import 'package:tour_drive_frontend/screens/tour_screen/tour_home_screen.dart';
 import 'package:tour_drive_frontend/screens/vehicle_screen/single_vehicle_screen/single_vehicle_screen.dart';
 // import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
 // import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_page_sreen.dart';

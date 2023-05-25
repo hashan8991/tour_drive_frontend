@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import "package:flutter/material.dart";
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/authentication/forget_password/forget_password_screen.dart';
@@ -286,44 +287,65 @@ class _LogInScreenState extends State<LogInScreen> {
                             fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: screenHeight * 0.03),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                elevation: 0.7,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(screenWidth *
-                                      0.9), // Set the border radius of the button
-                                ),
-                              ),
-                              child: Image.asset(
-                                'assets/images/google.png',
-                                height: screenHeight * 0.07,
-                                width: screenWidth * 0.07,
-                              )),
-                          SizedBox(width: screenWidth * 0.08),
-                          ElevatedButton(
-                              onPressed: () {
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     ElevatedButton(
+                      //         onPressed: () {},
+                      //         style: ElevatedButton.styleFrom(
+                      //           backgroundColor: Colors.white,
+                      //           elevation: 0.7,
+                      //           shape: RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.circular(screenWidth *
+                      //                 0.9), // Set the border radius of the button
+                      //           ),
+                      //         ),
+                      //         child: Image.asset(
+                      //           'assets/images/google.png',
+                      //           height: screenHeight * 0.07,
+                      //           width: screenWidth * 0.07,
+                      //         )),
+                      //     SizedBox(width: screenWidth * 0.08),
+                      //     ElevatedButton(
+                      //         onPressed: () {
                                 
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                elevation: 0.7,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(screenWidth *
-                                      0.9), // Set the border radius of the button
-                                ),
-                              ),
-                              child: Image.asset(
-                                'assets/images/facebook.png',
-                                height: screenHeight * 0.07,
-                                width: screenWidth * 0.07,
-                              )),
-                        ],
-                      ),
+                      //         },
+                      //         style: ElevatedButton.styleFrom(
+                      //           backgroundColor: Colors.white,
+                      //           elevation: 0.7,
+                      //           shape: RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.circular(screenWidth *
+                      //                 0.9), // Set the border radius of the button
+                      //           ),
+                      //         ),
+                      //         child: Image.asset(
+                      //           'assets/images/facebook.png',
+                      //           height: screenHeight * 0.07,
+                      //           width: screenWidth * 0.07,
+                      //         )),
+                      //   ],
+                      // ),
+                     SizedBox(
+                      height: screenHeight * 0.07,
+                      width: screenWidth * 0.8,
+                       child: ElevatedButton(
+                        onPressed: (){},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(screenHeight * 0.03),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            FaIcon(FontAwesomeIcons.google),
+                            SizedBox(width: screenWidth * 0.03),
+                            Text("Google SignIn", style: TextStyle(fontSize: 16, color: Colors.white),),
+                          ],
+                        ),
+                                         ),
+                     ),
                       SizedBox(height: screenHeight * 0.04),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
