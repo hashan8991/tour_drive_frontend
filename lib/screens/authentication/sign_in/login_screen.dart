@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import "package:flutter/material.dart";
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/authentication/forget_password/forget_password_screen.dart';
@@ -9,9 +10,15 @@ import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.da
 import 'package:tour_drive_frontend/screens/authentication/sign_up/sign_up_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
+
+import '../../../provider/internet_provider.dart';
+import '../../../provider/sign_in_provider.dart';
+import '../../../util/next_screen.dart';
+import '../../../util/snakbar.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -29,6 +36,10 @@ class _LogInScreenState extends State<LogInScreen> {
   bool isError = false;
   String errorMessage = "";
   late bool isloading = false ;
+
+  // rounded button controller for google sign in is initialized from here
+  final RoundedLoadingButtonController googleController =
+      RoundedLoadingButtonController();
 
   // Sending data to server
   Future loginUser(TextEditingController emailController,TextEditingController passwordController) async {
@@ -325,27 +336,28 @@ class _LogInScreenState extends State<LogInScreen> {
                       //         )),
                       //   ],
                       // ),
-                     SizedBox(
-                      height: screenHeight * 0.07,
-                      width: screenWidth * 0.8,
-                       child: ElevatedButton(
-                        onPressed: (){},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(screenHeight * 0.03),
+                     RoundedLoadingButton(
+                            // width: screenWidth * 0.1,
+                            color: Colors.blue,
+                            controller: googleController,
+                            successColor: kSecondaryColor,
+                            errorColor: Colors.red,
+                            child: Wrap(
+                              children: [
+                                const FaIcon(FontAwesomeIcons.google),
+                                SizedBox(
+                                  width: screenWidth * 0.03,
+                                ),
+                                const Text(
+                                  'Google SignIn',
+                                  style: TextStyle(fontSize: 16),
+                                )
+                              ],
+                            ),
+                            onPressed: () {
+                              handleGoogleSignIn();
+                            },
                           ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            FaIcon(FontAwesomeIcons.google),
-                            SizedBox(width: screenWidth * 0.03),
-                            Text("Google SignIn", style: TextStyle(fontSize: 16, color: Colors.white),),
-                          ],
-                        ),
-                                         ),
-                     ),
                       SizedBox(height: screenHeight * 0.04),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -380,4 +392,54 @@ class _LogInScreenState extends State<LogInScreen> {
       ),
     );
   }
+
+
+  // handling google sign in
+  Future handleGoogleSignIn() async {
+    final sp = context.read<SignInProvider>();
+    final ip = context.read<InternetProvider>();
+    await ip.checkInternetConnection();
+    if (ip.hasInternet == false) {
+      openSnackbar(context, "Check your Internet connection", Colors.red);
+      googleController.reset();
+    } else {
+      await sp.signInWithGoogle().then((value) {
+        if (sp.hasError == true) {
+          openSnackbar(context, sp.errorCode.toString(), Colors.red);
+          googleController.reset();
+        } else {
+          // checking whether user exists or not
+          sp.checkUserExists().then((value) async {
+            if (value == true) {
+              // user exists
+              await sp.getUserDataFromFirestore(sp.uid).then((value) => sp
+                  .saveDataToSharedPreferences()
+                  .then((value) => sp.setSignIn().then((value) {
+                        googleController.success();
+                        handleAfterSignIn();
+                      })));
+            } else {
+              // user does not exist
+              sp.saveDataToFirestore().then((value) => sp
+                  .saveDataToSharedPreferences()
+                  .then((value) => sp.setSignIn().then((value) {
+                        googleController.success();
+                        handleAfterSignIn();
+                      })));
+            }
+          });
+        }
+      });
+    }
+  }
+
+  // handle after signin
+  handleAfterSignIn() {
+    Future.delayed(const Duration(milliseconds: 1000)).then((value) {
+      nextScreenReplace(context,
+          const NavbarMainPage()); // here add the next page to be replaced
+    });
+  }
 }
+
+
