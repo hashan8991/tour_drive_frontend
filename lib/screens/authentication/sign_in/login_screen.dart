@@ -209,25 +209,25 @@ class _LogInScreenState extends State<LogInScreen> {
                       ),
                       SizedBox(height: screenHeight * 0.02),
              
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ForgetPasswordScreen()));
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: kPrimaryColor,
-                        ),
-                        child: Text(
-                          'Forgot password?',
-                          style: TextStyle(
-                            fontSize: screenHeight * 0.02,
-                            color: kPrimaryColor,
-                          ),
-                        ),
-                      ),
+                      // TextButton(
+                      //   onPressed: () {
+                      //     Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //             builder: (context) =>
+                      //                 const ForgetPasswordScreen()));
+                      //   },
+                      //   style: TextButton.styleFrom(
+                      //     foregroundColor: kPrimaryColor,
+                      //   ),
+                      //   child: Text(
+                      //     'Forgot password?',
+                      //     style: TextStyle(
+                      //       fontSize: screenHeight * 0.02,
+                      //       color: kPrimaryColor,
+                      //     ),
+                      //   ),
+                      // ),
                       SizedBox(height: screenHeight * 0.02),
         
                       DefaultButton(
