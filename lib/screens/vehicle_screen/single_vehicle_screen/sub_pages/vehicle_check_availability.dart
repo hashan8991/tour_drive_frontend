@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_string_interpolations
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:intl/intl.dart';
@@ -14,9 +16,9 @@ import 'package:http/http.dart' as http;
 class VehicleCheckAvailability extends StatefulWidget {
 
   final String vehicleName;
-  final double priceWithDriver;
-  final double priceWithoutDriver;
-  const VehicleCheckAvailability({super.key, required this.vehicleName, required this.priceWithDriver, required this.priceWithoutDriver});
+  late num priceWithDriver;
+  late num priceWithoutDriver;
+  VehicleCheckAvailability({super.key, required this.vehicleName, required this.priceWithDriver, required this.priceWithoutDriver});
 
   @override
   State<VehicleCheckAvailability> createState() => _VehicleCheckAvailabilityState();

@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:tour_drive_frontend/widgets/list_tile_phone_call.dart';
 
 class EmergencyScreen extends StatefulWidget {
   const EmergencyScreen({super.key});
@@ -146,7 +147,20 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                   builder: (context) {
                     return AlertDialog(
                       title: const Text("TourDrive Emergencie"),
-                      content: const Text("Our customer service team will review your request and respond as soon as possible."),
+                      // content: const Text("Our customer service team will review your request and respond as soon as possible."),
+                      content:  SizedBox(
+                        height: screenHeight*0.25,
+                        child: Column(
+                          children: const [
+                            Text("Our customer service team will review your request and respond as soon as possible.\n\n For further contact, please use the provided contact number ..."),
+                            PhoneCallListTile(
+                                    iconLeading: Icons.phone_android_outlined,
+                                    title:
+                                        '011 123 4567', // add this phone number to the definition of this list_tile
+                                  ),
+                          ],
+                        ),
+                      ),
                       actions: [
                         TextButton(onPressed: () {
                           Navigator.pop(context);

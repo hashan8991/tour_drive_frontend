@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import "package:flutter/material.dart";
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
 import 'package:tour_drive_frontend/screens/authentication/forget_password/forget_password_screen.dart';
@@ -8,9 +10,15 @@ import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.da
 import 'package:tour_drive_frontend/screens/authentication/sign_up/sign_up_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
+
+import '../../../provider/internet_provider.dart';
+import '../../../provider/sign_in_provider.dart';
+import '../../../util/next_screen.dart';
+import '../../../util/snakbar.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -28,6 +36,10 @@ class _LogInScreenState extends State<LogInScreen> {
   bool isError = false;
   String errorMessage = "";
   late bool isloading = false ;
+
+  // rounded button controller for google sign in is initialized from here
+  final RoundedLoadingButtonController googleController =
+      RoundedLoadingButtonController();
 
   // Sending data to server
   Future loginUser(TextEditingController emailController,TextEditingController passwordController) async {
@@ -197,25 +209,25 @@ class _LogInScreenState extends State<LogInScreen> {
                       ),
                       SizedBox(height: screenHeight * 0.02),
              
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ForgetPasswordScreen()));
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: kPrimaryColor,
-                        ),
-                        child: Text(
-                          'Forgot password?',
-                          style: TextStyle(
-                            fontSize: screenHeight * 0.02,
-                            color: kPrimaryColor,
-                          ),
-                        ),
-                      ),
+                      // TextButton(
+                      //   onPressed: () {
+                      //     Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //             builder: (context) =>
+                      //                 const ForgetPasswordScreen()));
+                      //   },
+                      //   style: TextButton.styleFrom(
+                      //     foregroundColor: kPrimaryColor,
+                      //   ),
+                      //   child: Text(
+                      //     'Forgot password?',
+                      //     style: TextStyle(
+                      //       fontSize: screenHeight * 0.02,
+                      //       color: kPrimaryColor,
+                      //     ),
+                      //   ),
+                      // ),
                       SizedBox(height: screenHeight * 0.02),
         
                       DefaultButton(
@@ -286,44 +298,66 @@ class _LogInScreenState extends State<LogInScreen> {
                             fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: screenHeight * 0.03),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                elevation: 0.7,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(screenWidth *
-                                      0.9), // Set the border radius of the button
-                                ),
-                              ),
-                              child: Image.asset(
-                                'assets/images/google.png',
-                                height: screenHeight * 0.07,
-                                width: screenWidth * 0.07,
-                              )),
-                          SizedBox(width: screenWidth * 0.08),
-                          ElevatedButton(
-                              onPressed: () {
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     ElevatedButton(
+                      //         onPressed: () {},
+                      //         style: ElevatedButton.styleFrom(
+                      //           backgroundColor: Colors.white,
+                      //           elevation: 0.7,
+                      //           shape: RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.circular(screenWidth *
+                      //                 0.9), // Set the border radius of the button
+                      //           ),
+                      //         ),
+                      //         child: Image.asset(
+                      //           'assets/images/google.png',
+                      //           height: screenHeight * 0.07,
+                      //           width: screenWidth * 0.07,
+                      //         )),
+                      //     SizedBox(width: screenWidth * 0.08),
+                      //     ElevatedButton(
+                      //         onPressed: () {
                                 
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                elevation: 0.7,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(screenWidth *
-                                      0.9), // Set the border radius of the button
+                      //         },
+                      //         style: ElevatedButton.styleFrom(
+                      //           backgroundColor: Colors.white,
+                      //           elevation: 0.7,
+                      //           shape: RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.circular(screenWidth *
+                      //                 0.9), // Set the border radius of the button
+                      //           ),
+                      //         ),
+                      //         child: Image.asset(
+                      //           'assets/images/facebook.png',
+                      //           height: screenHeight * 0.07,
+                      //           width: screenWidth * 0.07,
+                      //         )),
+                      //   ],
+                      // ),
+                     RoundedLoadingButton(
+                            // width: screenWidth * 0.1,
+                            color: Colors.blue,
+                            controller: googleController,
+                            successColor: kSecondaryColor,
+                            errorColor: Colors.red,
+                            child: Wrap(
+                              children: [
+                                const FaIcon(FontAwesomeIcons.google),
+                                SizedBox(
+                                  width: screenWidth * 0.03,
                                 ),
-                              ),
-                              child: Image.asset(
-                                'assets/images/facebook.png',
-                                height: screenHeight * 0.07,
-                                width: screenWidth * 0.07,
-                              )),
-                        ],
-                      ),
+                                const Text(
+                                  'Google SignIn',
+                                  style: TextStyle(fontSize: 16),
+                                )
+                              ],
+                            ),
+                            onPressed: () {
+                              handleGoogleSignIn();
+                            },
+                          ),
                       SizedBox(height: screenHeight * 0.04),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -358,4 +392,54 @@ class _LogInScreenState extends State<LogInScreen> {
       ),
     );
   }
+
+
+  // handling google sign in
+  Future handleGoogleSignIn() async {
+    final sp = context.read<SignInProvider>();
+    final ip = context.read<InternetProvider>();
+    await ip.checkInternetConnection();
+    if (ip.hasInternet == false) {
+      openSnackbar(context, "Check your Internet connection", Colors.red);
+      googleController.reset();
+    } else {
+      await sp.signInWithGoogle().then((value) {
+        if (sp.hasError == true) {
+          openSnackbar(context, sp.errorCode.toString(), Colors.red);
+          googleController.reset();
+        } else {
+          // checking whether user exists or not
+          sp.checkUserExists().then((value) async {
+            if (value == true) {
+              // user exists
+              await sp.getUserDataFromFirestore(sp.uid).then((value) => sp
+                  .saveDataToSharedPreferences()
+                  .then((value) => sp.setSignIn().then((value) {
+                        googleController.success();
+                        handleAfterSignIn();
+                      })));
+            } else {
+              // user does not exist
+              sp.saveDataToFirestore().then((value) => sp
+                  .saveDataToSharedPreferences()
+                  .then((value) => sp.setSignIn().then((value) {
+                        googleController.success();
+                        handleAfterSignIn();
+                      })));
+            }
+          });
+        }
+      });
+    }
+  }
+
+  // handle after signin
+  handleAfterSignIn() {
+    Future.delayed(const Duration(milliseconds: 1000)).then((value) {
+      nextScreenReplace(context,
+          const NavbarMainPage()); // here add the next page to be replaced
+    });
+  }
 }
+
+

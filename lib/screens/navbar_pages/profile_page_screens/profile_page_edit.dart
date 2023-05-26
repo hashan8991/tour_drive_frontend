@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/constants.dart';
@@ -102,8 +104,8 @@ class _EditProfileState extends State<EditProfile> {
       isloading2 = true;
     });
 
-    final prefs = await SharedPreferences.getInstance();
-    final cookie = await prefs.getString('Cookie');
+    final pre = await SharedPreferences.getInstance();
+    final cookie = await pre.getString('Cookie');
 
     final response = await http
         .patch(Uri.parse('$URL/api/v1/auth/update-password'),
@@ -399,11 +401,12 @@ class _EditProfileState extends State<EditProfile> {
                           backgroundColor: kPrimaryColor,
                           ),
                       );
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  ProfileDetails()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  const ProfileDetails()));
                     }else{
                       final Map<String, dynamic> responseData = json.decode(response1.body);
-                      errorMessage1 = responseData["message"];
+                      
                       setState(() {
+                        errorMessage1 = responseData["message"];
                         isError1 = true;
                       });
                     }
@@ -549,26 +552,28 @@ class _EditProfileState extends State<EditProfile> {
                     var response2;
 
                     if(formKey2.currentState!.validate()){
+                     
                       response2 = await updatePassword();
                     }
                     
-                    if( formKey1.currentState!.validate() && response2.statusCode == 201 ) {  
+                    if( formKey1.currentState!.validate() && response2.statusCode == 200 ) {  
 
                       final cookies =  await response2.headers["set-cookie"];
-                      final pre = await SharedPreferences.getInstance();
-                      await pre.setString('Cookie', cookies);
+                      final instance = await SharedPreferences.getInstance();
+                      await instance.setString('Cookie', cookies);
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Profile Updated Successfully'), 
+                          content: Text('Password Updated Successfully'), 
                           backgroundColor: kPrimaryColor,
                           ),
                       );
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  ProfileDetails()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  const ProfileDetails()));
                     }else{
                       final Map<String, dynamic> responseData = json.decode(response2.body);
-                      errorMessage1 = responseData["message"];
+
                       setState(() {
+                        errorMessage2 = responseData["message"];
                         isError2 = true;
                       });
                     }
