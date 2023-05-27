@@ -423,7 +423,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                       lineHeight: screenHeight * 0.022,
                       animationDuration: 2500,
                       percent: ((tourDetails["locationRatingsAverage"]*100)/5.toDouble())/100,
-                      center: Text("${((tourDetails["locationRatingsAverage"]*100)/5)}%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
+                      center: Text("${((tourDetails["locationRatingsAverage"]*100)/5).toStringAsFixed(2)}%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
                       progressColor: kPrimaryColor,
                     ),
                   ],
@@ -440,7 +440,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                       lineHeight: screenHeight * 0.022,
                       animationDuration: 2500,
                       percent: ((tourDetails["serviceRatingsAverage"]*100)/5.toDouble())/100,
-                      center: Text("${((tourDetails["serviceRatingsAverage"]*100)/5)}%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
+                      center: Text("${((tourDetails["serviceRatingsAverage"]*100)/5).toStringAsFixed(2)}%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
                       progressColor: kPrimaryColor,
                     ),
                   ],
@@ -474,7 +474,7 @@ class _SingleTourScreenState extends State<SingleTourScreen> {
                             Row(
                               children: [
                                 const CircleAvatar(
-                                  backgroundImage:NetworkImage('https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper.png'),
+                                  backgroundImage:NetworkImage(kprofilePhoto),
                                 ),
                                 SizedBox(width: screenWidth * 0.05,),
                                 Text(tourReviews[index]['name'], style: TextStyle(fontSize: screenHeight * 0.02,fontWeight: FontWeight.bold),),

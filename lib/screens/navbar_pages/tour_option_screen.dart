@@ -82,7 +82,7 @@ class _TourOptionScreenState extends State<TourOptionScreen> {
           title: const Text(
             'Booked Tours',
             textAlign: TextAlign.center,
-            style: TextStyle(color: kTextColor),
+            style: TextStyle(color: kPrimaryColor),
           ),
         ),
       body: Container(

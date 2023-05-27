@@ -94,7 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             radius: screenWidth * 0.1,
                             backgroundColor: kTextColor,
                             backgroundImage:
-                                const AssetImage('assets/images/avatar2.png'),
+                                const NetworkImage(kprofilePhoto),
                           ),
                         ],
                       ),
@@ -165,9 +165,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const Divider(),
                   ],
                 ),
-                SizedBox(
-                  height: screenHeight * 0.15,
-                ),
+                SizedBox(height: screenHeight * 0.08),
                 SizedBox(
                   width: screenWidth * 0.9,
                   child: DefaultButton(

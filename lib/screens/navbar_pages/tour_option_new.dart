@@ -151,11 +151,11 @@ List<Map<String, dynamic>> locations = [
         child: Scaffold(
 
           appBar: AppBar(
-            title: const Text('Tour Option', style: TextStyle(color: Colors.black),),
+            title: const Text('Tour Option', style: TextStyle(color: kPrimaryColor),),
             backgroundColor: Colors.white,
             bottom: const TabBar(
               indicatorColor: kPrimaryColor,
-              labelColor: Colors.black,
+              labelColor: Color.fromARGB(255, 208, 125, 1),
               tabs: [
                 Tab( text: 'Booked\nTours'),
                 Tab( text: 'Request\nCustom Tour'),

@@ -25,8 +25,8 @@ class _VehicleFilterState extends State<VehicleFilter> {
 
   final List<String> _veicleTypesOptions = ['car', 'van', 'suv', 'bike'];
   final List<bool> _veicleTypeSelected = [false, false, false, false,];
-  final List<String> _vehicleReviewScore = ['⭐⭐⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐', '⭐⭐', '⭐'];
-  final List<bool> _vehicleReviewSelected = [false, false, false, false, false];
+  // final List<String> _vehicleReviewScore = ['⭐⭐⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐', '⭐⭐', '⭐'];
+  // final List<bool> _vehicleReviewSelected = [false, false, false, false, false];
   final List<String> _fuelTypeOptons = ['petrol', 'diesal'];
   final List<bool> _fuelTypeSelected = [false, false];
   final List<String> _transmissionOptons = ['auto', 'manuel'];
@@ -42,17 +42,22 @@ class _VehicleFilterState extends State<VehicleFilter> {
 
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+            onPressed: () { Navigator.pop(context,MaterialPageRoute(builder: (context) =>const VehicleHomeScreen())); }, 
+            icon: const Icon(Icons.arrow_back, color: Colors.black, )
+            ),
+        ),
         body: Container(
           margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
           child: SingleChildScrollView(
             child: Column(
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextButton(onPressed: () {
-                      Navigator.pop(context,MaterialPageRoute(builder: (context) => const VehicleHomeScreen()));
-                    }, child: Text("❌", style: TextStyle(fontSize: screenHeight * 0.02, fontWeight: FontWeight.bold),),),
-                    SizedBox(width: screenWidth * 0.1,),
                     Text("Vehicle Type", style: TextStyle(fontSize: screenHeight * 0.025, fontWeight: FontWeight.bold)),
                   ],
                 ),
@@ -78,13 +83,14 @@ class _VehicleFilterState extends State<VehicleFilter> {
                   );
                 }).toList(),
                 ),
-                SizedBox(height: screenHeight * 0.02,),
+                SizedBox(height: screenHeight * 0.04,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
                       children: [
                         Text("Fuel Type", style: TextStyle(fontSize: screenHeight * 0.025, fontWeight: FontWeight.bold)),
+                        SizedBox(height: screenHeight * 0.02,),
                         SizedBox(
                           width: screenWidth * 0.4,
                           child: Column(
@@ -114,6 +120,7 @@ class _VehicleFilterState extends State<VehicleFilter> {
                     Column(
                   children: [
                     Text("Transmission", style: TextStyle(fontSize: screenHeight * 0.025, fontWeight: FontWeight.bold)),
+                    SizedBox(height: screenHeight * 0.02,),
                     SizedBox(
                       width: screenWidth * 0.4,
                       child: Column(
@@ -166,7 +173,7 @@ class _VehicleFilterState extends State<VehicleFilter> {
                 //     );
                 //   }).toList(),
                 //  ),
-                SizedBox(height: screenHeight * 0.01,),
+                SizedBox(height: screenHeight * 0.04,),
                 Text("Filter Price", style: TextStyle(fontSize: screenHeight * 0.025, fontWeight: FontWeight.bold)),
                 RangeSlider(
                   values: RangeValues(minPrice.toDouble(), maxPrice.toDouble()),
@@ -183,7 +190,7 @@ class _VehicleFilterState extends State<VehicleFilter> {
                     });
                   },
                 ),
-                SizedBox(height: screenHeight * 0.01,),
+                SizedBox(height: screenHeight * 0.07,),
                 DefaultButton(text: "Filter", press: () async{
                     // save filter values
                     final pref = await SharedPreferences.getInstance();

@@ -1,6 +1,6 @@
 // ignore_for_file: unnecessary_string_interpolations
 
-import 'dart:ffi';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -280,65 +280,62 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
                               children: [
                                 Text("From", style: TextStyle(fontSize: screenHeight * 0.025,letterSpacing: screenWidth * 0.003, fontWeight: FontWeight.bold),),
                                 SizedBox(height: screenHeight * 0.01,),
-                                Container(
-                                  height: screenHeight * 0.07,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFE4F9FB),
-                                    borderRadius: BorderRadius.circular(screenHeight * 0.02),
-                                  ),
-                                  child: Container(
-                                    margin:  EdgeInsets.symmetric( horizontal: screenWidth * 0.05),
-                                  //##########################################   From date  ######################################################################################                           
-                                    child: TextFormField(
-                                      controller: fromDateController,
-                                      //focusNode: _dateFocus,
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return '* Please enter from date?';
-                                        }
-                                        return null;
-                                      },
-                                      decoration: InputDecoration(
-                                        hintText: 'Select Date',
-                                        border: InputBorder.none,
-                                        suffixIcon: IconButton(
-                                          icon: const Icon(Icons.date_range,color: kPrimaryColor,),
-                                          onPressed: () => _selectDate1(context),
-                                        ),
-                                      ),
+                                TextFormField(
+                                  controller: fromDateController,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return '* Please enter from date?';
+                                    }
+                                    return null;
+                                  },
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    labelText: "From Date",
+                                    floatingLabelStyle: const TextStyle(color: kPrimaryColor),
+                                    contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
+                                    hintText: 'Select Date',
+                                    suffixIcon: IconButton(
+                                      icon: const Icon(Icons.date_range,color: kPrimaryColor,),
+                                       onPressed: () => _selectDate1(context),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(screenHeight * 0.025),
+                                      borderSide: const BorderSide(color: kPrimaryColor),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(screenHeight * 0.025),
+                                      borderSide: const BorderSide(color: kPrimaryColor),
                                     )
                                   ),
                                 ),
                                 SizedBox(height: screenHeight * 0.02,),
                                 Text("To", style: TextStyle(fontSize: screenHeight * 0.025,letterSpacing: screenWidth * 0.003, fontWeight: FontWeight.bold),),
                                 SizedBox(height: screenHeight * 0.01,),
-                                Container(
-                                  height: screenHeight * 0.07,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFE4F9FB),
-                                    borderRadius: BorderRadius.circular(screenHeight * 0.02),
-                                  ),
-                                  child: Container(
-                                    margin:  EdgeInsets.symmetric( horizontal: screenWidth * 0.05),
-                                    child: 
-                              //##########################################   To date  ######################################################################################                           
-                                    TextFormField(
-                                      controller: toDateController,
-                                      //focusNode: _dateFocus,
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          return '* Please enter to date?';
-                                        }
-                                        return null;
-                                      },
-                                      decoration: InputDecoration(
-                                        hintText: 'Select Date',
-                                        border: InputBorder.none,
-                                        suffixIcon: IconButton(
-                                          icon: const Icon(Icons.date_range,color: kPrimaryColor,),
-                                          onPressed: () => _selectDate2(context),
-                                        ),
-                                      ),
+                                TextFormField(
+                                  controller: toDateController,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return '* Please enter to date?';
+                                    }
+                                    return null;
+                                  },
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    labelText: "To Date",
+                                    floatingLabelStyle: const TextStyle(color: kPrimaryColor),
+                                    contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
+                                    hintText: 'Select Date',
+                                    suffixIcon: IconButton(
+                                      icon: const Icon(Icons.date_range,color: kPrimaryColor,),
+                                       onPressed: () => _selectDate2(context),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(screenHeight * 0.025),
+                                      borderSide: const BorderSide(color: kPrimaryColor),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(screenHeight * 0.025),
+                                      borderSide: const BorderSide(color: kPrimaryColor),
                                     )
                                   ),
                                 ),
@@ -388,6 +385,7 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
                           ),
                           
                           DefaultButton(text: "Rent Now", press: () async{
+                         
                             if( formKey.currentState!.validate()) { 
                                 if(drivingOption == "With driver"){
                                   setState(() {
@@ -398,6 +396,7 @@ class _VehicleCheckAvailabilityState extends State<VehicleCheckAvailability> {
                                     price = widget.priceWithoutDriver;
                                   });
                                 }
+
                                 String totalamout = price.toString().split('.')[0];
                                 makePayment(totalamout);
                                 

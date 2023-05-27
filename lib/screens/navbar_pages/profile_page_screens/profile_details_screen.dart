@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_page_edit.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_page_sreen.dart';
+import 'package:tour_drive_frontend/widgets/default_button.dart';
 import '../../../constants.dart';
 import '../../../widgets/list_tiles2.dart';
 
@@ -115,7 +116,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                             radius: screenWidth * 0.1,
                             backgroundColor: kTextColor,
                             backgroundImage:
-                                const AssetImage('assets/images/avatar2.png'),
+                                const NetworkImage(kprofilePhoto),
                           ),
                         ],
                       ),
@@ -145,6 +146,18 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                         title: '$passportID'),
                     const Divider(),
                   ],
+                ),
+                SizedBox(height: screenHeight * 0.02,),
+                SizedBox(
+                  width: screenWidth * 0.3,
+                  child: DefaultButton(text: "Edit", press: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EditProfile(),
+                      ),
+                    );
+                  }),
                 )
               ],
             ),

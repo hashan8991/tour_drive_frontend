@@ -87,7 +87,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
           title: const Text(
             'Emergency Contact',
             textAlign: TextAlign.center,
-            style: TextStyle(color: kTextColor),
+            style: TextStyle(color: kPrimaryColor),
           ),
         ),
       body: Container(
@@ -134,7 +134,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                 ),
               ),
             ),
-            SizedBox(height: screenHeight * 0.04,),
+            SizedBox(height: screenHeight * 0.09,),
             DefaultButton(text: "ADD SOS", press: () async {
 
               // ignore: prefer_typing_uninitialized_variables
