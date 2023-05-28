@@ -62,6 +62,7 @@ class MyApp extends StatelessWidget {
             create: (context) => InternetProvider(),
           ),],
       child: MaterialApp(
+        
         debugShowCheckedModeBanner: false,
         title: "TourDrive",
         theme: ThemeData(

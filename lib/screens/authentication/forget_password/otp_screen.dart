@@ -1,29 +1,28 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:tour_drive_frontend/constants.dart';
-import 'package:tour_drive_frontend/screens/authentication/forget_password/otp_screen.dart';
+import 'package:tour_drive_frontend/screens/authentication/forget_password/create_new_password.dart';
+import 'package:tour_drive_frontend/screens/authentication/forget_password/forget_password_screen.dart';
 import 'package:tour_drive_frontend/screens/authentication/sign_in/login_screen.dart';
 import 'package:tour_drive_frontend/widgets/default_button.dart';
 import 'package:tour_drive_frontend/widgets/header.dart';
-//import 'package:tour_drive_frontend/size_config.dart';
 
-class ForgetPasswordScreen extends StatefulWidget {
-  const ForgetPasswordScreen({super.key});
+class OtpScreen extends StatefulWidget {
+  const OtpScreen({super.key});
 
   @override
-  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
+  State<OtpScreen> createState() => _OtpScreenState();
 }
 
-class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+class _OtpScreenState extends State<OtpScreen> {
 
-  late final String email;
-  final formKey1 = GlobalKey<FormState>();
-  final phoneController = TextEditingController();
+  late final String otp;
+  final formKey2 = GlobalKey<FormState>();
+  final otpController = TextEditingController();
   bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
-    
-     final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenWidth = MediaQuery.of(context).size.width;
      final double screenHeight = MediaQuery.of(context).size.height;
 
     return SafeArea(
@@ -32,8 +31,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
           scrollDirection: Axis.vertical,
           child: Column(
             children: [
-              Header(text: "Forget Password", press: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const LogInScreen()));
+              Header(text: "Enter OTP", press: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgetPasswordScreen()));
               } ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
@@ -41,29 +40,28 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   scrollDirection: Axis.vertical,
                   child: Column(
                     children: <Widget>[
+                      
                       SizedBox(height: screenHeight * 0.03),
-                      const Text("Please enter phone number assosiated with your account.",),
+                      const Text("Please enter code sent to your registered mobile number",),
                       SizedBox(height: screenHeight * 0.06),
                       Form(
-                        key: formKey1,
+                        key: formKey2,
                         child: TextFormField(
-                              controller: phoneController,
+                              controller: otpController,
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return '* Please enter mobile number';
+                                  return '* Please enter OTP number';
                                 }
-                                if (value.length != 10) {
-                                  return '* Please enter valid phone number';
-                                }
+                            
                                 return null;
                               },
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
-                                labelText: "Phone Number",
+                                labelText: "OTP Number",
                                 floatingLabelStyle: const TextStyle(color: kPrimaryColor),
                                 contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.028),
-                                hintText: 'Enter your Phone Number',
-                                suffixIcon: const Icon(Icons.phone, color: kPrimaryColor,),
+                                hintText: 'Enter your OTP Number',
+                                suffixIcon: const Icon(Icons.numbers, color: kPrimaryColor,),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(screenHeight * 0.03),
                                   borderSide: const BorderSide(color: kPrimaryColor),
@@ -75,20 +73,22 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                               ),
                             ),
                       ),
-                      SizedBox(height: screenHeight * 0.08),
-                      DefaultButton(text: "Send", press: () {
-                        if (formKey1.currentState!.validate()) {
 
+                      SizedBox(height: screenHeight * 0.08),
+                      DefaultButton(text: "Submit", press: () {
+                        if (formKey2.currentState!.validate()) {
                           // ScaffoldMessenger.of(context).showSnackBar(
                           //   const SnackBar(
                           //     content: Text('Send  successfully'), 
                           //     backgroundColor: kPrimaryColor,
                           //     ),
                           // );
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const OtpScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateNewPasswordScreen()));
                         }
                       }),
                       SizedBox(height: screenHeight * 0.04),
+                      
+
                     ],
                   ),
                 ),

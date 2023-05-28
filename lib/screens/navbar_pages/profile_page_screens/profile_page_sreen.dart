@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tour_drive_frontend/screens/authentication/sign_in/login_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/about_us/about_us_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_details_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/support/support.dart';
+import 'package:tour_drive_frontend/util/next_screen.dart';
 import '../../../constants.dart';
 import '../../../widgets/default_button.dart';
 import '../../../widgets/list_tiles1.dart';
@@ -172,6 +174,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     text: 'Sign Out',
                     press: () {
                       //sign out function goes here..
+                      //sp.userSignOut();
+                      nextScreenReplace(context, const LogInScreen());
                     },
                   ),
                 )
