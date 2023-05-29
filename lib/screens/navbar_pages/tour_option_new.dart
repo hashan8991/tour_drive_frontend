@@ -240,7 +240,7 @@ List<Map<String, dynamic>> locations = [
                                             tourBookingDetails != null && tourBookingDetails[index] != null && tourBookingDetails[index]["tour"] != null
                                             ? "${tourBookingDetails[index]["tour"]["name"]}"
                                             : "${tourBookingDetails[index]["customTour"]["name"]}",
-                                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.02), maxLines: 2, overflow: TextOverflow.ellipsis,),
+                                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.02), maxLines: 1, overflow: TextOverflow.ellipsis,),
                                           SizedBox(height: screenHeight * 0.008,),                                    
                                           Text(
                                             tourBookingDetails != null && tourBookingDetails[index] != null && tourBookingDetails[index]["tour"] != null 

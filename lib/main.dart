@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:kommunicate_flutter/kommunicate_flutter.dart';
@@ -43,7 +44,11 @@ void main() async{
   runApp(const MyApp());
 }
 
-// void main() {
+// void main() async{
+//   WidgetsFlutterBinding.ensureInitialized();
+//   Stripe.publishableKey =
+//       "pk_test_51N1atlGJCiP6SiMGdIAuABxakpw7SAEIIhIfUJMX2i6PzeRLVTH88yj79nnURfSybXGxKAC6iFcXfIdfdFJzjcgh00ZjbmbfNr";
+//      await Firebase.initializeApp();
 //   runApp(
 //     DevicePreview(
 //       builder: (context) =>  const MyApp(),
@@ -74,7 +79,7 @@ class MyApp extends StatelessWidget {
         //home: const LogInScreen(),
         //home: const ForgetPasswordScreen(),
         //home: const SignUpScreen(),
-        //home: const LoadingScreen(), // first page of the app
+        home: const LoadingScreen(), // first page of the app
     
         //home: const FeedbackForm(),
     
@@ -97,7 +102,7 @@ class MyApp extends StatelessWidget {
         //home: TourFilter(),
         //home:  TourCheckAvailabilityScreen(),
         //home: TourOptionNewScreen(),
-        home: CreateNewPasswordScreen(email: "hello@gmail.com")
+        //home: CreateNewPasswordScreen(email: "hello@gmail.com")
         
       ),
     );
