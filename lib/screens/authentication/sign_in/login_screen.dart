@@ -209,25 +209,25 @@ class _LogInScreenState extends State<LogInScreen> {
                       ),
                       SizedBox(height: screenHeight * 0.02),
              
-                      // TextButton(
-                      //   onPressed: () {
-                      //     Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //             builder: (context) =>
-                      //                 const ForgetPasswordScreen()));
-                      //   },
-                      //   style: TextButton.styleFrom(
-                      //     foregroundColor: kPrimaryColor,
-                      //   ),
-                      //   child: Text(
-                      //     'Forgot password?',
-                      //     style: TextStyle(
-                      //       fontSize: screenHeight * 0.02,
-                      //       color: kPrimaryColor,
-                      //     ),
-                      //   ),
-                      // ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ForgetPasswordScreen()));
+                        },
+                        style: TextButton.styleFrom(
+                          foregroundColor: kPrimaryColor,
+                        ),
+                        child: Text(
+                          'Forgot password?',
+                          style: TextStyle(
+                            fontSize: screenHeight * 0.02,
+                            color: kPrimaryColor,
+                          ),
+                        ),
+                      ),
                       SizedBox(height: screenHeight * 0.02),
         
                       DefaultButton(
@@ -337,19 +337,16 @@ class _LogInScreenState extends State<LogInScreen> {
                       //   ],
                       // ),
                      RoundedLoadingButton(
-                            // width: screenWidth * 0.1,
-                            color: Colors.blue,
+                            color: const Color.fromARGB(255, 0, 106, 193),
                             controller: googleController,
                             successColor: kSecondaryColor,
                             errorColor: Colors.red,
                             child: Wrap(
                               children: [
                                 const FaIcon(FontAwesomeIcons.google),
-                                SizedBox(
-                                  width: screenWidth * 0.03,
-                                ),
+                                SizedBox(width: screenWidth * 0.03),
                                 const Text(
-                                  'Google SignIn',
+                                  'Google Sign In',
                                   style: TextStyle(fontSize: 16),
                                 )
                               ],

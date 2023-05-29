@@ -365,7 +365,7 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                       lineHeight: screenHeight * 0.022,
                       animationDuration: 2500,
                       percent: ((vehicleDetails["driverRatingsAverage"]*100)/5.toDouble())/100,
-                      center: Text("${((vehicleDetails["driverRatingsAverage"]*100)/5)}%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
+                      center: Text("${((vehicleDetails["driverRatingsAverage"]*100)/5).toStringAsFixed(2)}%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
                       progressColor: kPrimaryColor,
                     ),
                   ],
@@ -382,7 +382,7 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                       lineHeight: screenHeight * 0.022,
                       animationDuration: 2500,
                       percent: ((vehicleDetails["vehicleRatingsAverage"]*100)/5.toDouble())/100,
-                      center: Text("${((vehicleDetails["vehicleRatingsAverage"]*100)/5)}%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
+                      center: Text("${((vehicleDetails["vehicleRatingsAverage"]*100)/5).toStringAsFixed(2)}%", style: TextStyle(fontSize: screenHeight * 0.015,color: Colors.white),),
                       progressColor: kPrimaryColor,
                     ),
                   ],
@@ -416,7 +416,7 @@ class _SingleVehicleScreenState extends State<SingleVehicleScreen> {
                             Row(
                               children: [
                                 const CircleAvatar(
-                                  backgroundImage:NetworkImage('https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper.png'),
+                                  backgroundImage:NetworkImage(kprofilePhoto),
                                 ),
                                 SizedBox(width: screenWidth * 0.05,),
                                 Text(vehicleReviews[index]['name'], style: TextStyle(fontSize: screenHeight * 0.02,fontWeight: FontWeight.bold),),

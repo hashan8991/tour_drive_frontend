@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tour_drive_frontend/screens/authentication/sign_in/login_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/about_us/about_us_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_details_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/support/support.dart';
+import 'package:tour_drive_frontend/util/next_screen.dart';
 import '../../../constants.dart';
 import '../../../widgets/default_button.dart';
 import '../../../widgets/list_tiles1.dart';
@@ -94,7 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             radius: screenWidth * 0.1,
                             backgroundColor: kTextColor,
                             backgroundImage:
-                                const AssetImage('assets/images/avatar2.png'),
+                                const NetworkImage(kprofilePhoto),
                           ),
                         ],
                       ),
@@ -102,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Text(
                       '$name',
                       style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: kTextColor),
                     )
@@ -165,15 +167,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const Divider(),
                   ],
                 ),
-                SizedBox(
-                  height: screenHeight * 0.15,
-                ),
+                SizedBox(height: screenHeight * 0.08),
                 SizedBox(
                   width: screenWidth * 0.9,
                   child: DefaultButton(
                     text: 'Sign Out',
                     press: () {
                       //sign out function goes here..
+                      //sp.userSignOut();
+                      nextScreenReplace(context, const LogInScreen());
                     },
                   ),
                 )

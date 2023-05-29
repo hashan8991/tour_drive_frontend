@@ -41,7 +41,7 @@ class _TourPlanScreenState extends State<TourPlanScreen> {
                 scrollDirection: Axis.vertical,
                 itemCount: tourPlan!.length,
                 itemBuilder: (BuildContext context, int index) {
-                  List<String> splitList = tourPlan![index].split(',  ');
+                  List<String> splitList = tourPlan![index].split(',');
                   
                   return Container(
                     margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),

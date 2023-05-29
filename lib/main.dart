@@ -1,9 +1,11 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:kommunicate_flutter/kommunicate_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tour_drive_frontend/provider/internet_provider.dart';
 import 'package:tour_drive_frontend/provider/sign_in_provider.dart';
+import 'package:tour_drive_frontend/screens/authentication/forget_password/create_new_password.dart';
 import 'package:tour_drive_frontend/screens/authentication/sign_in/login_screen.dart';
 import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
 // import 'package:tour_drive_frontend/screens/navbar_pages/drive_option_screen.dart';
@@ -15,6 +17,7 @@ import 'package:tour_drive_frontend/screens/loading/loading_screen.dart';
 // import 'package:tour_drive_frontend/screens/authentication/forget_password/forget_password_screen.dart';
 // import 'package:tour_drive_frontend/screens/navbar_pages/landing_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_main_page/navbar_main_page.dart';
+import 'package:tour_drive_frontend/screens/navbar_pages/emergency_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/landing_screen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/profile_page_screens/profile_page_sreen.dart';
 import 'package:tour_drive_frontend/screens/navbar_pages/tour_option_new.dart';
@@ -41,7 +44,11 @@ void main() async{
   runApp(const MyApp());
 }
 
-// void main() {
+// void main() async{
+//   WidgetsFlutterBinding.ensureInitialized();
+//   Stripe.publishableKey =
+//       "pk_test_51N1atlGJCiP6SiMGdIAuABxakpw7SAEIIhIfUJMX2i6PzeRLVTH88yj79nnURfSybXGxKAC6iFcXfIdfdFJzjcgh00ZjbmbfNr";
+//      await Firebase.initializeApp();
 //   runApp(
 //     DevicePreview(
 //       builder: (context) =>  const MyApp(),
@@ -62,6 +69,7 @@ class MyApp extends StatelessWidget {
             create: (context) => InternetProvider(),
           ),],
       child: MaterialApp(
+        
         debugShowCheckedModeBanner: false,
         title: "TourDrive",
         theme: ThemeData(
@@ -71,7 +79,7 @@ class MyApp extends StatelessWidget {
         //home: const LogInScreen(),
         //home: const ForgetPasswordScreen(),
         //home: const SignUpScreen(),
-         home: const LoadingScreen(), // first page of the app
+        home: const LoadingScreen(), // first page of the app
     
         //home: const FeedbackForm(),
     
@@ -94,6 +102,7 @@ class MyApp extends StatelessWidget {
         //home: TourFilter(),
         //home:  TourCheckAvailabilityScreen(),
         //home: TourOptionNewScreen(),
+        //home: CreateNewPasswordScreen(email: "hello@gmail.com")
         
       ),
     );

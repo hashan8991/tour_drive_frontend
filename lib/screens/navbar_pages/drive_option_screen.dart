@@ -82,7 +82,7 @@ class _DriveOptionScreenState extends State<DriveOptionScreen> {
           title: const Text(
             'Booked Vehicle',
             textAlign: TextAlign.center,
-            style: TextStyle(color: kTextColor),
+            style: TextStyle(color: kPrimaryColor),
           ),
         ),
       body: Container(

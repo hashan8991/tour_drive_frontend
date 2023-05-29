@@ -22,8 +22,8 @@ class _TourFilterState extends State<TourFilter> {
   
   final List<String> _catergoryOptions = ['city', 'hiking', 'adventure', 'historical', 'cultural'];
   final List<bool> _categorySelected = [false, false, false, false, false];
-  final List<String> _reviewScore = ['⭐⭐⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐', '⭐⭐', '⭐'];
-  final List<bool> _reviewSelected = [false, false, false, false, false];
+  // final List<String> _reviewScore = ['⭐⭐⭐⭐⭐', '⭐⭐⭐⭐', '⭐⭐⭐', '⭐⭐', '⭐'];
+  // final List<bool> _reviewSelected = [false, false, false, false, false];
 
   @override
   Widget build(BuildContext context) {
@@ -33,23 +33,26 @@ class _TourFilterState extends State<TourFilter> {
 
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+            onPressed: () { Navigator.pop(context,MaterialPageRoute(builder: (context) =>const TourHomeScreen())); }, 
+            icon: const Icon(Icons.arrow_back, color: Colors.black, )
+            ),
+        ),
         body: Container(
           margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: screenHeight * 0.01,),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextButton(onPressed: () {
-                      Navigator.pop(context,MaterialPageRoute(builder: (context) => const TourHomeScreen()));
-                    }, child: Text("❌", style: TextStyle(fontSize: screenHeight * 0.02, fontWeight: FontWeight.bold),),),
-                    SizedBox(width: screenWidth * 0.14,),
                     Text("Catergories", style: TextStyle(fontSize: screenHeight * 0.025, fontWeight: FontWeight.bold)),
                   ],
                 ),
                 SizedBox(height: screenHeight * 0.01,),
-
                 Column(
                 children: _catergoryOptions.map((option) {
                   int index = _catergoryOptions.indexOf(option);
@@ -71,7 +74,6 @@ class _TourFilterState extends State<TourFilter> {
                   );
                 }).toList(),
                 ),
-
                 SizedBox(height: screenHeight * 0.02,),
                 // Text("Reviews Score", style: TextStyle(fontSize: screenHeight * 0.025, fontWeight: FontWeight.bold)),
                 // SizedBox(height: screenHeight * 0.01,),
@@ -100,10 +102,9 @@ class _TourFilterState extends State<TourFilter> {
                 //   }).toList(),
                 // ),
 
-                SizedBox(height: screenHeight * 0.02,),
+                SizedBox(height: screenHeight * 0.04,),
                 Text("Filter Price", style: TextStyle(fontSize: screenHeight * 0.025, fontWeight: FontWeight.bold)),
                 SizedBox(height: screenHeight * 0.01,),
-                
                 RangeSlider(
                   values: RangeValues(_minPrice.toDouble(), _maxPrice.toDouble()),
                   min: 0,
@@ -119,8 +120,7 @@ class _TourFilterState extends State<TourFilter> {
                     });
                   },
                 ),
-
-                SizedBox(height: screenHeight * 0.04,),
+                SizedBox(height: screenHeight * 0.1,),
                 SizedBox(
                   width: screenWidth * 0.5,
                   child: DefaultButton(text: "Filter", press: () async{

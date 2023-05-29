@@ -239,7 +239,7 @@ class _TourHomeScreenState extends State<TourHomeScreen> {
                                           ],
                                         ),
                                         SizedBox(width: screenWidth * 0.09,),
-                                        Text("\$ ${tour["price"].toStringAsFixed(0)}", style: TextStyle(fontSize: screenHeight * 0.022,fontWeight: FontWeight.bold),)
+                                        Text("\$ ${tour["price"].toStringAsFixed(0)}", style: TextStyle(fontSize: screenHeight * 0.021,fontWeight: FontWeight.bold),)
                                       ],
                                     ),
                                     SizedBox(height: screenHeight * 0.001,),

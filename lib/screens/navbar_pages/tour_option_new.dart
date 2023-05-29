@@ -151,11 +151,11 @@ List<Map<String, dynamic>> locations = [
         child: Scaffold(
 
           appBar: AppBar(
-            title: const Text('Tour Option', style: TextStyle(color: Colors.black),),
+            title: const Text('Tour Option', style: TextStyle(color: kPrimaryColor),),
             backgroundColor: Colors.white,
             bottom: const TabBar(
               indicatorColor: kPrimaryColor,
-              labelColor: Colors.black,
+              labelColor: Color.fromARGB(255, 208, 125, 1),
               tabs: [
                 Tab( text: 'Booked\nTours'),
                 Tab( text: 'Request\nCustom Tour'),
@@ -208,9 +208,23 @@ List<Map<String, dynamic>> locations = [
                                 margin: EdgeInsets.all(screenWidth * 0.025),
                                 child: Row(
                                   children: [
-                                    ClipRRect( 
+                                    ClipRRect(
                                       borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                                      child: Image.network('$urlPhoto/tour-uploads/${tourBookingDetails[index]["tour"]["tour_cover"]}',errorBuilder: (context, error, stackTrace) => Image.network('https://www.tgsin.in/images/joomlart/demo/default.jpg', fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, ), fit: BoxFit.fill, height: screenHeight * 0.14,width: screenWidth * 0.29, )),
+                                      child: Image.network(
+                                      tourBookingDetails != null && tourBookingDetails[index] != null && tourBookingDetails[index]["tour"] != null
+                                          ? '$urlPhoto/tour-uploads/${tourBookingDetails[index]["tour"]["tour_cover"]}'
+                                          : 'https://www.tgsin.in/images/joomlart/demo/default.jpg',
+                                      errorBuilder: (context, error, stackTrace) => Image.network(
+                                        'https://www.tgsin.in/images/joomlart/demo/default.jpg',
+                                        fit: BoxFit.fill,
+                                        height: screenHeight * 0.14,
+                                        width: screenWidth * 0.29,
+                                      ),
+                                      fit: BoxFit.fill,
+                                      height: screenHeight * 0.14,
+                                      width: screenWidth * 0.29,
+                                      ),
+                                    ),
                                     SizedBox(width: screenWidth * 0.03),
                                     Container(
                                       height: screenHeight * 0.14,
@@ -222,13 +236,29 @@ List<Map<String, dynamic>> locations = [
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text("${tourBookingDetails[index]["tour"]["name"]}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.02), maxLines: 2, overflow: TextOverflow.ellipsis,),
+                                          Text(
+                                            tourBookingDetails != null && tourBookingDetails[index] != null && tourBookingDetails[index]["tour"] != null
+                                            ? "${tourBookingDetails[index]["tour"]["name"]}"
+                                            : "${tourBookingDetails[index]["customTour"]["name"]}",
+                                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenHeight * 0.02), maxLines: 1, overflow: TextOverflow.ellipsis,),
                                           SizedBox(height: screenHeight * 0.008,),                                    
-                                          Text("\$ ${tourBookingDetails[index]["tour"]["price"]}", style: TextStyle(fontSize: screenHeight * 0.022,fontWeight: FontWeight.bold),),
+                                          Text(
+                                            tourBookingDetails != null && tourBookingDetails[index] != null && tourBookingDetails[index]["tour"] != null 
+                                            ?"\$ ${tourBookingDetails[index]["tour"]["price"]}"
+                                            : "\$ ${tourBookingDetails[index]["customTour"]["finalCost"]}",
+                                           style: TextStyle(fontSize: screenHeight * 0.022,fontWeight: FontWeight.bold),),
                                           SizedBox(height: screenHeight * 0.008,),
-                                          Text("Check In    :   ${tourBookingDetails[index]["tour"]["start_date"].split('T')[0]}", style: TextStyle(fontSize: screenHeight * 0.018)), 
+                                          Text(
+                                            tourBookingDetails != null && tourBookingDetails[index] != null && tourBookingDetails[index]["tour"] != null 
+                                            ?"Check In    :   ${tourBookingDetails[index]["tour"]["start_date"].split('T')[0]}"
+                                            : "${tourBookingDetails[index]["customTour"]["startDate"]}",
+                                            style: TextStyle(fontSize: screenHeight * 0.018)), 
                                           SizedBox(height: screenHeight * 0.008,),
-                                          Text("Check Out :   ${tourBookingDetails[index]["tour"]["end_date"].split('T')[0]}", style: TextStyle(fontSize: screenHeight * 0.018)),  
+                                          Text(
+                                            tourBookingDetails != null && tourBookingDetails[index] != null && tourBookingDetails[index]["tour"] != null 
+                                            ?"Check Out :   ${tourBookingDetails[index]["tour"]["end_date"].split('T')[0]}"
+                                            : "${tourBookingDetails[index]["customTour"]["endDate"]}",
+                                            style: TextStyle(fontSize: screenHeight * 0.018)),  
                                         ],
                                       ),
                                     ),

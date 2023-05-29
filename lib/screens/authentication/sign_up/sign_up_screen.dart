@@ -233,7 +233,7 @@ Future registerUser(TextEditingController emailController,TextEditingController 
                         }
                       ),
 
-                      SizedBox(height: screenHeight * 0.02),
+                      SizedBox(height: screenHeight * 0.06),
                       const Text("If you have already account ?",),
                       TextButton(
                         onPressed: () {
